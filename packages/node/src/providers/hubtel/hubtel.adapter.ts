@@ -1,21 +1,21 @@
 import {
   VoltaxProvider,
   VoltaxPaymentResponse,
-} from '../../core/interfaces.js';
-import { PaymentStatus } from '../../core/enums.js';
+} from "../../core/interfaces.js";
+import { PaymentStatus } from "../../core/enums.js";
 import {
   VoltaxValidationError,
   handleGatewayError,
-} from '../../core/errors.js';
-import axios, { AxiosError } from 'axios';
+} from "../../core/errors.js";
+import axios from "axios";
 import {
   HubtelAPIResponse,
   HubtelConfig,
   HubtelInitiatePaymentResponse,
   HubtelTransaction,
-} from './types.js';
-import { InitiatePaymentDTO } from '../../core/schemas.js';
-import { validateHubtelRequest } from './utils.js';
+} from "./types.js";
+import { InitiatePaymentDTO } from "../../core/schemas.js";
+import { validateHubtelRequest } from "./utils.js";
 
 export class HubtelAdapter implements VoltaxProvider {
   private authHeader: string;
@@ -26,10 +26,10 @@ export class HubtelAdapter implements VoltaxProvider {
 
     if (!clientId || !clientSecret || !merchantAccountNumber) {
       throw new Error(
-        'Client ID, Client Secret, and merchant number are required',
+        "Client ID, Client Secret, and merchant number are required",
       );
     }
-    this.authHeader = `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`;
+    this.authHeader = `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`;
     this.merchantAccount = merchantAccountNumber;
   }
 
@@ -43,15 +43,8 @@ export class HubtelAdapter implements VoltaxProvider {
   ): Promise<VoltaxPaymentResponse> {
     const validation = validateHubtelRequest(payload); // Safe to use the validation result as the validator will throw an error if validation fails
 
-    const {
-      amount,
-      email,
-      reference,
-      callbackUrl,
-      metadata,
-      options,
-      description,
-    } = validation.data;
+    const { amount, email, reference, callbackUrl, options, description } =
+      validation.data;
     const { returnUrl, cancellationUrl } = options?.hubtel || {};
 
     const $description = description || `Payment for ${reference}`;
@@ -71,12 +64,12 @@ export class HubtelAdapter implements VoltaxProvider {
     try {
       const { data } = await axios.post<
         HubtelAPIResponse<HubtelInitiatePaymentResponse>
-      >('https://payproxyapi.hubtel.com/items/initiate', hubtelBody, {
+      >("https://payproxyapi.hubtel.com/items/initiate", hubtelBody, {
         headers: { Authorization: this.authHeader },
       });
 
-      if (data.status !== 'success') {
-        throw new Error('Hubtel Initialization Failed');
+      if (data.status !== "success") {
+        throw new Error("Hubtel Initialization Failed");
       }
 
       const $data = data.data;
@@ -88,7 +81,7 @@ export class HubtelAdapter implements VoltaxProvider {
         raw: data,
       };
     } catch (error) {
-      handleGatewayError(error, 'Hubtel');
+      handleGatewayError(error, "Hubtel");
     }
   }
 
@@ -99,7 +92,7 @@ export class HubtelAdapter implements VoltaxProvider {
    */
   async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> {
     if (!reference) {
-      throw new VoltaxValidationError('Reference is required');
+      throw new VoltaxValidationError("Reference is required");
     }
 
     try {
@@ -119,7 +112,7 @@ export class HubtelAdapter implements VoltaxProvider {
         raw: data,
       };
     } catch (error) {
-      handleGatewayError(error, 'Hubtel');
+      handleGatewayError(error, "Hubtel");
     }
   }
 
@@ -136,9 +129,9 @@ export class HubtelAdapter implements VoltaxProvider {
    */
   private mapHubtelStatus(status: string): PaymentStatus {
     switch (status) {
-      case 'Paid':
+      case "Paid":
         return PaymentStatus.SUCCESS;
-      case 'Refunded':
+      case "Refunded":
         return PaymentStatus.FAILED;
       default:
         return PaymentStatus.PENDING;

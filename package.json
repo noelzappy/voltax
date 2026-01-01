@@ -7,6 +7,19 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "npm run format --workspaces",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "packages/node/**/*.{ts,tsx,js,jsx}": [
+      "npm run --workspace=packages/node lint -- --fix",
+      "npm run --workspace=packages/node format"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
   }
 }

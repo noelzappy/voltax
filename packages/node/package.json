@@ -23,7 +23,7 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts --fix",
+    "lint": "eslint . --fix",
     "format": "prettier --write .",
     "prepare": "husky install"
   },
@@ -38,21 +38,13 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "husky": "^8.0.3",
     "prettier": "^3.7.4",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
+    "typescript-eslint": "^8.51.0",
     "vitest": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "lint-staged": {
-    "**/*.{ts,js,json,md}": [
-      "prettier --write"
-    ],
-    "**/*.{ts,js}": [
-      "eslint --fix"
-    ]
   }
 }

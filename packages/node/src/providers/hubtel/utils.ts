@@ -1,15 +1,15 @@
-import { VoltaxValidationError } from '../../core/errors.js';
+import { VoltaxValidationError } from "../../core/errors.js";
 import {
   InitiatePaymentDTO,
   InitiatePaymentSchema,
-} from '../../core/schemas.js';
-import { isValidAmount } from '../../core/utils.js';
+} from "../../core/schemas.js";
+import { isValidAmount } from "../../core/utils.js";
 
 export const validateHubtelRequest = (payload: InitiatePaymentDTO) => {
   const validation = InitiatePaymentSchema.safeParse(payload);
   if (!validation.success) {
     throw new VoltaxValidationError(
-      'Validation Failed',
+      "Validation Failed",
       validation.error.errors,
     );
   }
@@ -20,22 +20,22 @@ export const validateHubtelRequest = (payload: InitiatePaymentDTO) => {
 
   const validAmount = isValidAmount(amount);
   if (!validAmount) {
-    throw new VoltaxValidationError('Invalid amount');
+    throw new VoltaxValidationError("Invalid amount");
   }
 
   if (!reference) {
-    throw new VoltaxValidationError('Reference is required for Hubtel payment');
+    throw new VoltaxValidationError("Reference is required for Hubtel payment");
   }
 
   if (!callbackUrl) {
     throw new VoltaxValidationError(
-      'Callback URL is required for Hubtel payment',
+      "Callback URL is required for Hubtel payment",
     );
   }
 
   if (!returnUrl) {
     throw new VoltaxValidationError(
-      'Return URL is required for Hubtel payment',
+      "Return URL is required for Hubtel payment",
     );
   }
 

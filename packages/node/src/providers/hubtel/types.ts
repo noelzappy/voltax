@@ -20,7 +20,7 @@ export interface HubtelAPIResponse<T> {
 
 export interface HubtelTransaction {
   date: string;
-  status: 'Paid' | 'Unpaid' | 'Refunded';
+  status: "Paid" | "Unpaid" | "Refunded";
   transactionId: string;
   externalTransactionId: string;
   paymentMethod: string;

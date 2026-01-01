@@ -1,4 +1,4 @@
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError, isAxiosError } from "axios";
 
 /**
  * Base error class for all Voltax errors.
@@ -6,7 +6,7 @@ import { AxiosError, isAxiosError } from 'axios';
 export class VoltaxError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'VoltaxError';
+    this.name = "VoltaxError";
   }
 }
 
@@ -18,7 +18,7 @@ export class VoltaxValidationError extends VoltaxError {
 
   constructor(message: string, errors?: any[]) {
     super(message);
-    this.name = 'VoltaxValidationError';
+    this.name = "VoltaxValidationError";
     this.errors = errors;
   }
 }
@@ -38,7 +38,7 @@ export class VoltaxGatewayError extends VoltaxError {
     data?: any,
   ) {
     super(message);
-    this.name = 'VoltaxGatewayError';
+    this.name = "VoltaxGatewayError";
     this.provider = provider;
     this.statusCode = statusCode;
     this.data = data;
@@ -53,7 +53,7 @@ export class VoltaxNetworkError extends VoltaxError {
 
   constructor(message: string, originalError?: Error) {
     super(message);
-    this.name = 'VoltaxNetworkError';
+    this.name = "VoltaxNetworkError";
     this.originalError = originalError;
   }
 }
@@ -71,12 +71,12 @@ export function handleGatewayError(error: any, gateway: string): never {
         data,
       );
     } else if (axiosError.request) {
-      throw new VoltaxNetworkError('No response from gateway', axiosError);
+      throw new VoltaxNetworkError("No response from gateway", axiosError);
     } else {
       throw new VoltaxError(axiosError.message);
     }
   }
   throw new VoltaxError(
-    error instanceof Error ? error.message : 'Unknown error occurred',
+    error instanceof Error ? error.message : "Unknown error occurred",
   );
 }
