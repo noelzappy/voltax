@@ -18,10 +18,9 @@ export interface HubtelAPIResponse<T> {
   data: T;
 }
 
-
 export interface HubtelTransaction {
   date: string;
-  status: "Paid" | "Unpaid" | "Refunded";
+  status: 'Paid' | 'Unpaid' | 'Refunded';
   transactionId: string;
   externalTransactionId: string;
   paymentMethod: string;
@@ -30,5 +29,5 @@ export interface HubtelTransaction {
   amount: number;
   charges: number;
   amountAfterCharges: number;
-  isFulfilled: boolean | null
+  isFulfilled: boolean | null;
 }

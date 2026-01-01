@@ -1,7 +1,5 @@
-import { PaymentStatus,  } from "./enums.js";
-import { InitiatePaymentDTO } from "./schemas.js";
-
-
+import { PaymentStatus } from './enums.js';
+import { InitiatePaymentDTO } from './schemas.js';
 
 /**
  * Standardized response from a payment initialization.
@@ -28,7 +26,7 @@ export interface VoltaxProvider {
    * @param payload The payment details
    */
   initializePayment(
-    payload: InitiatePaymentDTO
+    payload: InitiatePaymentDTO,
   ): Promise<VoltaxPaymentResponse>;
 
   /**

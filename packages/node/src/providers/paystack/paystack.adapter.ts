@@ -1,34 +1,38 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import {
   VoltaxProvider,
   VoltaxPaymentResponse,
-} from "../../core/interfaces.js";
-import { PaymentStatus,  } from "../../core/enums.js";
+} from '../../core/interfaces.js';
+import { PaymentStatus } from '../../core/enums.js';
 import {
   VoltaxValidationError,
-  VoltaxGatewayError,
-  VoltaxNetworkError,
-  VoltaxError,
-} from "../../core/errors.js";
-import { InitiatePaymentDTO, InitiatePaymentSchema } from "../../core/schemas.js";
-import { isValidAmount } from "../../core/utils.js";
-import { PaystackResponse, PaystackTransaction } from "./types.js";
-
+  handleGatewayError,
+} from '../../core/errors.js';
+import {
+  InitiatePaymentDTO,
+  InitiatePaymentSchema,
+} from '../../core/schemas.js';
+import { isValidAmount } from '../../core/utils.js';
+import {
+  PaystackConfig,
+  PaystackResponse,
+  PaystackTransaction,
+} from './types.js';
 
 export class PaystackAdapter implements VoltaxProvider {
   private readonly client: AxiosInstance;
 
-  constructor(secretKey: string) {
+  constructor({ secretKey }: PaystackConfig) {
     if (!secretKey) {
-      throw new VoltaxValidationError("Paystack secret key is required");
+      throw new VoltaxValidationError('Paystack secret key is required');
     }
 
     this.client = axios.create({
-      baseURL: "https://api.paystack.co",
+      baseURL: 'https://api.paystack.co',
       timeout: 10000,
       headers: {
         Authorization: `Bearer ${secretKey}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
@@ -39,30 +43,45 @@ export class PaystackAdapter implements VoltaxProvider {
    * @returns Promise<VoltaxPaymentResponse>
    */
   async initializePayment(
-    payload: InitiatePaymentDTO
+    payload: InitiatePaymentDTO,
   ): Promise<VoltaxPaymentResponse> {
-
     const validation = InitiatePaymentSchema.safeParse(payload);
     if (!validation.success) {
       throw new VoltaxValidationError(
-        "Validation Failed",
-        validation.error.errors
+        'Validation Failed',
+        validation.error.errors,
       );
     }
 
-    const { amount, email,  reference, callbackUrl, metadata, options, description } =
-      validation.data;
-    const { channels, subaccount, splitCode, bearer, transactionCharge, plan, invoiceLimit, currency } = options?.paystack || {};
+    const {
+      amount,
+      email,
+      reference,
+      callbackUrl,
+      metadata,
+      options,
+      description,
+      currency,
+    } = validation.data;
+    const {
+      channels,
+      subaccount,
+      splitCode,
+      bearer,
+      transactionCharge,
+      plan,
+      invoiceLimit,
+    } = options?.paystack || {};
 
-    const validAmount = isValidAmount(amount)
+    const validAmount = isValidAmount(amount);
     if (!validAmount) {
-      throw new VoltaxValidationError("Invalid amount");
+      throw new VoltaxValidationError('Invalid amount');
     }
 
     const $metadata = {
       description: description || `Payment for ${reference}`,
-      ...metadata
-    }
+      ...metadata,
+    };
 
     // Paystack expects amount in kobo (minor units) and currency in standard ISO code.
     const paystackPayload = {
@@ -75,21 +94,20 @@ export class PaystackAdapter implements VoltaxProvider {
       subaccount,
       split_code: splitCode,
       bearer,
-      transaction_charge: transactionCharge ,
+      transaction_charge: transactionCharge,
       plan,
       invoice_limit: invoiceLimit,
       currency,
     };
 
     try {
-      const response = await this.client.post<PaystackResponse<{
-        authorization_url: string;
-        reference: string;
-        access_code: string;
-      }>>(
-        "/transaction/initialize",
-        paystackPayload
-      );
+      const response = await this.client.post<
+        PaystackResponse<{
+          authorization_url: string;
+          reference: string;
+          access_code: string;
+        }>
+      >('/transaction/initialize', paystackPayload);
       const data = response.data?.data;
       return {
         status: PaymentStatus.PENDING, // Initialization is always pending until user pays
@@ -99,7 +117,7 @@ export class PaystackAdapter implements VoltaxProvider {
         raw: response.data,
       };
     } catch (error) {
-      this.handleError(error);
+      handleGatewayError(error, 'Paystack');
     }
   }
 
@@ -111,14 +129,14 @@ export class PaystackAdapter implements VoltaxProvider {
   async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> {
     if (!reference) {
       throw new VoltaxValidationError(
-        "Transaction reference is required for verification"
+        'Transaction reference is required for verification',
       );
     }
 
     try {
-      const response = await this.client.get<PaystackResponse<PaystackTransaction>>(
-        `/transaction/verify/${reference}`
-      );
+      const response = await this.client.get<
+        PaystackResponse<PaystackTransaction>
+      >(`/transaction/verify/${reference}`);
       const data = response.data?.data;
 
       return {
@@ -128,7 +146,7 @@ export class PaystackAdapter implements VoltaxProvider {
         raw: response.data,
       };
     } catch (error) {
-      this.handleError(error);
+      handleGatewayError(error, 'Paystack');
     }
   }
 
@@ -137,7 +155,7 @@ export class PaystackAdapter implements VoltaxProvider {
    */
   async getPaymentStatus(reference: string): Promise<PaymentStatus> {
     const response = await this.verifyTransaction(reference);
-    return response.status
+    return response.status;
   }
 
   /**
@@ -145,42 +163,14 @@ export class PaystackAdapter implements VoltaxProvider {
    */
   private mapPaystackStatus(status: string): PaymentStatus {
     switch (status) {
-      case "success":
+      case 'success':
         return PaymentStatus.SUCCESS;
-      case "failed":
-      case "reversed":
-      case "abandoned":
+      case 'failed':
+      case 'reversed':
+      case 'abandoned':
         return PaymentStatus.FAILED;
       default:
         return PaymentStatus.PENDING;
     }
-  }
-
-
-  private handleError(error: any): never {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-
-      if (axiosError.response) {
-        const data = axiosError.response.data as any;
-        throw new VoltaxGatewayError(
-          `Paystack Error: ${data?.message || axiosError.message}`,
-          "paystack",
-          axiosError.response.status,
-          data
-        );
-      } else if (axiosError.request) {
-
-        throw new VoltaxNetworkError(
-          "No response from Paystack gateway",
-          axiosError
-        );
-      } else {
-        throw new VoltaxError(axiosError.message);
-      }
-    }
-    throw new VoltaxError(
-      error instanceof Error ? error.message : "Unknown error occurred with Paystack"
-    );
   }
 }
