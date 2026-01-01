@@ -10,7 +10,7 @@ import {
   VoltaxError,
 } from "../../core/errors.js";
 import axios, { AxiosError, } from "axios";
-import { HubtelAPIResponse, HubtelConfig, HubtelInitiatePaymentResponse, HubtelPaymentStatus } from "./types.js";
+import { HubtelAPIResponse, HubtelConfig, HubtelInitiatePaymentResponse, HubtelTransaction } from "./types.js";
 import { InitiatePaymentDTO } from "../../core/schemas.js";
 import { validateHubtelRequest } from "./utils.js";
 
@@ -97,7 +97,7 @@ export class HubtelAdapter implements VoltaxProvider {
       }
 
       try {
-        const { data } = await axios.get<HubtelAPIResponse<HubtelPaymentStatus>>(
+        const { data } = await axios.get<HubtelAPIResponse<HubtelTransaction>>(
           `https://api-txnstatus.hubtel.com/transactions/${this.merchantAccount}/status`,
           {
             headers: { Authorization: this.authHeader }

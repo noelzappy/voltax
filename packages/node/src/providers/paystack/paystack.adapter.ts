@@ -12,17 +12,18 @@ import {
 } from "../../core/errors.js";
 import { InitiatePaymentDTO, InitiatePaymentSchema } from "../../core/schemas.js";
 import { isValidAmount } from "../../core/utils.js";
+import { PaystackResponse, PaystackTransaction } from "./types.js";
 
 
 export class PaystackAdapter implements VoltaxProvider {
-  private readonly axiosInstance: AxiosInstance;
+  private readonly client: AxiosInstance;
 
   constructor(secretKey: string) {
     if (!secretKey) {
       throw new VoltaxValidationError("Paystack secret key is required");
     }
 
-    this.axiosInstance = axios.create({
+    this.client = axios.create({
       baseURL: "https://api.paystack.co",
       timeout: 10000,
       headers: {
@@ -81,12 +82,15 @@ export class PaystackAdapter implements VoltaxProvider {
     };
 
     try {
-      const response = await this.axiosInstance.post(
+      const response = await this.client.post<PaystackResponse<{
+        authorization_url: string;
+        reference: string;
+        access_code: string;
+      }>>(
         "/transaction/initialize",
         paystackPayload
       );
       const data = response.data?.data;
-
       return {
         status: PaymentStatus.PENDING, // Initialization is always pending until user pays
         reference: data.reference,
@@ -112,7 +116,7 @@ export class PaystackAdapter implements VoltaxProvider {
     }
 
     try {
-      const response = await this.axiosInstance.get(
+      const response = await this.client.get<PaystackResponse<PaystackTransaction>>(
         `/transaction/verify/${reference}`
       );
       const data = response.data?.data;
