@@ -97,15 +97,6 @@ jobs:
                   registry-url: "https://npm.pkg.github.com"
                   scope: "@noelzappy"
 
-            - name: Prepare package for GitHub Packages
-              working-directory: packages/node
-              run: |
-                  node -e "
-                    const pkg = require('./package.json');
-                    pkg.name = '@noelzappy/voltax-node';
-                    require('fs').writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
-                  "
-
             - name: Publish to GitHub Packages
               working-directory: packages/node
               run: npm publish --access public
