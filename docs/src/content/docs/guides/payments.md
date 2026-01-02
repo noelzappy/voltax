@@ -3,8 +3,6 @@ title: Initializing Payments
 description: Learn how to initialize and manage payments with Voltax.
 ---
 
-import { Tabs, TabItem, Steps, Aside } from "@astrojs/starlight/components";
-
 This guide covers everything you need to know about initializing payments, verifying transactions, and handling payment responses with Voltax.
 
 ## Payment Flow Overview
@@ -14,7 +12,7 @@ All Voltax payment providers follow the same general flow:
 <Steps>
 
 1. **Initialize Payment**: Call `initializePayment()` with payment details
-2. **Redirect User**: Redirect the customer to the `authorizationUrl`
+2. **Redirect User**: Redirect the customer to the `authorizationUrl` 
 3. **Customer Completes Payment**: Customer enters payment details on the provider's page
 4. **Callback**: Provider redirects customer back to your `callbackUrl`
 5. **Verify Transaction**: Call `verifyTransaction()` to confirm payment status
@@ -26,20 +24,20 @@ All Voltax payment providers follow the same general flow:
 All providers use a standardized payment initialization payload:
 
 ```typescript
-import { Currency } from "@noelzappy/voltax";
+import { Currency } from '@noelzappy/voltax';
 
 interface InitiatePaymentDTO {
   // Required fields
-  amount: number; // Amount in major currency units (e.g., 100.50)
-  email: string; // Customer's email address
-  currency: Currency; // Currency code (NGN, GHS, USD, KES, ZAR)
+  amount: number;         // Amount in major currency units (e.g., 100.50)
+  email: string;          // Customer's email address
+  currency: Currency;     // Currency code (NGN, GHS, USD, KES, ZAR)
 
   // Optional fields
-  reference?: string; // Your unique transaction reference
-  mobileNumber?: string; // Customer's mobile number (10-15 digits)
-  description?: string; // Transaction description (max 255 chars)
-  callbackUrl?: string; // URL to redirect after payment (Used as webhook for Hubtel)
-  metadata?: Record<string, any>; // Custom data to attach
+  reference?: string;     // Your unique transaction reference
+  mobileNumber?: string;  // Customer's mobile number (10-15 digits)
+  description?: string;   // Transaction description (max 255 chars)
+  callbackUrl?: string;   // URL to redirect after payment (Used as webhook for Hubtel)
+  metadata?: Record<string, any>;  // Custom data to attach
 
   // Provider-specific options
   options?: {
@@ -52,28 +50,28 @@ interface InitiatePaymentDTO {
 
 ### Required Fields
 
-| Field      | Type       | Description                                                                            |
-| ---------- | ---------- | -------------------------------------------------------------------------------------- |
-| `amount`   | `number`   | Payment amount in major units (e.g., 100 for 100 NGN)                                  |
-| `email`    | `string`   | Valid email address of the customer                                                    |
+| Field | Type | Description |
+|-------|------|-------------|
+| `amount` | `number` | Payment amount in major units (e.g., 100 for 100 NGN) |
+| `email` | `string` | Valid email address of the customer |
 | `currency` | `Currency` | One of: `Currency.NGN`, `Currency.GHS`, `Currency.USD`, `Currency.KES`, `Currency.ZAR` |
 
 ### Optional Fields
 
-| Field          | Type                  | Description                                                               |
-| -------------- | --------------------- | ------------------------------------------------------------------------- |
-| `reference`    | `string`              | Unique identifier for the transaction. Required by Flutterwave and Hubtel |
-| `mobileNumber` | `string`              | Customer phone number (10-15 characters)                                  |
-| `description`  | `string`              | Brief description of the payment (max 255 chars)                          |
-| `callbackUrl`  | `string`              | URL to redirect after payment completion                                  |
-| `metadata`     | `Record<string, any>` | Custom key-value data attached to the transaction                         |
+| Field | Type | Description |
+|-------|------|-------------|
+| `reference` | `string` | Unique identifier for the transaction. Required by Flutterwave and Hubtel |
+| `mobileNumber` | `string` | Customer phone number (10-15 characters) |
+| `description` | `string` | Brief description of the payment (max 255 chars) |
+| `callbackUrl` | `string` | URL to redirect after payment completion |
+| `metadata` | `Record<string, any>` | Custom key-value data attached to the transaction |
 
 ## Initialize a Payment
 
 ### Basic Example
 
 ```typescript
-import Voltax, { Currency } from "@noelzappy/voltax";
+import Voltax, { Currency } from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
@@ -81,10 +79,10 @@ const voltax = new Voltax({
 
 const payment = await voltax.paystack.initializePayment({
   amount: 5000,
-  email: "customer@example.com",
+  email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `order-${Date.now()}`,
-  callbackUrl: "https://yoursite.com/payment/callback",
+  callbackUrl: 'https://yoursite.com/payment/callback',
 });
 
 console.log(payment);
@@ -104,13 +102,13 @@ Attach custom data to track orders, users, or any relevant information:
 ```typescript
 const payment = await voltax.paystack.initializePayment({
   amount: 2500,
-  email: "customer@example.com",
+  email: 'customer@example.com',
   currency: Currency.NGN,
-  reference: "order-123",
+  reference: 'order-123',
   metadata: {
-    orderId: "ORD-12345",
-    userId: "USR-67890",
-    productName: "Premium Subscription",
+    orderId: 'ORD-12345',
+    userId: 'USR-67890',
+    productName: 'Premium Subscription',
     quantity: 1,
   },
 });
@@ -125,49 +123,47 @@ Each provider supports additional options through the `options` field:
   ```typescript
   import { PaystackChannel } from '@noelzappy/voltax';
 
-const payment = await voltax.paystack.initializePayment({
-amount: 5000,
-email: 'customer@example.com',
-currency: Currency.NGN,
-options: {
-paystack: {
-// Limit payment channels
-channels: [PaystackChannel.CARD, PaystackChannel.BANK_TRANSFER],
-// Split payment to subaccount
-subaccount: 'ACCT_xxxxxxxx',
-// Add transaction charge
-transactionCharge: 100,
-// For subscription payments
-plan: 'PLN_xxxxxxxx',
-},
-},
-});
-
-````
-</TabItem>
-<TabItem label="Flutterwave">
-```typescript
-const payment = await voltax.flutterwave.initializePayment({
-  amount: 5000,
-  email: 'customer@example.com',
-  currency: Currency.NGN,
-  reference: 'order-123',  // Required for Flutterwave
-  options: {
-    flutterwave: {
-      customerName: 'John Doe',
-      pageTitle: 'My Store Checkout',
-      logoUrl: 'https://yoursite.com/logo.png',
-      sessionDuration: 30,  // Minutes (1-1440)
-      maxRetryAttempts: 3,  // Max retry attempts (1-10)
-      paymentOptions: 'card,banktransfer,ussd',
-      subaccounts: [
-        { id: 'RS_xxxxxxxx' },
-      ],
+  const payment = await voltax.paystack.initializePayment({
+    amount: 5000,
+    email: 'customer@example.com',
+    currency: Currency.NGN,
+    options: {
+      paystack: {
+        // Limit payment channels
+        channels: [PaystackChannel.CARD, PaystackChannel.BANK_TRANSFER],
+        // Split payment to subaccount
+        subaccount: 'ACCT_xxxxxxxx',
+        // Add transaction charge
+        transactionCharge: 100,
+        // For subscription payments
+        plan: 'PLN_xxxxxxxx',
+      },
     },
-  },
-});
-````
-
+  });
+  ```
+  </TabItem>
+  <TabItem label="Flutterwave">
+  ```typescript
+  const payment = await voltax.flutterwave.initializePayment({
+    amount: 5000,
+    email: 'customer@example.com',
+    currency: Currency.NGN,
+    reference: 'order-123',  // Required for Flutterwave
+    options: {
+      flutterwave: {
+        customerName: 'John Doe',
+        pageTitle: 'My Store Checkout',
+        logoUrl: 'https://yoursite.com/logo.png',
+        sessionDuration: 30,  // Minutes (1-1440)
+        maxRetryAttempts: 3,  // Max retry attempts (1-10)
+        paymentOptions: 'card,banktransfer,ussd',
+        subaccounts: [
+          { id: 'RS_xxxxxxxx' },
+        ],
+      },
+    },
+  });
+  ```
   </TabItem>
   <TabItem label="Hubtel">
   ```typescript
@@ -194,11 +190,11 @@ All payment operations return a standardized response:
 
 ```typescript
 interface VoltaxPaymentResponse {
-  status: PaymentStatus; // SUCCESS, PENDING, or FAILED
-  reference: string; // Your transaction reference
-  authorizationUrl?: string; // URL to redirect customer (for initialization)
+  status: PaymentStatus;      // SUCCESS, PENDING, or FAILED
+  reference: string;          // Your transaction reference
+  authorizationUrl?: string;  // URL to redirect customer (for initialization)
   externalReference?: string; // Provider's internal reference
-  raw?: any; // Original provider response
+  raw?: any;                  // Original provider response
 }
 ```
 
@@ -206,9 +202,9 @@ interface VoltaxPaymentResponse {
 
 ```typescript
 enum PaymentStatus {
-  SUCCESS = "SUCCESS", // Payment completed successfully
-  PENDING = "PENDING", // Payment is processing or awaiting action
-  FAILED = "FAILED", // Payment failed or was cancelled
+  SUCCESS = 'SUCCESS',   // Payment completed successfully
+  PENDING = 'PENDING',   // Payment is processing or awaiting action
+  FAILED = 'FAILED',     // Payment failed or was cancelled
 }
 ```
 
@@ -217,25 +213,25 @@ enum PaymentStatus {
 After the customer completes payment, verify the transaction status:
 
 ```typescript
-import { PaymentStatus } from "@noelzappy/voltax";
+import { PaymentStatus } from '@noelzappy/voltax';
 
-const result = await voltax.paystack.verifyTransaction("order-123");
+const result = await voltax.paystack.verifyTransaction('order-123');
 
 switch (result.status) {
   case PaymentStatus.SUCCESS:
     // Payment successful - fulfill the order
-    console.log("Payment completed!");
-    console.log("Provider reference:", result.externalReference);
+    console.log('Payment completed!');
+    console.log('Provider reference:', result.externalReference);
     break;
 
   case PaymentStatus.PENDING:
     // Payment still processing
-    console.log("Payment is still pending...");
+    console.log('Payment is still pending...');
     break;
 
   case PaymentStatus.FAILED:
     // Payment failed
-    console.log("Payment failed");
+    console.log('Payment failed');
     break;
 }
 ```
@@ -245,10 +241,10 @@ switch (result.status) {
 For a quick status check without full transaction details:
 
 ```typescript
-const status = await voltax.paystack.getPaymentStatus("order-123");
+const status = await voltax.paystack.getPaymentStatus('order-123');
 
 if (status === PaymentStatus.SUCCESS) {
-  console.log("Order is paid!");
+  console.log('Order is paid!');
 }
 ```
 
@@ -270,19 +266,19 @@ const voltax = new Voltax({
 // Use Paystack for Nigerian customers
 const ngPayment = await voltax.paystack.initializePayment({
   amount: 5000,
-  email: "customer@ng.example.com",
+  email: 'customer@ng.example.com',
   currency: Currency.NGN,
 });
 
 // Use Hubtel for Ghanaian customers
 const ghPayment = await voltax.hubtel.initializePayment({
   amount: 100,
-  email: "customer@gh.example.com",
+  email: 'customer@gh.example.com',
   currency: Currency.GHS,
-  reference: "gh-order-123",
-  callbackUrl: "https://yoursite.com/webhook",
+  reference: 'gh-order-123',
+  callbackUrl: 'https://yoursite.com/webhook',
   options: {
-    hubtel: { returnUrl: "https://yoursite.com/success" },
+    hubtel: { returnUrl: 'https://yoursite.com/success' },
   },
 });
 ```
@@ -290,25 +286,18 @@ const ghPayment = await voltax.hubtel.initializePayment({
 ## Best Practices
 
 <Aside type="tip" title="Generate Unique References">
-  Always generate unique transaction references to avoid duplicate payments.
-  Consider using UUIDs or combining timestamps with random strings.
+  Always generate unique transaction references to avoid duplicate payments. Consider using UUIDs or combining timestamps with random strings.
 </Aside>
 
 <Aside type="caution" title="Always Verify Payments">
-  Never trust callback parameters alone. Always verify the transaction status
-  server-side using `verifyTransaction()` before fulfilling orders.
+  Never trust callback parameters alone. Always verify the transaction status server-side using `verifyTransaction()` before fulfilling orders.
 </Aside>
 
 ### Example: Robust Payment Flow
 
 ```typescript
-import Voltax, {
-  Currency,
-  PaymentStatus,
-  VoltaxValidationError,
-  VoltaxGatewayError,
-} from "@noelzappy/voltax";
-import { randomUUID } from "crypto";
+import Voltax, { Currency, PaymentStatus, VoltaxValidationError, VoltaxGatewayError } from '@noelzappy/voltax';
+import { randomUUID } from 'crypto';
 
 async function processPayment(orderDetails: {
   amount: number;
@@ -340,10 +329,10 @@ async function processPayment(orderDetails: {
     };
   } catch (error) {
     if (error instanceof VoltaxValidationError) {
-      return { success: false, error: "Invalid payment details" };
+      return { success: false, error: 'Invalid payment details' };
     }
     if (error instanceof VoltaxGatewayError) {
-      return { success: false, error: "Payment provider error" };
+      return { success: false, error: 'Payment provider error' };
     }
     throw error;
   }

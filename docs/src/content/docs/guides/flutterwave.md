@@ -22,7 +22,7 @@ Before you begin, you'll need:
 Initialize Voltax with your Flutterwave credentials:
 
 ```typescript
-import Voltax from 'voltax-node';
+import Voltax from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   flutterwave: {
@@ -40,7 +40,7 @@ const voltax = new Voltax({
 ### Basic Payment
 
 ```typescript
-import { Currency } from 'voltax-node';
+import { Currency } from '@noelzappy/voltax';
 
 const payment = await voltax.flutterwave.initializePayment({
   amount: 5000,
@@ -237,7 +237,7 @@ interface FlutterwaveOptions {
 After the customer completes payment, verify the transaction:
 
 ```typescript
-import { PaymentStatus } from 'voltax-node';
+import { PaymentStatus } from '@noelzappy/voltax';
 
 const result = await voltax.flutterwave.verifyTransaction('flw-123456');
 
@@ -284,7 +284,7 @@ Here's a full Express.js integration example:
 
 ```typescript
 import express from 'express';
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 import { randomUUID } from 'crypto';
 
 const app = express();

@@ -12,7 +12,7 @@ This page provides practical examples for common payment integration scenarios u
 A typical e-commerce checkout flow with order tracking:
 
 ```typescript
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 import { randomUUID } from 'crypto';
 
 // Initialize Voltax
@@ -77,7 +77,7 @@ async function handlePaymentCallback(orderId: string, reference: string) {
 Using Paystack's subscription plan feature:
 
 ```typescript
-import Voltax, { Currency, PaystackChannel } from 'voltax-node';
+import Voltax, { Currency, PaystackChannel } from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
@@ -112,7 +112,7 @@ async function createSubscription(
 Supporting different currencies based on customer location:
 
 ```typescript
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
@@ -186,7 +186,7 @@ import Voltax, {
   VoltaxValidationError,
   VoltaxGatewayError,
   VoltaxNetworkError,
-} from 'voltax-node';
+} from '@noelzappy/voltax';
 
 const app = express();
 app.use(express.json());
@@ -305,7 +305,7 @@ Using Voltax with Next.js App Router:
 ```typescript
 // app/api/payments/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import Voltax, { Currency } from 'voltax-node';
+import Voltax, { Currency } from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
@@ -342,7 +342,7 @@ export async function POST(request: NextRequest) {
 ```typescript
 // app/api/payments/verify/[reference]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import Voltax, { PaymentStatus } from 'voltax-node';
+import Voltax, { PaymentStatus } from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
@@ -375,7 +375,7 @@ Handling payment webhooks securely:
 ```typescript
 import express from 'express';
 import crypto from 'crypto';
-import Voltax, { PaymentStatus } from 'voltax-node';
+import Voltax, { PaymentStatus } from '@noelzappy/voltax';
 
 const app = express();
 
@@ -429,7 +429,7 @@ async function processSuccessfulPayment(reference: string, data: any) {
 For testing purposes:
 
 ```typescript
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 
 // Use test/sandbox keys
 const voltax = new Voltax({

@@ -1,4 +1,4 @@
-# voltax-node
+# @noelzappy/voltax
 
 > The Unified Payment SDK for Africa.
 

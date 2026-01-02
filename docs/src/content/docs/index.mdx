@@ -16,7 +16,13 @@ hero:
       icon: external
 ---
 
-import { Card, CardGrid, Aside, Tabs, TabItem } from "@astrojs/starlight/components";
+import {
+  Card,
+  CardGrid,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
 
 ## Why Voltax?
 
@@ -31,7 +37,7 @@ Building payment integrations across Africa means dealing with multiple provider
 ## Quick Example
 
 ```typescript
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus } from "@noelzappy/voltax";
 
 // Initialize with your provider credentials
 const voltax = new Voltax({
@@ -42,16 +48,16 @@ const voltax = new Voltax({
 // Same API for any provider
 const payment = await voltax.paystack.initializePayment({
   amount: 5000,
-  email: 'customer@example.com',
+  email: "customer@example.com",
   currency: Currency.NGN,
-  reference: 'order-123',
+  reference: "order-123",
 });
 
 // Redirect customer to payment page
 console.log(payment.authorizationUrl);
 
 // Later, verify the payment
-const result = await voltax.paystack.verifyTransaction('order-123');
+const result = await voltax.paystack.verifyTransaction("order-123");
 if (result.status === PaymentStatus.SUCCESS) {
   // Fulfill the order
 }
@@ -59,11 +65,11 @@ if (result.status === PaymentStatus.SUCCESS) {
 
 ## Supported Providers
 
-| Provider | Countries | Status |
-|----------|-----------|--------|
-| **Paystack** | Nigeria, Ghana, South Africa, Kenya | ✅ Supported |
+| Provider        | Countries                                     | Status       |
+| --------------- | --------------------------------------------- | ------------ |
+| **Paystack**    | Nigeria, Ghana, South Africa, Kenya           | ✅ Supported |
 | **Flutterwave** | Nigeria, Ghana, Kenya, South Africa + 30 more | ✅ Supported |
-| **Hubtel** | Ghana | ✅ Supported |
+| **Hubtel**      | Ghana                                         | ✅ Supported |
 
 ## Next Steps
 
@@ -73,13 +79,16 @@ if (result.status === PaymentStatus.SUCCESS) {
     Guide](/guides/getting-started/).
   </Card>
   <Card title="Initialize Payments" icon="rocket">
-    Learn how to [create and manage payments](/guides/payments/) with any provider.
+    Learn how to [create and manage payments](/guides/payments/) with any
+    provider.
   </Card>
   <Card title="Handle Errors" icon="warning">
-    Implement robust [error handling](/guides/error-handling/) for production apps.
+    Implement robust [error handling](/guides/error-handling/) for production
+    apps.
   </Card>
   <Card title="API Reference" icon="open-book">
-    Explore the complete [API documentation](/reference/) with all classes, interfaces, and types.
+    Explore the complete [API documentation](/reference/) with all classes,
+    interfaces, and types.
   </Card>
 </CardGrid>
 
@@ -87,13 +96,16 @@ if (result.status === PaymentStatus.SUCCESS) {
 
 <CardGrid>
   <Card title="Paystack" icon="seti:config">
-    Integrate [Paystack payments](/guides/paystack/) with channels, splits, and subscriptions.
+    Integrate [Paystack payments](/guides/paystack/) with channels, splits, and
+    subscriptions.
   </Card>
   <Card title="Flutterwave" icon="seti:config">
-    Set up [Flutterwave payments](/guides/flutterwave/) with customization and subaccounts.
+    Set up [Flutterwave payments](/guides/flutterwave/) with customization and
+    subaccounts.
   </Card>
   <Card title="Hubtel" icon="seti:config">
-    Configure [Hubtel payments](/guides/hubtel/) for Ghana with mobile money support.
+    Configure [Hubtel payments](/guides/hubtel/) for Ghana with mobile money
+    support.
   </Card>
   <Card title="Examples" icon="seti:todo">
     Real-world [integration examples](/guides/example/) for common scenarios.

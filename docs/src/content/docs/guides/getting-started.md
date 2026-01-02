@@ -3,8 +3,6 @@ title: Getting Started
 description: Learn how to install and configure the Voltax SDK for Node.js.
 ---
 
-import { Tabs, TabItem, Steps, Aside } from "@astrojs/starlight/components";
-
 Voltax is a unified payment SDK that simplifies integrating multiple African payment gateways (Paystack, Flutterwave, Hubtel) into a single, consistent API. Build faster, switch providers easily, and maintain less code.
 
 ## Features
@@ -18,7 +16,6 @@ Voltax is a unified payment SDK that simplifies integrating multiple African pay
 ## Prerequisites
 
 Before you begin, make sure you have:
-
 - Node.js 18 or later
 - npm, pnpm, or yarn package manager
 - API credentials from at least one supported payment provider
@@ -27,10 +24,22 @@ Before you begin, make sure you have:
 
 Install the Voltax SDK using your preferred package manager.
 
-<Tabs>
-  <TabItem label="npm">```bash npm install @noelzappy/voltax ```</TabItem>
-  <TabItem label="pnpm">```bash pnpm add @noelzappy/voltax ```</TabItem>
-  <TabItem label="yarn">```bash yarn add @noelzappy/voltax ```</TabItem>
+<Tabs default="npm">
+  <TabItem label="npm">
+  ```bash
+  npm install @noelzappy/voltax
+  ```
+  </TabItem>
+  <TabItem label="pnpm">
+  ```bash
+  pnpm add @noelzappy/voltax
+  ```
+  </TabItem>
+  <TabItem label="yarn">
+  ```bash
+  yarn add @noelzappy/voltax
+  ```
+  </TabItem>
 </Tabs>
 
 ## Quick Start
@@ -43,10 +52,10 @@ Install the Voltax SDK using your preferred package manager.
 
    ```typescript
    // Default import
-   import Voltax from "@noelzappy/voltax";
+   import Voltax from '@noelzappy/voltax';
 
    // Or named import
-   import { Voltax } from "@noelzappy/voltax";
+   import { Voltax } from '@noelzappy/voltax';
    ```
 
 2. **Initialize the SDK**
@@ -77,15 +86,15 @@ Install the Voltax SDK using your preferred package manager.
    Use the provider of your choice to initialize a payment:
 
    ```typescript
-   import { Currency } from "@noelzappy/voltax";
+   import { Currency } from '@noelzappy/voltax';
 
    const response = await voltax.paystack.initializePayment({
-     amount: 100.0, // Amount in major currency units (e.g., 100 NGN)
-     email: "customer@example.com",
+     amount: 100.00,  // Amount in major currency units (e.g., 100 NGN)
+     email: 'customer@example.com',
      currency: Currency.NGN,
-     reference: "unique-transaction-ref-123",
-     callbackUrl: "https://yoursite.com/payment/callback",
-     description: "Payment for Order #123",
+     reference: 'unique-transaction-ref-123',
+     callbackUrl: 'https://yoursite.com/payment/callback',
+     description: 'Payment for Order #123',
    });
 
    // Redirect user to complete payment
@@ -97,35 +106,32 @@ Install the Voltax SDK using your preferred package manager.
    After the user completes the payment, verify the transaction:
 
    ```typescript
-   import { PaymentStatus } from "@noelzappy/voltax";
+   import { PaymentStatus } from '@noelzappy/voltax';
 
-   const verification = await voltax.paystack.verifyTransaction(
-     "unique-transaction-ref-123"
-   );
+   const verification = await voltax.paystack.verifyTransaction('unique-transaction-ref-123');
 
    if (verification.status === PaymentStatus.SUCCESS) {
-     console.log("Payment successful!");
+     console.log('Payment successful!');
    } else if (verification.status === PaymentStatus.PENDING) {
-     console.log("Payment is still processing...");
+     console.log('Payment is still processing...');
    } else {
-     console.log("Payment failed.");
+     console.log('Payment failed.');
    }
    ```
 
 </Steps>
 
 <Aside type="tip">
-  Always store your API keys securely in environment variables. Never commit
-  them to version control.
+  Always store your API keys securely in environment variables. Never commit them to version control.
 </Aside>
 
 ## Supported Providers
 
-| Provider                            | Countries                                     | Currencies              |
-| ----------------------------------- | --------------------------------------------- | ----------------------- |
-| [Paystack](/guides/paystack/)       | Nigeria, Ghana, South Africa, Kenya           | NGN, GHS, ZAR, KES, USD |
+| Provider | Countries | Currencies |
+|----------|-----------|------------|
+| [Paystack](/guides/paystack/) | Nigeria, Ghana, South Africa, Kenya | NGN, GHS, ZAR, KES, USD |
 | [Flutterwave](/guides/flutterwave/) | Nigeria, Ghana, Kenya, South Africa, and more | NGN, GHS, KES, ZAR, USD |
-| [Hubtel](/guides/hubtel/)           | Ghana                                         | GHS                     |
+| [Hubtel](/guides/hubtel/) | Ghana | GHS |
 
 ## Configuration Reference
 
@@ -133,7 +139,7 @@ Install the Voltax SDK using your preferred package manager.
 
 ```typescript
 interface PaystackConfig {
-  secretKey: string; // Your Paystack secret key
+  secretKey: string;  // Your Paystack secret key
 }
 ```
 
@@ -141,7 +147,7 @@ interface PaystackConfig {
 
 ```typescript
 interface FlutterwaveConfig {
-  secretKey: string; // Your Flutterwave secret key
+  secretKey: string;  // Your Flutterwave secret key
 }
 ```
 
@@ -149,9 +155,9 @@ interface FlutterwaveConfig {
 
 ```typescript
 interface HubtelConfig {
-  clientId: string; // Your Hubtel client ID
-  clientSecret: string; // Your Hubtel client secret
-  merchantAccountNumber: string; // Your Hubtel merchant account number
+  clientId: string;           // Your Hubtel client ID
+  clientSecret: string;       // Your Hubtel client secret
+  merchantAccountNumber: string;  // Your Hubtel merchant account number
 }
 ```
 

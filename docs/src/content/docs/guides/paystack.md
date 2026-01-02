@@ -22,7 +22,7 @@ Before you begin, you'll need:
 Initialize Voltax with your Paystack credentials:
 
 ```typescript
-import Voltax from 'voltax-node';
+import Voltax from '@noelzappy/voltax';
 
 const voltax = new Voltax({
   paystack: {
@@ -36,7 +36,7 @@ const voltax = new Voltax({
 ### Basic Payment
 
 ```typescript
-import { Currency } from 'voltax-node';
+import { Currency } from '@noelzappy/voltax';
 
 const payment = await voltax.paystack.initializePayment({
   amount: 5000,  // 5,000 NGN (Voltax handles kobo conversion)
@@ -83,7 +83,7 @@ Paystack supports several advanced options through the `options.paystack` field:
 Limit which payment methods customers can use:
 
 ```typescript
-import { PaystackChannel } from 'voltax-node';
+import { PaystackChannel } from '@noelzappy/voltax';
 
 const payment = await voltax.paystack.initializePayment({
   amount: 5000,
@@ -193,7 +193,7 @@ interface PaystackOptions {
 After the customer completes payment, verify the transaction:
 
 ```typescript
-import { PaymentStatus } from 'voltax-node';
+import { PaymentStatus } from '@noelzappy/voltax';
 
 const result = await voltax.paystack.verifyTransaction('txn-123456');
 
@@ -242,7 +242,7 @@ Here's a full Express.js integration example:
 
 ```typescript
 import express from 'express';
-import Voltax, { Currency, PaymentStatus, PaystackChannel } from 'voltax-node';
+import Voltax, { Currency, PaymentStatus, PaystackChannel } from '@noelzappy/voltax';
 
 const app = express();
 app.use(express.json());

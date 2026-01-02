@@ -23,7 +23,7 @@ VoltaxError (base class)
 The base error class for all Voltax-related errors.
 
 ```typescript
-import { VoltaxError } from 'voltax-node';
+import { VoltaxError } from '@noelzappy/voltax';
 
 try {
   await voltax.paystack.initializePayment(payload);
@@ -39,7 +39,7 @@ try {
 Thrown when input validation fails. This includes invalid email addresses, unsupported currencies, missing required fields, or invalid amounts.
 
 ```typescript
-import { VoltaxValidationError } from 'voltax-node';
+import { VoltaxValidationError } from '@noelzappy/voltax';
 
 try {
   await voltax.paystack.initializePayment({
@@ -78,7 +78,7 @@ try {
 Thrown when the payment provider's API returns an error response (e.g., invalid API key, transaction not found, insufficient funds).
 
 ```typescript
-import { VoltaxGatewayError } from 'voltax-node';
+import { VoltaxGatewayError } from '@noelzappy/voltax';
 
 try {
   await voltax.paystack.verifyTransaction('invalid-reference');
@@ -110,7 +110,7 @@ try {
 Thrown when the network request fails due to connectivity issues, timeouts, or DNS errors.
 
 ```typescript
-import { VoltaxNetworkError } from 'voltax-node';
+import { VoltaxNetworkError } from '@noelzappy/voltax';
 
 try {
   await voltax.paystack.initializePayment(payload);
@@ -150,7 +150,7 @@ import {
   VoltaxValidationError,
   VoltaxGatewayError,
   VoltaxNetworkError,
-} from 'voltax-node';
+} from '@noelzappy/voltax';
 
 async function processPayment(payload: InitiatePaymentDTO) {
   const voltax = new Voltax({
@@ -326,7 +326,7 @@ try {
 For advanced users, Voltax exports the `handleGatewayError` utility function used internally to process Axios errors:
 
 ```typescript
-import { handleGatewayError } from 'voltax-node';
+import { handleGatewayError } from '@noelzappy/voltax';
 
 // This function always throws - it transforms errors and re-throws them
 try {

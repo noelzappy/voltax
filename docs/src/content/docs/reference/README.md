@@ -6,19 +6,19 @@ title: "API Reference"
 slug: reference
 ---
 
-This is the complete API reference for `voltax-node`. The SDK exports all the classes, interfaces, enums, and utilities you need to integrate African payment gateways.
+This is the complete API reference for `@noelzappy/voltax`. The SDK exports all the classes, interfaces, enums, and utilities you need to integrate African payment gateways.
 
 ## Installation
 
 ```bash
-npm install voltax-node
+npm install @noelzappy/voltax
 ```
 
 ## Quick Import Guide
 
 ```typescript
 // Main class (default export)
-import Voltax from 'voltax-node';
+import Voltax from '@noelzappy/voltax';
 
 // Named exports - import what you need
 import {
@@ -33,7 +33,7 @@ import {
   VoltaxValidationError,
   VoltaxGatewayError,
   VoltaxNetworkError,
-} from 'voltax-node';
+} from '@noelzappy/voltax';
 ```
 
 ---
