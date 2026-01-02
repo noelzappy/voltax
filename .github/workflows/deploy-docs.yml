@@ -31,8 +31,7 @@ jobs:
                   node-version: 20
                   cache: "npm"
 
-            - name: Install dependencies
-              working-directory: docs
+            - name: Install all dependencies
               run: npm ci
 
             - name: Build documentation
