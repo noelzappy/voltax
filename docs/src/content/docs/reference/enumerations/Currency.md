@@ -5,7 +5,7 @@ prev: false
 title: "Currency"
 ---
 
-Defined in: [packages/node/src/core/enums.ts:13](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L13)
+Defined in: [packages/node/src/core/enums.ts:13](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L13)
 
 Supported currencies for Voltax.
 
@@ -15,7 +15,7 @@ Supported currencies for Voltax.
 
 > **GHS**: `"GHS"`
 
-Defined in: [packages/node/src/core/enums.ts:14](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L14)
+Defined in: [packages/node/src/core/enums.ts:14](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L14)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [packages/node/src/core/enums.ts:14](https://github.com/noelzappy/vo
 
 > **KES**: `"KES"`
 
-Defined in: [packages/node/src/core/enums.ts:17](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L17)
+Defined in: [packages/node/src/core/enums.ts:17](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L17)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [packages/node/src/core/enums.ts:17](https://github.com/noelzappy/vo
 
 > **NGN**: `"NGN"`
 
-Defined in: [packages/node/src/core/enums.ts:15](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L15)
+Defined in: [packages/node/src/core/enums.ts:15](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L15)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [packages/node/src/core/enums.ts:15](https://github.com/noelzappy/vo
 
 > **USD**: `"USD"`
 
-Defined in: [packages/node/src/core/enums.ts:16](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L16)
+Defined in: [packages/node/src/core/enums.ts:16](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L16)
 
 ***
 
@@ -47,4 +47,4 @@ Defined in: [packages/node/src/core/enums.ts:16](https://github.com/noelzappy/vo
 
 > **ZAR**: `"ZAR"`
 
-Defined in: [packages/node/src/core/enums.ts:18](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/enums.ts#L18)
+Defined in: [packages/node/src/core/enums.ts:18](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L18)

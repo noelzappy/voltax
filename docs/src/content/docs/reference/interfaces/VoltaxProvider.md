@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxProvider"
 ---
 
-Defined in: [packages/node/src/core/interfaces.ts:18](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/interfaces.ts#L18)
+Defined in: [packages/node/src/core/interfaces.ts:18](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/interfaces.ts#L18)
 
 Interface that all Voltax Gateways must implement.
 
@@ -15,7 +15,7 @@ Interface that all Voltax Gateways must implement.
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:43](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/interfaces.ts#L43)
+Defined in: [packages/node/src/core/interfaces.ts:43](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/interfaces.ts#L43)
 
 Gets the status of a payment.
 In many cases aliases to verifyTransaction, but explicit for clarity.
@@ -38,7 +38,7 @@ The transaction reference
 
 > **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:28](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/interfaces.ts#L28)
+Defined in: [packages/node/src/core/interfaces.ts:28](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/interfaces.ts#L28)
 
 Initiates a payment transaction.
 
@@ -94,7 +94,7 @@ The payment details
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:36](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/interfaces.ts#L36)
+Defined in: [packages/node/src/core/interfaces.ts:36](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/interfaces.ts#L36)
 
 Verifies a transaction by its reference.
 

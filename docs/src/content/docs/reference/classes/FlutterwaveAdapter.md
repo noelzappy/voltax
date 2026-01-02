@@ -5,7 +5,7 @@ prev: false
 title: "FlutterwaveAdapter"
 ---
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:21](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L21)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:21](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L21)
 
 Interface that all Voltax Gateways must implement.
 
@@ -19,7 +19,7 @@ Interface that all Voltax Gateways must implement.
 
 > **new FlutterwaveAdapter**(`__namedParameters`): `FlutterwaveAdapter`
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:24](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L24)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:24](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L24)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:24](
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:150](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L150)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:150](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L150)
 
 Helper to get status directly.
 
@@ -61,7 +61,7 @@ Helper to get status directly.
 
 > **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:41](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L41)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:41](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L41)
 
 Initiate a payment with Flutterwave
 
@@ -119,7 +119,7 @@ Initiate a payment with Flutterwave
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:126](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L126)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:126](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L126)
 
 Verifies a transaction by its reference.
 

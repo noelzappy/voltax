@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxConfig"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:9](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L9)
+Defined in: [packages/node/src/core/voltax.ts:9](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L9)
 
 ## Properties
 
@@ -13,7 +13,7 @@ Defined in: [packages/node/src/core/voltax.ts:9](https://github.com/noelzappy/vo
 
 > `optional` **flutterwave**: `FlutterwaveConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L12)
+Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L12)
 
 ***
 
@@ -21,7 +21,7 @@ Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/v
 
 > `optional` **hubtel**: `HubtelConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L11)
+Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L11)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/v
 
 > `optional` **paystack**: `PaystackConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:10](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L10)
+Defined in: [packages/node/src/core/voltax.ts:10](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L10)

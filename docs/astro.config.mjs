@@ -25,8 +25,19 @@ export default defineConfig({
         {
           label: "Guides",
           items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Getting Started", link: "/guides/getting-started/" },
+            { label: "Getting Started", slug: "guides/getting-started" },
+            { label: "Core Concepts", slug: "guides/concepts" },
+            { label: "Initializing Payments", slug: "guides/payments" },
+            { label: "Error Handling", slug: "guides/error-handling" },
+            {
+              label: "Providers",
+              items: [
+                { label: "Paystack", slug: "guides/paystack" },
+                { label: "Flutterwave", slug: "guides/flutterwave" },
+                { label: "Hubtel", slug: "guides/hubtel" },
+              ],
+            },
+            { label: "Examples", slug: "guides/example" },
           ],
         },
         typeDocSidebarGroup,

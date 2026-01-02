@@ -1,49 +1,64 @@
-# Starlight Starter Kit: Basics
+# Voltax Documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+This is the documentation site for Voltax, the unified payment SDK for Africa. Built with [Starlight](https://starlight.astro.build).
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Structure
 
 ```
-npm create astro@latest -- --template starlight
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
-.
-├── public/
+docs/
 ├── src/
-│   ├── assets/
 │   ├── content/
 │   │   └── docs/
-│   └── content.config.ts
+│   │       ├── index.mdx          # Homepage
+│   │       ├── guides/            # User guides
+│   │       │   ├── getting-started.md
+│   │       │   ├── concepts.md
+│   │       │   ├── payments.md
+│   │       │   ├── error-handling.md
+│   │       │   ├── paystack.md
+│   │       │   ├── flutterwave.md
+│   │       │   ├── hubtel.md
+│   │       │   └── example.md
+│   │       └── reference/         # API Reference (auto-generated)
+│   │           ├── classes/
+│   │           ├── enumerations/
+│   │           ├── functions/
+│   │           ├── interfaces/
+│   │           ├── type-aliases/
+│   │           └── variables/
+│   └── assets/
 ├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+└── package.json
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## API Reference
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+The API reference is auto-generated from TypeScript source code using [starlight-typedoc](https://github.com/HiDeoo/starlight-typedoc). Run the build to regenerate documentation:
 
-Static assets, like favicons, can be placed in the `public/` directory.
+```bash
+npm run build
+```
 
-## 🧞 Commands
+## Contributing
 
-All commands are run from the root of the project, from a terminal:
+When adding new documentation:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+1. Add markdown files to `src/content/docs/guides/`
+2. Update sidebar in `astro.config.mjs`
+3. Use Starlight components for enhanced formatting

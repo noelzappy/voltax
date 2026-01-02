@@ -2,12 +2,47 @@
 editUrl: false
 next: false
 prev: false
-title: "voltax-node"
+title: "API Reference"
+slug: reference
+---
+
+This is the complete API reference for `voltax-node`. The SDK exports all the classes, interfaces, enums, and utilities you need to integrate African payment gateways.
+
+## Installation
+
+```bash
+npm install voltax-node
+```
+
+## Quick Import Guide
+
+```typescript
+// Main class (default export)
+import Voltax from 'voltax-node';
+
+// Named exports - import what you need
+import {
+  Voltax,
+  PaystackAdapter,
+  FlutterwaveAdapter,
+  HubtelAdapter,
+  Currency,
+  PaymentStatus,
+  PaystackChannel,
+  VoltaxError,
+  VoltaxValidationError,
+  VoltaxGatewayError,
+  VoltaxNetworkError,
+} from 'voltax-node';
+```
+
 ---
 
 ## Enumerations
 
 - [Currency](/reference/enumerations/currency/)
+- [PaymentStatus](/reference/enumerations/paymentstatus/)
+- [PaystackChannel](/reference/enumerations/paystackchannel/)
 - [PaymentStatus](/reference/enumerations/paymentstatus/)
 - [PaystackChannel](/reference/enumerations/paystackchannel/)
 

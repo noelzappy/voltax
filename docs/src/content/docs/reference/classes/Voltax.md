@@ -5,7 +5,7 @@ prev: false
 title: "Voltax"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L15)
+Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L15)
 
 ## Constructors
 
@@ -13,7 +13,7 @@ Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/v
 
 > **new Voltax**(`config`): `Voltax`
 
-Defined in: [packages/node/src/core/voltax.ts:20](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L20)
+Defined in: [packages/node/src/core/voltax.ts:20](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L20)
 
 #### Parameters
 
@@ -33,7 +33,7 @@ Defined in: [packages/node/src/core/voltax.ts:20](https://github.com/noelzappy/v
 
 > **get** **flutterwave**(): [`FlutterwaveAdapter`](/reference/classes/flutterwaveadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:61](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L61)
+Defined in: [packages/node/src/core/voltax.ts:61](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L61)
 
 Get Flutterwave provider instance
 
@@ -49,7 +49,7 @@ Get Flutterwave provider instance
 
 > **get** **hubtel**(): [`HubtelAdapter`](/reference/classes/hubteladapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L43)
+Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L43)
 
 Get Hubtel provider instance
 
@@ -65,7 +65,7 @@ Get Hubtel provider instance
 
 > **get** **paystack**(): [`PaystackAdapter`](/reference/classes/paystackadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:25](https://github.com/noelzappy/voltax/blob/902bc693f22624d3bec9406a5c1d8f6b182d63c0/packages/node/src/core/voltax.ts#L25)
+Defined in: [packages/node/src/core/voltax.ts:25](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L25)
 
 Get Paystack provider instance
 
