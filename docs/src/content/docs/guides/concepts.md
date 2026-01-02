@@ -3,8 +3,6 @@ title: Core Concepts
 description: Understand the architecture and design principles behind Voltax.
 ---
 
-import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
-
 This guide explains the key concepts and architecture behind Voltax to help you understand how the SDK works and how to use it effectively.
 
 ## The Problem

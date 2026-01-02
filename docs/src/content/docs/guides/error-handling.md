@@ -3,8 +3,6 @@ title: Error Handling
 description: Learn how to handle errors gracefully when using Voltax.
 ---
 
-import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
-
 Voltax provides a comprehensive error handling system with specific error classes for different failure scenarios. This guide explains each error type and how to handle them effectively.
 
 ## Error Hierarchy
@@ -296,54 +294,6 @@ async function initializeWithFailover(
     throw error;
   }
 }
-```
-
-### Express.js Error Handler
-
-```typescript
-import express from 'express';
-import {
-  VoltaxValidationError,
-  VoltaxGatewayError,
-  VoltaxNetworkError,
-} from 'voltax-node';
-
-const app = express();
-
-// Voltax error handler middleware
-app.use((err, req, res, next) => {
-  if (err instanceof VoltaxValidationError) {
-    return res.status(400).json({
-      error: 'Validation Error',
-      message: err.message,
-      details: err.errors,
-    });
-  }
-
-  if (err instanceof VoltaxGatewayError) {
-    // Log for monitoring
-    console.error('Gateway error:', {
-      provider: err.provider,
-      statusCode: err.statusCode,
-      data: err.data,
-    });
-
-    return res.status(502).json({
-      error: 'Payment Gateway Error',
-      message: 'Unable to process payment. Please try again.',
-    });
-  }
-
-  if (err instanceof VoltaxNetworkError) {
-    return res.status(503).json({
-      error: 'Service Unavailable',
-      message: 'Payment service is temporarily unavailable.',
-      retryAfter: 30,
-    });
-  }
-
-  next(err);
-});
 ```
 
 ## Configuration Errors

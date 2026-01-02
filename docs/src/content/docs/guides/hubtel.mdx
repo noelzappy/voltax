@@ -3,13 +3,14 @@ title: Hubtel Integration
 description: Complete guide to integrating Hubtel payments with Voltax.
 ---
 
-import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+import { Aside } from "@astrojs/starlight/components";
 
 [Hubtel](https://hubtel.com) is a leading payment and commerce platform in Ghana, offering mobile money, card payments, and more. This guide covers how to integrate Hubtel payments using Voltax.
 
 ## Prerequisites
 
 Before you begin, you'll need:
+
 - A Hubtel merchant account (sign up at [hubtel.com](https://hubtel.com))
 - Your Hubtel API credentials:
   - Client ID
@@ -17,7 +18,8 @@ Before you begin, you'll need:
   - Merchant Account Number
 
 <Aside type="caution">
-  Never expose your credentials in client-side code. Always keep them secure on your server.
+  Never expose your credentials in client-side code. Always keep them secure on
+  your server.
 </Aside>
 
 ## Configuration
@@ -25,7 +27,7 @@ Before you begin, you'll need:
 Initialize Voltax with your Hubtel credentials:
 
 ```typescript
-import Voltax from 'voltax-node';
+import Voltax from "voltax-node";
 
 const voltax = new Voltax({
   hubtel: {
@@ -39,26 +41,25 @@ const voltax = new Voltax({
 ## Initialize a Payment
 
 <Aside type="note" title="Required Fields">
-  Hubtel has specific requirements that differ from other providers:
-  - `reference` is **required**
-  - `callbackUrl` is **required**
-  - `options.hubtel.returnUrl` is **required**
+  Hubtel has specific requirements that differ from other providers: -
+  `reference` is **required** - `callbackUrl` is **required** -
+  `options.hubtel.returnUrl` is **required**
 </Aside>
 
 ### Basic Payment
 
 ```typescript
-import { Currency } from 'voltax-node';
+import { Currency } from "voltax-node";
 
 const payment = await voltax.hubtel.initializePayment({
-  amount: 100,  // 100 GHS
-  email: 'customer@example.com',
+  amount: 100, // 100 GHS
+  email: "customer@example.com",
   currency: Currency.GHS,
-  reference: `hub-${Date.now()}`,  // Required!
-  callbackUrl: 'https://yoursite.com/webhooks/hubtel',  // Required!
+  reference: `hub-${Date.now()}`, // Required!
+  callbackUrl: "https://yoursite.com/webhooks/hubtel", // Required!
   options: {
     hubtel: {
-      returnUrl: 'https://yoursite.com/payment/success',  // Required!
+      returnUrl: "https://yoursite.com/payment/success", // Required!
     },
   },
 });
@@ -73,16 +74,16 @@ console.log(payment.authorizationUrl);
 ```typescript
 const payment = await voltax.hubtel.initializePayment({
   amount: 250,
-  email: 'customer@example.com',
+  email: "customer@example.com",
   currency: Currency.GHS,
   reference: `order-${Date.now()}`,
-  mobileNumber: '0241234567',  // Customer's mobile money number
-  description: 'Order #12345 - Premium Package',
-  callbackUrl: 'https://yoursite.com/webhooks/hubtel',
+  mobileNumber: "0241234567", // Customer's mobile money number
+  description: "Order #12345 - Premium Package",
+  callbackUrl: "https://yoursite.com/webhooks/hubtel",
   options: {
     hubtel: {
-      returnUrl: 'https://yoursite.com/payment/success',
-      cancellationUrl: 'https://yoursite.com/payment/cancelled',
+      returnUrl: "https://yoursite.com/payment/success",
+      cancellationUrl: "https://yoursite.com/payment/cancelled",
     },
   },
 });
@@ -96,7 +97,7 @@ const payment = await voltax.hubtel.initializePayment({
 interface HubtelOptions {
   // URL to redirect after successful payment (Required!)
   returnUrl: string;
-  
+
   // URL to redirect if customer cancels (Optional, defaults to returnUrl)
   cancellationUrl?: string;
 }
@@ -104,15 +105,16 @@ interface HubtelOptions {
 
 ### Understanding the URLs
 
-| URL | Purpose |
-|-----|---------|
-| `callbackUrl` | Server-to-server webhook URL for payment notifications |
-| `returnUrl` | Where to redirect the customer after successful payment |
-| `cancellationUrl` | Where to redirect if customer cancels (optional) |
+| URL               | Purpose                                                 |
+| ----------------- | ------------------------------------------------------- |
+| `callbackUrl`     | Server-to-server webhook URL for payment notifications  |
+| `returnUrl`       | Where to redirect the customer after successful payment |
+| `cancellationUrl` | Where to redirect if customer cancels (optional)        |
 
 <Aside type="tip" title="Callback vs Return URL">
-  - **callbackUrl**: Your backend endpoint that receives payment status updates (webhook)
-  - **returnUrl**: The page your customer sees after payment completion
+  - **callbackUrl**: Your backend endpoint that receives payment status updates
+  (webhook) - **returnUrl**: The page your customer sees after payment
+  completion
 </Aside>
 
 ## Verify a Transaction
@@ -120,9 +122,9 @@ interface HubtelOptions {
 After the customer completes payment, verify the transaction:
 
 ```typescript
-import { PaymentStatus } from 'voltax-node';
+import { PaymentStatus } from "voltax-node";
 
-const result = await voltax.hubtel.verifyTransaction('hub-123456');
+const result = await voltax.hubtel.verifyTransaction("hub-123456");
 
 console.log(result);
 // {
@@ -144,21 +146,21 @@ if (result.status === PaymentStatus.SUCCESS) {
 Voltax maps Hubtel statuses to standardized values:
 
 | Hubtel Status | Voltax Status |
-|---------------|---------------|
-| `Paid` | `SUCCESS` |
-| `Refunded` | `FAILED` |
-| `Unpaid` | `PENDING` |
-| Other | `PENDING` |
+| ------------- | ------------- |
+| `Paid`        | `SUCCESS`     |
+| `Refunded`    | `FAILED`      |
+| `Unpaid`      | `PENDING`     |
+| Other         | `PENDING`     |
 
 ## Get Payment Status
 
 For a quick status check:
 
 ```typescript
-const status = await voltax.hubtel.getPaymentStatus('hub-123456');
+const status = await voltax.hubtel.getPaymentStatus("hub-123456");
 
 if (status === PaymentStatus.SUCCESS) {
-  console.log('Payment successful!');
+  console.log("Payment successful!");
 }
 ```
 
@@ -167,9 +169,9 @@ if (status === PaymentStatus.SUCCESS) {
 Here's a full Express.js integration example:
 
 ```typescript
-import express from 'express';
-import Voltax, { Currency, PaymentStatus } from 'voltax-node';
-import { randomUUID } from 'crypto';
+import express from "express";
+import Voltax, { Currency, PaymentStatus } from "voltax-node";
+import { randomUUID } from "crypto";
 
 const app = express();
 app.use(express.json());
@@ -183,7 +185,7 @@ const voltax = new Voltax({
 });
 
 // Initialize payment
-app.post('/api/payments/hubtel', async (req, res) => {
+app.post("/api/payments/hubtel", async (req, res) => {
   try {
     const { amount, email, phone, orderId } = req.body;
 
@@ -214,7 +216,7 @@ app.post('/api/payments/hubtel', async (req, res) => {
       reference: payment.reference,
     });
   } catch (error) {
-    console.error('Payment initialization failed:', error);
+    console.error("Payment initialization failed:", error);
     res.status(400).json({
       success: false,
       error: error.message,
@@ -223,10 +225,10 @@ app.post('/api/payments/hubtel', async (req, res) => {
 });
 
 // Webhook endpoint (callbackUrl)
-app.post('/webhooks/hubtel', async (req, res) => {
+app.post("/webhooks/hubtel", async (req, res) => {
   const { ClientReference, Status, TransactionId } = req.body;
 
-  console.log('Hubtel webhook received:', {
+  console.log("Hubtel webhook received:", {
     reference: ClientReference,
     status: Status,
     transactionId: TransactionId,
@@ -243,13 +245,13 @@ app.post('/webhooks/hubtel', async (req, res) => {
 
     res.status(200).json({ received: true });
   } catch (error) {
-    console.error('Webhook processing failed:', error);
-    res.status(500).json({ error: 'Processing failed' });
+    console.error("Webhook processing failed:", error);
+    res.status(500).json({ error: "Processing failed" });
   }
 });
 
 // Return URL handler
-app.get('/payment/success', async (req, res) => {
+app.get("/payment/success", async (req, res) => {
   const { ref } = req.query;
 
   try {
@@ -257,27 +259,27 @@ app.get('/payment/success', async (req, res) => {
     const result = await voltax.hubtel.verifyTransaction(ref as string);
 
     if (result.status === PaymentStatus.SUCCESS) {
-      res.render('success', { 
-        message: 'Payment successful!',
+      res.render("success", {
+        message: "Payment successful!",
         reference: ref,
       });
     } else {
-      res.render('pending', {
-        message: 'Payment is being processed...',
+      res.render("pending", {
+        message: "Payment is being processed...",
         reference: ref,
       });
     }
   } catch (error) {
-    res.render('error', {
-      message: 'Could not verify payment status',
+    res.render("error", {
+      message: "Could not verify payment status",
     });
   }
 });
 
 // Cancellation handler
-app.get('/payment/cancelled', (req, res) => {
-  res.render('cancelled', {
-    message: 'Payment was cancelled',
+app.get("/payment/cancelled", (req, res) => {
+  res.render("cancelled", {
+    message: "Payment was cancelled",
   });
 });
 
@@ -291,14 +293,14 @@ Hubtel excels at mobile money payments in Ghana. Include the customer's mobile n
 ```typescript
 const payment = await voltax.hubtel.initializePayment({
   amount: 50,
-  email: 'customer@example.com',
+  email: "customer@example.com",
   currency: Currency.GHS,
   reference: `momo-${Date.now()}`,
-  mobileNumber: '0241234567',  // MTN, Vodafone, or AirtelTigo number
-  callbackUrl: 'https://yoursite.com/webhooks/hubtel',
+  mobileNumber: "0241234567", // MTN, Vodafone, or AirtelTigo number
+  callbackUrl: "https://yoursite.com/webhooks/hubtel",
   options: {
     hubtel: {
-      returnUrl: 'https://yoursite.com/success',
+      returnUrl: "https://yoursite.com/success",
     },
   },
 });
@@ -306,9 +308,9 @@ const payment = await voltax.hubtel.initializePayment({
 
 ## Supported Currency
 
-| Currency | Code | Country |
-|----------|------|---------|
-| Ghanaian Cedi | `GHS` | Ghana |
+| Currency      | Code  | Country |
+| ------------- | ----- | ------- |
+| Ghanaian Cedi | `GHS` | Ghana   |
 
 <Aside type="note">
   Hubtel currently only supports payments in Ghana with GHS currency.
@@ -318,11 +320,11 @@ const payment = await voltax.hubtel.initializePayment({
 
 Hubtel has specific validation requirements. Here's what Voltax validates:
 
-| Field | Requirement |
-|-------|-------------|
-| `amount` | Must be a positive number |
-| `reference` | Required, must be provided |
-| `callbackUrl` | Required, must be a valid URL |
+| Field                      | Requirement                   |
+| -------------------------- | ----------------------------- |
+| `amount`                   | Must be a positive number     |
+| `reference`                | Required, must be provided    |
+| `callbackUrl`              | Required, must be a valid URL |
 | `options.hubtel.returnUrl` | Required, must be a valid URL |
 
 If any of these are missing or invalid, you'll receive a `VoltaxValidationError`.
@@ -334,31 +336,31 @@ import {
   VoltaxValidationError,
   VoltaxGatewayError,
   VoltaxNetworkError,
-} from 'voltax-node';
+} from "voltax-node";
 
 try {
   const payment = await voltax.hubtel.initializePayment({
     amount: 100,
-    email: 'customer@example.com',
+    email: "customer@example.com",
     currency: Currency.GHS,
-    reference: 'test-123',
-    callbackUrl: 'https://yoursite.com/webhook',
+    reference: "test-123",
+    callbackUrl: "https://yoursite.com/webhook",
     options: {
-      hubtel: { returnUrl: 'https://yoursite.com/success' },
+      hubtel: { returnUrl: "https://yoursite.com/success" },
     },
   });
 } catch (error) {
   if (error instanceof VoltaxValidationError) {
     // Missing required fields or invalid values
-    console.error('Validation error:', error.message);
-    console.error('Details:', error.errors);
+    console.error("Validation error:", error.message);
+    console.error("Details:", error.errors);
   } else if (error instanceof VoltaxGatewayError) {
     // Hubtel API error
-    console.error('Hubtel error:', error.message);
-    console.error('Status:', error.statusCode);
+    console.error("Hubtel error:", error.message);
+    console.error("Status:", error.statusCode);
   } else if (error instanceof VoltaxNetworkError) {
     // Network connectivity issue
-    console.error('Network error:', error.message);
+    console.error("Network error:", error.message);
   }
 }
 ```
