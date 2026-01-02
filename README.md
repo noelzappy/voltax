@@ -9,7 +9,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Documentation](https://voltax.dev) · [Report Bug](https://github.com/noelzappy/voltax/issues) · [Request Feature](https://github.com/noelzappy/voltax/issues)
+[Documentation](https://voltax.noelzappy.dev) · [Report Bug](https://github.com/noelzappy/voltax/issues) · [Request Feature](https://github.com/noelzappy/voltax/issues)
 
 </div>
 
@@ -217,12 +217,12 @@ const payment = await voltax.hubtel.initializePayment({
 
 ## Documentation
 
-For complete documentation, visit [voltax.dev](https://voltax.dev)
+For complete documentation, visit [voltax.dev](https://voltax.noelzappy.dev)
 
-- [Getting Started](https://voltax.dev/guides/getting-started/)
-- [Payment Initialization](https://voltax.dev/guides/payments/)
-- [Error Handling](https://voltax.dev/guides/error-handling/)
-- [API Reference](https://voltax.dev/reference/)
+- [Getting Started](https://voltax.noelzappy.dev/guides/getting-started/)
+- [Payment Initialization](https://voltax.noelzappy.dev/guides/payments/)
+- [Error Handling](https://voltax.noelzappy.dev/guides/error-handling/)
+- [API Reference](https://voltax.noelzappy.dev/reference/)
 
 ## Contributing
 
