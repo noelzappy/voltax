@@ -217,7 +217,7 @@ const payment = await voltax.hubtel.initializePayment({
 
 ## Documentation
 
-For complete documentation, visit [voltax.dev](https://voltax.noelzappy.dev)
+For complete documentation, visit [voltax.noelzappy.dev](https://voltax.noelzappy.dev)
 
 - [Getting Started](https://voltax.noelzappy.dev/guides/getting-started/)
 - [Payment Initialization](https://voltax.noelzappy.dev/guides/payments/)
