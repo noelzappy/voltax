@@ -11,7 +11,7 @@
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "format": "npm run format --workspaces",
-    "prepare": "husky install"
+    "prepare": "node -e \"if (process.env.CI !== 'true') process.exit(1)\" || husky"
   },
   "lint-staged": {
     "packages/node/**/*.{ts,tsx,js,jsx}": [
