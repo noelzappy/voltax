@@ -3,6 +3,11 @@ name: Publish Package
 on:
     release:
         types: [published]
+    workflow_run:
+        workflows: ["CI"]
+        types:
+            - completed
+        branches: [main]
     workflow_dispatch:
         inputs:
             version:
@@ -19,6 +24,8 @@ jobs:
     publish-npm:
         name: Publish to npm
         runs-on: ubuntu-latest
+        # Only run if CI succeeded (for workflow_run trigger) or for other triggers
+        if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
         permissions:
             contents: read
