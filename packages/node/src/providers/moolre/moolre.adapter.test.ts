@@ -122,7 +122,7 @@ describe("MoolreAdapter", () => {
         externalref: validPayload.reference,
         callback: validPayload.callbackUrl,
         redirect: validPayload.options?.moolre?.redirectUrl,
-        reusable: "Non-reusable",
+        reusable: "0",
         currency: validPayload.currency,
         accountnumber: options.accountNumber,
         metadata: {},
