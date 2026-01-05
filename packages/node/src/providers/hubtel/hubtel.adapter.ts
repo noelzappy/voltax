@@ -45,7 +45,7 @@ export class HubtelAdapter implements VoltaxProvider {
 
     const { amount, email, reference, callbackUrl, options, description } =
       validation.data;
-    const { returnUrl, cancellationUrl } = options?.hubtel || {};
+    const { returnUrl, cancellationUrl, mobileNumber } = options?.hubtel || {};
 
     const $description = description || `Payment for ${reference}`;
 
@@ -58,7 +58,7 @@ export class HubtelAdapter implements VoltaxProvider {
       cancellationUrl: cancellationUrl || returnUrl,
       clientReference: reference,
       payeeEmail: email,
-      payeeMobileNumber: payload.mobileNumber,
+      payeeMobileNumber: mobileNumber,
     };
 
     try {

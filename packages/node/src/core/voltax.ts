@@ -5,17 +5,21 @@ import { PaystackConfig } from "../providers/paystack/types.js";
 import { FlutterwaveAdapter } from "../providers/flutterwave/flutterwave.adapter.js";
 import { FlutterwaveConfig } from "../providers/flutterwave/types.js";
 import { VoltaxValidationError } from "./errors.js";
+import { MoolreAdapterOptions } from "../providers/moolre/types.js";
+import { MoolreAdapter } from "../providers/moolre/moolre.adapter.js";
 
 export interface VoltaxConfig {
   paystack?: PaystackConfig;
   hubtel?: HubtelConfig;
   flutterwave?: FlutterwaveConfig;
+  moolre?: MoolreAdapterOptions;
 }
 
 export class Voltax {
   private _paystack?: PaystackAdapter;
   private _hubtel?: HubtelAdapter;
   private _flutterwave?: FlutterwaveAdapter;
+  private _moolre?: MoolreAdapter;
 
   constructor(private readonly config: VoltaxConfig) {}
 
@@ -71,5 +75,23 @@ export class Voltax {
 
     this._flutterwave = new FlutterwaveAdapter(this.config.flutterwave);
     return this._flutterwave;
+  }
+
+  /**
+   * Get Moolre provider instance
+   */
+  get moolre(): MoolreAdapter {
+    if (this._moolre) {
+      return this._moolre;
+    }
+
+    if (!this.config.moolre) {
+      throw new VoltaxValidationError(
+        'Moolre configuration is missing. Please provide "moolre" in the Voltax constructor.',
+      );
+    }
+
+    this._moolre = new MoolreAdapter(this.config.moolre);
+    return this._moolre;
   }
 }

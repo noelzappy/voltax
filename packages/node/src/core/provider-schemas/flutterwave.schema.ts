@@ -1,0 +1,20 @@
+import { z } from "zod";
+
+export const FlutterwaveOptions = z.object({
+  customerName: z.string().optional(),
+  pageTitle: z.string().optional(),
+  logoUrl: z.string().url("Logo URL must be a valid URL").optional(),
+  sessionDuration: z.number().min(1).max(1440).optional(),
+  maxRetryAttempts: z.number().min(1).max(10).optional(),
+  paymentPlan: z.number().optional(),
+  paymentOptions: z.string().optional(),
+  linkExpiration: z.date().optional(),
+  mobileNumber: z.string().optional(),
+  subaccounts: z
+    .array(
+      z.object({
+        id: z.string().uuid("Subaccount ID must be a valid UUID"),
+      }),
+    )
+    .optional(),
+});

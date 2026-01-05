@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxError"
 ---
 
-Defined in: [packages/node/src/core/errors.ts:6](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L6)
+Defined in: [packages/node/src/core/errors.ts:6](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L6)
 
 Base error class for all Voltax errors.
 
@@ -25,7 +25,7 @@ Base error class for all Voltax errors.
 
 > **new VoltaxError**(`message`): `VoltaxError`
 
-Defined in: [packages/node/src/core/errors.ts:7](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L7)
+Defined in: [packages/node/src/core/errors.ts:7](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L7)
 
 #### Parameters
 

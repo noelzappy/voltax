@@ -19,13 +19,13 @@ import {
 import { PaymentStatus } from "../../core/enums.js";
 
 export class FlutterwaveAdapter implements VoltaxProvider {
-  private readonly client: AxiosInstance;
+  private readonly axiosClient: AxiosInstance;
 
   constructor({ secretKey }: FlutterwaveConfig) {
     if (!secretKey) {
       throw new VoltaxValidationError("Flutterwave secret key is required");
     }
-    this.client = axios.create({
+    this.axiosClient = axios.create({
       baseURL: "https://api.flutterwave.com/v3",
       timeout: 10000,
       headers: {
@@ -49,7 +49,6 @@ export class FlutterwaveAdapter implements VoltaxProvider {
     const {
       amount,
       email,
-      mobileNumber,
       currency,
       callbackUrl,
       metadata,
@@ -74,6 +73,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
       paymentOptions,
       linkExpiration,
       subaccounts,
+      mobileNumber,
     } = options?.flutterwave || {};
 
     const flutterwavePayload = {
@@ -106,7 +106,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
     };
 
     try {
-      const { data } = await this.client.post<
+      const { data } = await this.axiosClient.post<
         FlutterwaveResponse<{
           link: string;
         }>
@@ -128,7 +128,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
       throw new VoltaxValidationError("Reference is required");
     }
     try {
-      const response = await this.client.get<
+      const response = await this.axiosClient.get<
         FlutterwaveResponse<FlutterwaveTransaction>
       >(`/transactions/verify_by_reference?tx_ref=${reference}`);
       const data = response.data?.data;

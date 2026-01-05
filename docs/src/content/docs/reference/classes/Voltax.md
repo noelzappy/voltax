@@ -5,7 +5,7 @@ prev: false
 title: "Voltax"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L15)
+Defined in: [packages/node/src/core/voltax.ts:18](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L18)
 
 ## Constructors
 
@@ -13,7 +13,7 @@ Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/v
 
 > **new Voltax**(`config`): `Voltax`
 
-Defined in: [packages/node/src/core/voltax.ts:20](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L20)
+Defined in: [packages/node/src/core/voltax.ts:24](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L24)
 
 #### Parameters
 
@@ -33,7 +33,7 @@ Defined in: [packages/node/src/core/voltax.ts:20](https://github.com/noelzappy/v
 
 > **get** **flutterwave**(): [`FlutterwaveAdapter`](/reference/classes/flutterwaveadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:61](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L61)
+Defined in: [packages/node/src/core/voltax.ts:65](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L65)
 
 Get Flutterwave provider instance
 
@@ -49,7 +49,7 @@ Get Flutterwave provider instance
 
 > **get** **hubtel**(): [`HubtelAdapter`](/reference/classes/hubteladapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L43)
+Defined in: [packages/node/src/core/voltax.ts:47](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L47)
 
 Get Hubtel provider instance
 
@@ -59,13 +59,29 @@ Get Hubtel provider instance
 
 ***
 
+### moolre
+
+#### Get Signature
+
+> **get** **moolre**(): [`MoolreAdapter`](/reference/classes/moolreadapter/)
+
+Defined in: [packages/node/src/core/voltax.ts:83](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L83)
+
+Get Moolre provider instance
+
+##### Returns
+
+[`MoolreAdapter`](/reference/classes/moolreadapter/)
+
+***
+
 ### paystack
 
 #### Get Signature
 
 > **get** **paystack**(): [`PaystackAdapter`](/reference/classes/paystackadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:25](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L25)
+Defined in: [packages/node/src/core/voltax.ts:29](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L29)
 
 Get Paystack provider instance
 

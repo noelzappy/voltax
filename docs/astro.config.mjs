@@ -35,6 +35,7 @@ export default defineConfig({
                 { label: "Paystack", slug: "guides/paystack" },
                 { label: "Flutterwave", slug: "guides/flutterwave" },
                 { label: "Hubtel", slug: "guides/hubtel" },
+                { label: "Moolre", slug: "guides/moolre" },
               ],
             },
             { label: "Examples", slug: "guides/example" },

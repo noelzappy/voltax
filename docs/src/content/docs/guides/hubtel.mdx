@@ -77,13 +77,13 @@ const payment = await voltax.hubtel.initializePayment({
   email: "customer@example.com",
   currency: Currency.GHS,
   reference: `order-${Date.now()}`,
-  mobileNumber: "0241234567", // Customer's mobile money number
   description: "Order #12345 - Premium Package",
   callbackUrl: "https://yoursite.com/webhooks/hubtel",
   options: {
     hubtel: {
       returnUrl: "https://yoursite.com/payment/success",
       cancellationUrl: "https://yoursite.com/payment/cancelled",
+      mobileNumber: "0241234567", // Customer's mobile money number
     },
   },
 });
@@ -100,6 +100,9 @@ interface HubtelOptions {
 
   // URL to redirect if customer cancels (Optional, defaults to returnUrl)
   cancellationUrl?: string;
+
+  // Customer's mobile money number (Required!)
+  mobileNumber: string;
 }
 ```
 

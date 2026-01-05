@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "PaystackAdapter"
+title: "MoolreAdapter"
 ---
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:22](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L22)
+Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:23
 
 Interface that all Voltax Gateways must implement.
 
@@ -17,19 +17,19 @@ Interface that all Voltax Gateways must implement.
 
 ### Constructor
 
-> **new PaystackAdapter**(`__namedParameters`): `PaystackAdapter`
+> **new MoolreAdapter**(`__namedParameters`): `MoolreAdapter`
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:25](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L25)
+Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:27
 
 #### Parameters
 
 ##### \_\_namedParameters
 
-`PaystackConfig`
+`MoolreAdapterOptions`
 
 #### Returns
 
-`PaystackAdapter`
+`MoolreAdapter`
 
 ## Methods
 
@@ -37,15 +37,18 @@ Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:25](https:
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:156](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L156)
+Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:123
 
-Helper to get status directly.
+Gets the status of a payment.
+In many cases aliases to verifyTransaction, but explicit for clarity.
 
 #### Parameters
 
 ##### reference
 
 `string`
+
+The transaction reference
 
 #### Returns
 
@@ -61,13 +64,15 @@ Helper to get status directly.
 
 > **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:45](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L45)
+Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:39
 
-Initialize a payment with Paystack.
+Initiates a payment transaction.
 
 #### Parameters
 
 ##### payload
+
+The payment details
 
 ###### amount
 
@@ -105,8 +110,6 @@ Initialize a payment with Paystack.
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Promise<VoltaxPaymentResponse>
-
 #### Implementation of
 
 [`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initializePayment`](/reference/interfaces/voltaxprovider/#initializepayment)
@@ -117,9 +120,9 @@ Promise<VoltaxPaymentResponse>
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:129](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L129)
+Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:98
 
-Verify a transaction with Paystack.
+Verifies a transaction by its reference.
 
 #### Parameters
 
@@ -127,13 +130,11 @@ Verify a transaction with Paystack.
 
 `string`
 
-The transaction reference to verify.
+The transaction reference
 
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
-
-The payment response.
 
 #### Implementation of
 

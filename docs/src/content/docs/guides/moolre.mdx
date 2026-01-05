@@ -1,0 +1,231 @@
+---
+title: Moolre Payments
+description: Configure Moolre payments for Ghana and Nigeria with mobile money support.
+---
+import { Aside, Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+[Moolre](https://moolre.com) is a payment technology company providing seamless payment solutions across Ghana and Nigeria. This guide covers how to integrate Moolre payments using Voltax.
+
+
+## Prerequisites
+
+Before you begin, you'll need:
+
+- A Moolre merchant account (sign up at [moolre.com](https://moolre.com))
+- Your Moolre API credentials:
+  - Public API Key
+  - Moolre Username
+  - Moolre Wallet Account Number
+
+<Aside type="caution">
+  Never expose your credentials in client-side code. Always keep them secure on
+  your server.
+</Aside>
+
+
+## Configuration
+
+Initialize Voltax with your Moolre credentials:
+
+```typescript
+import Voltax from '@noelzappy/voltax';
+
+const voltax = new Voltax({
+  moolre: {
+    apiUser: process.env.MOOLRE_USERNAME!,
+    apiPublicKey: process.env.MOOLRE_PUBLIC_API_KEY!,
+    accountNumber: process.env.MOOLRE_WALLET_ACCOUNT_NUMBER!,
+  },
+});
+```
+
+## Initialize a Payment
+
+<Aside type="note" title="Required Fields">
+  Moolre has specific requirements that differ from other providers: -
+  `reference` is **required** - `callbackUrl` is **required** -
+  `options.moolre.redirectUrl` is **required**
+</Aside>
+
+
+### Basic Payment
+
+```typescript
+import { Currency } from '@noelzappy/voltax';
+
+const payment = await voltax.moolre.initializePayment({
+  amount: 5000,  // 5,000 GHS
+  email: 'customer@example.com',
+  currency: Currency.GHS,
+  reference: `txn-${Date.now()}`,
+  callbackUrl: 'https://yoursite.com/webhook/callback',
+  options: {
+    redirectUrl: 'https://yoursite.com/payment/redirect',
+  },
+});
+
+// Redirect customer to complete payment
+console.log(payment.authorizationUrl);
+// "https://checkout.moolre.com/xxxxxxxxxx"
+```
+
+
+### With Metadata
+
+Attach Metadata. Moolre will automatically return this to you during their callback/webhook call to you.
+
+```typescript
+import { Currency } from '@noelzappy/voltax';
+
+const payment = await voltax.moolre.initializePayment({
+  amount: 5000,  // 5,000 GHS
+  email: 'customer@example.com',
+  currency: Currency.GHS,
+  reference: `txn-${Date.now()}`,
+  callbackUrl: 'https://yoursite.com/webhook/callback',
+  options: {
+    redirectUrl: 'https://yoursite.com/payment/redirect'
+  },
+  metadata: {
+    customer_id: '12345',
+    order_id: '67890',
+  },
+});
+
+// Redirect customer to complete payment
+console.log(payment.authorizationUrl);
+// "https://checkout.moolre.com/xxxxxxxxxx"
+```
+
+### Reusable Authorization URL 
+
+Generate a reusable authorization URL that can be used to initiate payments without requiring user input.
+
+```typescript
+import { Currency } from '@noelzappy/voltax';
+
+const payment = await voltax.moolre.initializePayment({
+  amount: 5000,  // 5,000 GHS
+  email: 'customer@example.com',
+  currency: Currency.GHS,
+  reference: `txn-${Date.now()}`,
+  callbackUrl: 'https://yoursite.com/webhook/callback',
+  options: {
+    redirectUrl: 'https://yoursite.com/payment/redirect',
+    linkReusable: true // This controls whether the authorization URL can be reused for multiple payments. By default, it is set to false.
+  },
+  metadata: {
+    customer_id: '12345',
+    order_id: '67890',
+  },
+});
+
+// Redirect customer to complete payment
+console.log(payment.authorizationUrl);
+// "https://checkout.moolre.com/xxxxxxxxxx"
+```
+
+
+### With All Options
+
+```typescript
+const payment = await voltax.moolre.initializePayment({
+  amount: 250,
+  email: "customer@example.com",
+  currency: Currency.GHS,
+  reference: `order-${Date.now()}`,
+  description: "Order #12345 - Premium Package",
+  callbackUrl: "https://yoursite.com/webhooks/moolre",
+  options: {
+    moolre: {
+      redirectUrl: 'https://yoursite.com/payment/redirect',
+      linkReusable: true,
+      accountNumberOverride: '1234567890'
+    },
+  },
+  metadata: {
+    customer_id: '12345',
+    order_id: '67890',
+  },
+});
+```
+
+
+## Moolre-Specific Options
+
+### Required Options
+
+```typescript
+interface MoolreOptions {
+  // URL to redirect after successful payment (Required!)
+  redirectUrl: string;
+
+  // Whether the authorization URL can be reused for multiple payments. By default, it is set to false.
+  linkReusable?: boolean;
+
+  // Override the account/wallet number to use for payment. By default, it is set to the account number supplied during initialization.
+  accountNumberOverride?: string;
+}
+```
+
+
+### Understanding the URLs
+
+| URL               | Purpose                                                 |
+| ----------------- | ------------------------------------------------------- |
+| `callbackUrl`     | Server-to-server webhook URL for payment notifications  |
+| `redirectUrl`       | Where to redirect the customer after successful payment |
+
+<Aside type="tip" title="Callback vs Redirect URL">
+  - **callbackUrl**: Your backend endpoint that receives payment status updates
+  (webhook) - **redirectUrl**: The page your customer sees after payment
+  completion
+</Aside>
+
+
+## Verify a Transaction
+
+After the customer completes payment, verify the transaction:
+
+```typescript
+import { PaymentStatus } from "@noelzappy/voltax";
+
+const result = await voltax.moolre.verifyTransaction("123456");
+
+console.log(result);
+// {
+//   status: 'SUCCESS',
+//   reference: 'moolre-123456',
+//   externalReference: 'txn_xxxxxxxxxx',
+//   raw: { ... }
+// }
+
+if (result.status === PaymentStatus.SUCCESS) {
+  // Access detailed transaction data
+  console.log(result.reference);
+}
+```
+
+### Status Mapping
+
+Voltax maps Moolre statuses to standardized values:
+
+| Moolre Status | Voltax Status |
+| ------------- | ------------- |
+| `1`        | `SUCCESS`     |
+| `0`      | `PENDING`     |
+| `2`    | `FAILED`      |
+| Other         | `PENDING`     |
+
+
+## Get Payment Status
+
+For a quick status check:
+
+```typescript
+const status = await voltax.moolre.getPaymentStatus("mool-123456");
+
+if (status === PaymentStatus.SUCCESS) {
+  console.log("Payment successful!");
+}
+```

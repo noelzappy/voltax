@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxValidationError"
 ---
 
-Defined in: [packages/node/src/core/errors.ts:16](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L16)
+Defined in: [packages/node/src/core/errors.ts:16](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L16)
 
 Thrown when input validation fails (e.g. invalid email, unsupported currency).
 
@@ -19,7 +19,7 @@ Thrown when input validation fails (e.g. invalid email, unsupported currency).
 
 > **new VoltaxValidationError**(`message`, `errors?`): `VoltaxValidationError`
 
-Defined in: [packages/node/src/core/errors.ts:19](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L19)
+Defined in: [packages/node/src/core/errors.ts:19](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L19)
 
 #### Parameters
 
@@ -57,7 +57,7 @@ Defined in: node\_modules/typescript/lib/lib.es2022.error.d.ts:26
 
 > `readonly` `optional` **errors**: `any`[]
 
-Defined in: [packages/node/src/core/errors.ts:17](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L17)
+Defined in: [packages/node/src/core/errors.ts:17](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L17)
 
 ***
 

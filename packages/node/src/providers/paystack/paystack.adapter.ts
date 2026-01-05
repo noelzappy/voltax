@@ -20,14 +20,14 @@ import {
 } from "./types.js";
 
 export class PaystackAdapter implements VoltaxProvider {
-  private readonly client: AxiosInstance;
+  private readonly axiosClient: AxiosInstance;
 
   constructor({ secretKey }: PaystackConfig) {
     if (!secretKey) {
       throw new VoltaxValidationError("Paystack secret key is required");
     }
 
-    this.client = axios.create({
+    this.axiosClient = axios.create({
       baseURL: "https://api.paystack.co",
       timeout: 10000,
       headers: {
@@ -101,7 +101,7 @@ export class PaystackAdapter implements VoltaxProvider {
     };
 
     try {
-      const response = await this.client.post<
+      const response = await this.axiosClient.post<
         PaystackResponse<{
           authorization_url: string;
           reference: string;
@@ -134,7 +134,7 @@ export class PaystackAdapter implements VoltaxProvider {
     }
 
     try {
-      const response = await this.client.get<
+      const response = await this.axiosClient.get<
         PaystackResponse<PaystackTransaction>
       >(`/transaction/verify/${reference}`);
       const data = response.data?.data;
