@@ -5,7 +5,7 @@ prev: false
 title: "PaystackChannel"
 ---
 
-Defined in: [packages/node/src/core/enums.ts:21](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L21)
+Defined in: [packages/node/src/core/enums.ts:21](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L21)
 
 ## Enumeration Members
 
@@ -13,7 +13,7 @@ Defined in: [packages/node/src/core/enums.ts:21](https://github.com/noelzappy/vo
 
 > **APPLE\_PAY**: `"apple_pay"`
 
-Defined in: [packages/node/src/core/enums.ts:24](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L24)
+Defined in: [packages/node/src/core/enums.ts:24](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L24)
 
 ***
 
@@ -21,7 +21,7 @@ Defined in: [packages/node/src/core/enums.ts:24](https://github.com/noelzappy/vo
 
 > **BANK**: `"bank"`
 
-Defined in: [packages/node/src/core/enums.ts:23](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L23)
+Defined in: [packages/node/src/core/enums.ts:23](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L23)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [packages/node/src/core/enums.ts:23](https://github.com/noelzappy/vo
 
 > **BANK\_TRANSFER**: `"bank_transfer"`
 
-Defined in: [packages/node/src/core/enums.ts:28](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L28)
+Defined in: [packages/node/src/core/enums.ts:28](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L28)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [packages/node/src/core/enums.ts:28](https://github.com/noelzappy/vo
 
 > **CARD**: `"card"`
 
-Defined in: [packages/node/src/core/enums.ts:22](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L22)
+Defined in: [packages/node/src/core/enums.ts:22](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L22)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [packages/node/src/core/enums.ts:22](https://github.com/noelzappy/vo
 
 > **EFT**: `"eft"`
 
-Defined in: [packages/node/src/core/enums.ts:29](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L29)
+Defined in: [packages/node/src/core/enums.ts:29](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L29)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [packages/node/src/core/enums.ts:29](https://github.com/noelzappy/vo
 
 > **MOBILE\_MONEY**: `"mobile_money"`
 
-Defined in: [packages/node/src/core/enums.ts:27](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L27)
+Defined in: [packages/node/src/core/enums.ts:27](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L27)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [packages/node/src/core/enums.ts:27](https://github.com/noelzappy/vo
 
 > **PAYATTITUDE**: `"payattitude"`
 
-Defined in: [packages/node/src/core/enums.ts:30](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L30)
+Defined in: [packages/node/src/core/enums.ts:30](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L30)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [packages/node/src/core/enums.ts:30](https://github.com/noelzappy/vo
 
 > **QR**: `"qr"`
 
-Defined in: [packages/node/src/core/enums.ts:26](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L26)
+Defined in: [packages/node/src/core/enums.ts:26](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L26)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [packages/node/src/core/enums.ts:26](https://github.com/noelzappy/vo
 
 > **USSD**: `"ussd"`
 
-Defined in: [packages/node/src/core/enums.ts:25](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/enums.ts#L25)
+Defined in: [packages/node/src/core/enums.ts:25](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/enums.ts#L25)

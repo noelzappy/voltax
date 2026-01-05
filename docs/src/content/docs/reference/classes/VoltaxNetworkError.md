@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxNetworkError"
 ---
 
-Defined in: [packages/node/src/core/errors.ts:51](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L51)
+Defined in: [packages/node/src/core/errors.ts:51](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L51)
 
 Thrown when the network request fails (e.g. timeout, DNS error).
 
@@ -19,7 +19,7 @@ Thrown when the network request fails (e.g. timeout, DNS error).
 
 > **new VoltaxNetworkError**(`message`, `originalError?`): `VoltaxNetworkError`
 
-Defined in: [packages/node/src/core/errors.ts:54](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L54)
+Defined in: [packages/node/src/core/errors.ts:54](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L54)
 
 #### Parameters
 
@@ -81,7 +81,7 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1076
 
 > `readonly` `optional` **originalError**: `Error`
 
-Defined in: [packages/node/src/core/errors.ts:52](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/errors.ts#L52)
+Defined in: [packages/node/src/core/errors.ts:52](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L52)
 
 ***
 

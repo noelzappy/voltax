@@ -137,10 +137,10 @@ import { handleGatewayError } from "../../core/utils.js";
 import { YourGatewayConfig } from "./types.js";
 
 export class YourGatewayAdapter implements VoltaxProvider {
-  private client: AxiosInstance;
+  private axiosClient: AxiosInstance;
 
   constructor(private config: YourGatewayConfig) {
-    this.client = axios.create({
+    this.axiosClient = axios.create({
       baseURL: "https://api.yourgateway.com",
       headers: {
         Authorization: `Bearer ${config.secretKey}`,
@@ -160,7 +160,7 @@ export class YourGatewayAdapter implements VoltaxProvider {
         // Map other fields...
       };
 
-      const response = await this.client.post("/transaction/initialize", gatewayPayload);
+      const response = await this.axiosClient.post("/transaction/initialize", gatewayPayload);
 
       // Transform response to VoltaxPaymentResponse
       return {
@@ -177,7 +177,7 @@ export class YourGatewayAdapter implements VoltaxProvider {
 
   async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> {
     try {
-      const response = await this.client.get(`/transaction/verify/${reference}`);
+      const response = await this.axiosClient.get(`/transaction/verify/${reference}`);
 
       return {
         status: this.mapStatus(response.data.status),

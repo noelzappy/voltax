@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxConfig"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:9](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L9)
+Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L11)
 
 ## Properties
 
@@ -13,7 +13,7 @@ Defined in: [packages/node/src/core/voltax.ts:9](https://github.com/noelzappy/vo
 
 > `optional` **flutterwave**: `FlutterwaveConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L12)
+Defined in: [packages/node/src/core/voltax.ts:14](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L14)
 
 ***
 
@@ -21,7 +21,15 @@ Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/v
 
 > `optional` **hubtel**: `HubtelConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L11)
+Defined in: [packages/node/src/core/voltax.ts:13](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L13)
+
+***
+
+### moolre?
+
+> `optional` **moolre**: `MoolreAdapterOptions`
+
+Defined in: [packages/node/src/core/voltax.ts:15](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L15)
 
 ***
 
@@ -29,4 +37,4 @@ Defined in: [packages/node/src/core/voltax.ts:11](https://github.com/noelzappy/v
 
 > `optional` **paystack**: `PaystackConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:10](https://github.com/noelzappy/voltax/blob/72283b5b756ae639e91ddd96e03cb7df05aa0ba9/packages/node/src/core/voltax.ts#L10)
+Defined in: [packages/node/src/core/voltax.ts:12](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/voltax.ts#L12)
