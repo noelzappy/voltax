@@ -4,6 +4,14 @@
   "description": "Voltax Node.js SDK for unified payment gateway integration",
   "license": "MIT",
   "author": "https://github.com/noelzappy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noelzappy/voltax"
+  },
+  "homepage": "https://github.com/noelzappy/voltax#readme",
+  "bugs": {
+    "url": "https://github.com/noelzappy/voltax/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
