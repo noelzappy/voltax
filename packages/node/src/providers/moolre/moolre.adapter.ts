@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { VoltaxPaymentResponse } from '../../core/interfaces.js';
+import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
 import {
   MoolreAdapterOptions,
   MoolreAPIResponse,
@@ -14,7 +14,7 @@ import { handleGatewayError, VoltaxValidationError } from '../../core/errors.js'
 import { isValidAmount } from '../../core/utils.js';
 import { PaymentStatus } from '../../core/enums.js';
 
-export class MoolreAdapter {
+export class MoolreAdapter implements VoltaxProvider<MoolrePaymentDTO> {
   private readonly axiosClient: AxiosInstance;
   private readonly accountNumber: string;
 

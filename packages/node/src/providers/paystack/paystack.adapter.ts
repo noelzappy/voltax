@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { VoltaxPaymentResponse } from '../../core/interfaces.js';
+import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
 import { PaymentStatus } from '../../core/enums.js';
 import { VoltaxValidationError, handleGatewayError } from '../../core/errors.js';
 import { isValidAmount } from '../../core/utils.js';
@@ -9,7 +9,7 @@ import {
   PaystackPaymentDTO,
 } from '../../core/provider-schemas/paystack.schema.js';
 
-export class PaystackAdapter {
+export class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
   private readonly axiosClient: AxiosInstance;
 
   constructor({ secretKey }: PaystackConfig) {

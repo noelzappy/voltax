@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { handleGatewayError, VoltaxValidationError } from '../../core/errors.js';
-import { VoltaxPaymentResponse } from '../../core/interfaces.js';
+import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
 import { FlutterwaveConfig, FlutterwaveResponse, FlutterwaveTransaction } from './types.js';
 import {
   FlutterwavePaymentSchema,
@@ -8,7 +8,7 @@ import {
 } from '../../core/provider-schemas/flutterwave.schema.js';
 import { PaymentStatus } from '../../core/enums.js';
 
-export class FlutterwaveAdapter {
+export class FlutterwaveAdapter implements VoltaxProvider<FlutterwavePaymentDTO> {
   private readonly axiosClient: AxiosInstance;
 
   constructor({ secretKey }: FlutterwaveConfig) {

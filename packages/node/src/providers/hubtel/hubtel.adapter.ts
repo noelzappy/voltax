@@ -1,4 +1,4 @@
-import { VoltaxPaymentResponse } from '../../core/interfaces.js';
+import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
 import { PaymentStatus } from '../../core/enums.js';
 import { VoltaxValidationError, handleGatewayError } from '../../core/errors.js';
 import axios from 'axios';
@@ -14,7 +14,7 @@ import {
 } from '../../core/provider-schemas/hubtel.schema.js';
 import { isValidAmount } from '../../core/utils.js';
 
-export class HubtelAdapter {
+export class HubtelAdapter implements VoltaxProvider<HubtelPaymentDTO> {
   private authHeader: string;
   private merchantAccount: string;
 
