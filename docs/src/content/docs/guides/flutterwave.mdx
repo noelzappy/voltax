@@ -19,19 +19,17 @@ Before you begin, you'll need:
 
 ## Configuration
 
-Initialize Voltax with your Flutterwave credentials:
+Initialize a Flutterwave provider with your credentials:
 
 ```typescript
 import Voltax from '@noelzappy/voltax';
 
-const voltax = new Voltax({
-  flutterwave: {
-    secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-  },
+const flutterwave = Voltax('flutterwave', {
+  secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
 });
 ```
 
-## Initialize a Payment
+## Initiate a Payment
 
 <Aside type="note">
   Unlike some providers, Flutterwave **requires** a transaction reference (`reference`) for all payments.
@@ -42,7 +40,7 @@ const voltax = new Voltax({
 ```typescript
 import { Currency } from '@noelzappy/voltax';
 
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -58,7 +56,7 @@ console.log(payment.authorizationUrl);
 ### With Customer Details
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 10000,
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -70,40 +68,28 @@ const payment = await voltax.flutterwave.initializePayment({
     orderId: 'ORD-12345',
     plan: 'premium',
   },
-  options: {
-    flutterwave: {
-      customerName: 'John Doe',
-    },
-  },
+  customerName: 'John Doe',
 });
 ```
 
 ## Flutterwave-Specific Options
 
-Flutterwave supports extensive customization through the `options.flutterwave` field:
+Flutterwave supports extensive customization through top-level fields in the payment DTO:
 
 ### Checkout Customization
 
 Customize the payment page appearance:
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `flw-${Date.now()}`,
-  options: {
-    flutterwave: {
-      // Customer name displayed on checkout
-      customerName: 'John Doe',
-      
-      // Checkout page title
-      pageTitle: 'My Store Checkout',
-      
-      // Your logo on checkout page
-      logoUrl: 'https://yoursite.com/logo.png',
-    },
-  },
+  // Flutterwave-specific options at top level
+  customerName: 'John Doe',       // Customer name displayed on checkout
+  pageTitle: 'My Store Checkout', // Checkout page title
+  logoUrl: 'https://yoursite.com/logo.png', // Your logo on checkout page
 });
 ```
 
@@ -112,23 +98,14 @@ const payment = await voltax.flutterwave.initializePayment({
 Control session behavior:
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `flw-${Date.now()}`,
-  options: {
-    flutterwave: {
-      // Session timeout in minutes (1-1440)
-      sessionDuration: 30,
-      
-      // Max payment retry attempts (1-10)
-      maxRetryAttempts: 3,
-      
-      // Link expiration date
-      linkExpiration: new Date('2026-12-31'),
-    },
-  },
+  sessionDuration: 30,      // Session timeout in minutes (1-1440)
+  maxRetryAttempts: 3,      // Max payment retry attempts (1-10)
+  linkExpiration: new Date('2026-12-31'), // Link expiration date
 });
 ```
 
@@ -137,17 +114,13 @@ const payment = await voltax.flutterwave.initializePayment({
 Specify allowed payment methods:
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `flw-${Date.now()}`,
-  options: {
-    flutterwave: {
-      // Comma-separated payment options
-      paymentOptions: 'card,banktransfer,ussd,mobilemoney',
-    },
-  },
+  paymentOptions: 'card,banktransfer,ussd,mobilemoney',
+});
 });
 ```
 
@@ -164,17 +137,12 @@ const payment = await voltax.flutterwave.initializePayment({
 For recurring payments:
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `sub-${Date.now()}`,
-  options: {
-    flutterwave: {
-      // Payment plan ID (from Flutterwave dashboard)
-      paymentPlan: 12345,
-    },
-  },
+  paymentPlan: 12345, // Payment plan ID (from Flutterwave dashboard)
 });
 ```
 
@@ -183,52 +151,46 @@ const payment = await voltax.flutterwave.initializePayment({
 Split payments between multiple accounts:
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+const payment = await flutterwave.initiatePayment({
   amount: 10000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: `split-${Date.now()}`,
-  options: {
-    flutterwave: {
-      subaccounts: [
-        { id: 'RS_xxxxxxxxxxxxxxxxx' },
-        { id: 'RS_yyyyyyyyyyyyyyyyy' },
-      ],
-    },
-  },
+  subaccounts: [
+    { id: 'RS_xxxxxxxxxxxxxxxxx' },
+    { id: 'RS_yyyyyyyyyyyyyyyyy' },
+  ],
 });
 ```
 
 ### Complete Options Reference
 
+All Flutterwave-specific options are available as top-level fields:
+
 ```typescript
-interface FlutterwaveOptions {
-  // Customer name for checkout display
-  customerName?: string;
+interface FlutterwavePaymentDTO {
+  // Base required fields
+  amount: number;
+  email: string;
+  currency: Currency;
+  reference: string;          // Required for Flutterwave
   
-  // Checkout page title
-  pageTitle?: string;
+  // Optional base fields
+  callbackUrl?: string;
+  description?: string;
+  mobileNumber?: string;
+  metadata?: Record<string, any>;
   
-  // Logo URL for checkout page (must be valid URL)
-  logoUrl?: string;
-  
-  // Session timeout in minutes (1-1440)
-  sessionDuration?: number;
-  
-  // Maximum retry attempts (1-10)
-  maxRetryAttempts?: number;
-  
-  // Payment plan ID for subscriptions
-  paymentPlan?: number;
-  
-  // Comma-separated payment options
-  paymentOptions?: string;
-  
-  // Link expiration date
-  linkExpiration?: Date;
-  
-  // Subaccounts for split payments
-  subaccounts?: Array<{ id: string }>;
+  // Flutterwave-specific options
+  customerName?: string;      // Customer name for checkout display
+  pageTitle?: string;         // Checkout page title
+  logoUrl?: string;           // Logo URL for checkout page
+  sessionDuration?: number;   // Session timeout in minutes (1-1440)
+  maxRetryAttempts?: number;  // Maximum retry attempts (1-10)
+  paymentPlan?: number;       // Payment plan ID for subscriptions
+  paymentOptions?: string;    // Comma-separated payment options
+  linkExpiration?: Date;      // Link expiration date
+  subaccounts?: Array<{ id: string }>; // Subaccounts for split payments
 }
 ```
 
@@ -239,7 +201,7 @@ After the customer completes payment, verify the transaction:
 ```typescript
 import { PaymentStatus } from '@noelzappy/voltax';
 
-const result = await voltax.flutterwave.verifyTransaction('flw-123456');
+const result = await flutterwave.verifyTransaction('flw-123456');
 
 console.log(result);
 // {
@@ -271,7 +233,7 @@ Voltax maps Flutterwave statuses to standardized values:
 For a quick status check:
 
 ```typescript
-const status = await voltax.flutterwave.getPaymentStatus('flw-123456');
+const status = await flutterwave.getPaymentStatus('flw-123456');
 
 if (status === PaymentStatus.SUCCESS) {
   console.log('Payment successful!');
@@ -290,18 +252,18 @@ import { randomUUID } from 'crypto';
 const app = express();
 app.use(express.json());
 
-const voltax = new Voltax({
-  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
+const flutterwave = Voltax('flutterwave', {
+  secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
 });
 
-// Initialize payment
+// Initiate payment
 app.post('/api/payments/flutterwave', async (req, res) => {
   try {
     const { amount, email, customerName, orderId } = req.body;
 
     const reference = `order-${orderId}-${randomUUID()}`;
 
-    const payment = await voltax.flutterwave.initializePayment({
+    const payment = await flutterwave.initiatePayment({
       amount,
       email,
       currency: Currency.NGN,
@@ -312,16 +274,12 @@ app.post('/api/payments/flutterwave', async (req, res) => {
         orderId,
         createdAt: new Date().toISOString(),
       },
-      options: {
-        flutterwave: {
-          customerName,
-          pageTitle: 'My Store - Checkout',
-          logoUrl: `${process.env.BASE_URL}/logo.png`,
-          sessionDuration: 30,
-          maxRetryAttempts: 3,
-          paymentOptions: 'card,banktransfer,ussd',
-        },
-      },
+      customerName,
+      pageTitle: 'My Store - Checkout',
+      logoUrl: `${process.env.BASE_URL}/logo.png`,
+      sessionDuration: 30,
+      maxRetryAttempts: 3,
+      paymentOptions: 'card,banktransfer,ussd',
     });
 
     // Store reference in database
@@ -347,7 +305,7 @@ app.get('/payment/callback', async (req, res) => {
 
   try {
     // Always verify server-side regardless of callback status
-    const result = await voltax.flutterwave.verifyTransaction(tx_ref as string);
+    const result = await flutterwave.verifyTransaction(tx_ref as string);
 
     if (result.status === PaymentStatus.SUCCESS) {
       await markOrderAsPaid(tx_ref as string);
@@ -373,7 +331,7 @@ app.post('/webhooks/flutterwave', async (req, res) => {
     const { tx_ref } = payload.data;
     
     // Verify and fulfill
-    const result = await voltax.flutterwave.verifyTransaction(tx_ref);
+    const result = await flutterwave.verifyTransaction(tx_ref);
     if (result.status === PaymentStatus.SUCCESS) {
       await fulfillOrder(tx_ref);
     }

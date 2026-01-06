@@ -36,17 +36,18 @@ Building payment integrations across Africa means dealing with multiple provider
 
 ## Quick Example
 
+### Single Provider
+
 ```typescript
-import Voltax, { Currency, PaymentStatus } from "@noelzappy/voltax";
+import { Voltax, Currency, PaymentStatus } from "@noelzappy/voltax";
 
 // Initialize with your provider credentials
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY },
-  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY },
+const paystack = Voltax("paystack", {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
-// Same API for any provider
-const payment = await voltax.paystack.initializePayment({
+// Create a payment
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: "customer@example.com",
   currency: Currency.NGN,
@@ -57,20 +58,40 @@ const payment = await voltax.paystack.initializePayment({
 console.log(payment.authorizationUrl);
 
 // Later, verify the payment
-const result = await voltax.paystack.verifyTransaction("order-123");
+const result = await paystack.verifyTransaction("order-123");
 if (result.status === PaymentStatus.SUCCESS) {
   // Fulfill the order
 }
 ```
 
+### Multiple Providers
+
+```typescript
+import { VoltaxAdapter, Currency } from "@noelzappy/voltax";
+
+// Initialize multiple providers
+const voltax = new VoltaxAdapter({
+  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
+});
+
+// Use any provider with the same API
+const payment = await voltax.paystack.initiatePayment({
+  amount: 5000,
+  email: "customer@example.com",
+  currency: Currency.NGN,
+  reference: "order-123",
+});
+```
+
 ## Supported Providers
 
-| Provider        | Countries                                     | Status       |
-| --------------- | --------------------------------------------- | ------------ |
-| **[Paystack](https://paystack.com)**    | Nigeria, Ghana, South Africa, Kenya           | ✅ Supported |
+| Provider                                   | Countries                                     | Status       |
+| ------------------------------------------ | --------------------------------------------- | ------------ |
+| **[Paystack](https://paystack.com)**       | Nigeria, Ghana, South Africa, Kenya           | ✅ Supported |
 | **[Flutterwave](https://flutterwave.com)** | Nigeria, Ghana, Kenya, South Africa + 30 more | ✅ Supported |
-| **[Hubtel](https://hubtel.com)**      | Ghana                                         | ✅ Supported |
-| **[Moolre](https://moolre.com)**      | Ghana, Nigeria                 | ✅ Supported |
+| **[Hubtel](https://hubtel.com)**           | Ghana                                         | ✅ Supported |
+| **[Moolre](https://moolre.com)**           | Ghana, Nigeria                                | ✅ Supported |
 
 ## Next Steps
 
@@ -109,8 +130,8 @@ if (result.status === PaymentStatus.SUCCESS) {
     support.
   </Card>
   <Card title="Moolre" icon="seti:config">
-    Configure [Moolre payments](/guides/moolre/) for Ghana and Nigeria with mobile money
-    support.
+    Configure [Moolre payments](/guides/moolre/) for Ghana and Nigeria with
+    mobile money support.
   </Card>
   <Card title="Examples" icon="seti:todo">
     Real-world [integration examples](/guides/example/) for common scenarios.

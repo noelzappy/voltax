@@ -28,26 +28,18 @@ yarn add @noelzappy/voltax
 
 ## Quick Start
 
-```typescript
-import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
+### Single Provider (Recommended)
 
-// Initialize with your providers
-const voltax = new Voltax({
-  paystack: {
-    secretKey: process.env.PAYSTACK_SECRET_KEY!,
-  },
-  flutterwave: {
-    secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-  },
-  hubtel: {
-    clientId: process.env.HUBTEL_CLIENT_ID!,
-    clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
-    merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
-  },
+```typescript
+import { Voltax, Currency, PaymentStatus } from '@noelzappy/voltax';
+
+// Initialize a single provider
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
-// Initialize a payment
-const payment = await voltax.paystack.initializePayment({
+// Initiate a payment
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -59,11 +51,31 @@ console.log(payment.authorizationUrl);
 // Redirect customer to complete payment
 
 // Verify the payment
-const result = await voltax.paystack.verifyTransaction(payment.reference);
+const result = await paystack.verifyTransaction(payment.reference);
 
 if (result.status === PaymentStatus.SUCCESS) {
   console.log('Payment successful!');
 }
+```
+
+### Multiple Providers
+
+```typescript
+import { VoltaxAdapter, Currency } from '@noelzappy/voltax';
+
+// Initialize multiple providers at once
+const voltax = new VoltaxAdapter({
+  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+  hubtel: {
+    clientId: process.env.HUBTEL_CLIENT_ID!,
+    clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
+    merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
+  },
+});
+
+// Use any configured provider
+await voltax.paystack.initiatePayment({ ... });
+await voltax.hubtel.initiatePayment({ ... });
 ```
 
 ## Documentation

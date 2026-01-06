@@ -12,6 +12,7 @@ Building payment integrations across Africa means dealing with multiple provider
 - **Paystack** for Nigeria, Ghana, South Africa, Kenya
 - **Flutterwave** for 30+ African countries
 - **Hubtel** for Ghana-specific mobile money
+- etc.
 
 Each provider has:
 - Different API structures and authentication methods
@@ -30,8 +31,8 @@ Voltax solves this with three key design patterns:
 Each payment provider has its own adapter class that implements a common interface (`VoltaxProvider`):
 
 ```typescript
-interface VoltaxProvider {
-  initializePayment(payload: InitiatePaymentDTO): Promise<VoltaxPaymentResponse>;
+interface VoltaxProvider<TPaymentDTO> {
+  initiatePayment(payload: TPaymentDTO): Promise<VoltaxPaymentResponse>;
   verifyTransaction(reference: string): Promise<VoltaxPaymentResponse>;
   getPaymentStatus(reference: string): Promise<PaymentStatus>;
 }
@@ -81,46 +82,6 @@ const InitiatePaymentSchema = z.object({
 
 This catches errors early with descriptive messages, before making API calls.
 
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Your Application                      │
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                      Voltax SDK                          │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │                  Voltax Class                     │   │
-│  │   .paystack  .flutterwave  .hubtel               │   │
-│  └──────────────────────────────────────────────────┘   │
-│                         │                                │
-│  ┌──────────────────────┼──────────────────────────┐    │
-│  │                      ▼                           │    │
-│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐      │    │
-│  │  │ Paystack  │ │Flutterwave│ │  Hubtel   │      │    │
-│  │  │ Adapter   │ │  Adapter  │ │  Adapter  │      │    │
-│  │  └───────────┘ └───────────┘ └───────────┘      │    │
-│  │        All implement VoltaxProvider              │    │
-│  └──────────────────────────────────────────────────┘   │
-│                                                          │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │             Shared Components                     │   │
-│  │  • Zod Schemas (validation)                      │   │
-│  │  • Error Classes (VoltaxError hierarchy)         │   │
-│  │  • Enums (Currency, PaymentStatus, etc.)        │   │
-│  │  • Interfaces (VoltaxPaymentResponse, etc.)     │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌──────────────────┬──────────────────┬───────────────────┐
-│ Paystack API     │ Flutterwave API  │ Hubtel API        │
-│ api.paystack.co  │ api.flutterwave. │ payproxyapi.      │
-│                  │ com              │ hubtel.com        │
-└──────────────────┴──────────────────┴───────────────────┘
-```
 
 ## Key Components
 
@@ -141,19 +102,30 @@ This catches errors early with descriptive messages, before making API calls.
 
 ## Lazy Initialization
 
-Provider adapters are created lazily when first accessed:
+When using `VoltaxAdapter` for multiple providers, adapters are created lazily when first accessed:
 
 ```typescript
-const voltax = new Voltax({
+import { VoltaxAdapter } from "@noelzappy/voltax";
+
+const voltax = new VoltaxAdapter({
   paystack: { secretKey: 'sk_xxx' },
   flutterwave: { secretKey: 'sk_xxx' },
 });
 
 // PaystackAdapter is created here (first access)
-const payment1 = await voltax.paystack.initializePayment(...);
+const payment1 = await voltax.paystack.initiatePayment(...);
 
 // Same instance is reused
-const payment2 = await voltax.paystack.initializePayment(...);
+const payment2 = await voltax.paystack.initiatePayment(...);
+```
+
+For single-provider usage, use the `Voltax` factory function:
+
+```typescript
+import Voltax from "@noelzappy/voltax";
+
+const paystack = Voltax("paystack", { secretKey: 'sk_xxx' });
+const payment = await paystack.initiatePayment(...);
 ```
 
 This means:
@@ -199,7 +171,7 @@ Voltax categorizes errors into three types:
 
 ```typescript
 try {
-  await voltax.paystack.initializePayment(payload);
+  await paystack.initiatePayment(payload);
 } catch (error) {
   if (error instanceof VoltaxValidationError) {
     // Fix payload and retry
@@ -213,22 +185,22 @@ try {
 
 ## Provider-Specific Options
 
-While the core payload is standardized, each provider has unique features accessible via `options`:
+While the core payload is standardized, each provider has unique features. These are passed as top-level fields in the payment DTO:
 
 ```typescript
-const payment = await voltax.paystack.initializePayment({
+import Voltax, { Currency, PaystackChannel } from "@noelzappy/voltax";
+
+const paystack = Voltax("paystack", { secretKey: 'sk_xxx' });
+
+const payment = await paystack.initiatePayment({
   // Standard fields (work across all providers)
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   
-  // Provider-specific options
-  options: {
-    paystack: {
-      channels: [PaystackChannel.CARD],
-      subaccount: 'ACCT_xxx',
-    },
-  },
+  // Paystack-specific options (flat, not nested)
+  channels: [PaystackChannel.CARD],
+  subaccount: 'ACCT_xxx',
 });
 ```
 
@@ -236,6 +208,7 @@ This design allows:
 - Core logic remains provider-agnostic
 - Advanced provider features are still accessible
 - Easy switching between providers for basic use cases
+- Type-safe provider-specific options with TypeScript
 
 ## Best Practices
 

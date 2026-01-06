@@ -67,12 +67,18 @@ voltax/
 │       │   │   ├── enums.ts     # Currency, PaymentStatus enums
 │       │   │   ├── errors.ts    # Error classes
 │       │   │   ├── interfaces.ts # VoltaxProvider interface
-│       │   │   ├── schemas.ts   # Zod validation schemas
-│       │   │   └── voltax.ts    # Main Voltax class
+│       │   │   ├── schemas.ts   # Base Zod validation schema
+│       │   │   ├── voltax.ts    # Voltax factory & VoltaxAdapter
+│       │   │   └── provider-schemas/  # Provider-specific schemas
+│       │   │       ├── paystack.schema.ts
+│       │   │       ├── flutterwave.schema.ts
+│       │   │       ├── hubtel.schema.ts
+│       │   │       └── moolre.schema.ts
 │       │   ├── providers/       # Payment gateway adapters
 │       │   │   ├── paystack/
 │       │   │   ├── flutterwave/
-│       │   │   └── hubtel/
+│       │   │   ├── hubtel/
+│       │   │   └── moolre/
 │       │   └── index.ts         # Public exports
 │       └── package.json
 └── docs/                        # Documentation site
@@ -95,16 +101,6 @@ Create `types.ts` with your gateway-specific types:
 ```typescript
 // packages/node/src/providers/YOUR_GATEWAY/types.ts
 
-import { z } from "zod";
-
-// Configuration schema
-export const YourGatewayOptionsSchema = z.object({
-  // Add gateway-specific payment options
-  customField: z.string().optional(),
-});
-
-export type YourGatewayOptions = z.infer<typeof YourGatewayOptionsSchema>;
-
 // Configuration for initialization
 export interface YourGatewayConfig {
   secretKey: string;
@@ -121,6 +117,33 @@ export interface YourGatewayVerifyResponse {
 }
 ```
 
+### Step 2b: Create the Provider Schema
+
+Create a schema file that extends the base payment schema:
+
+```typescript
+// packages/node/src/core/provider-schemas/your_gateway.schema.ts
+
+import { z } from 'zod';
+import { BasePaymentSchema } from '../schemas.js';
+
+/**
+ * YourGateway-specific payment options
+ */
+export const YourGatewayOptionsSchema = z.object({
+  customField: z.string().optional(),
+  // Add gateway-specific options here
+});
+
+/**
+ * Complete YourGateway payment schema (base + gateway-specific options)
+ */
+export const YourGatewayPaymentSchema = BasePaymentSchema.extend(YourGatewayOptionsSchema.shape);
+
+export type YourGatewayPaymentDTO = z.infer<typeof YourGatewayPaymentSchema>;
+export type YourGatewayOptions = z.infer<typeof YourGatewayOptionsSchema>;
+```
+
 ### Step 3: Create the Adapter
 
 Create the adapter that implements `VoltaxProvider`:
@@ -132,11 +155,14 @@ import axios, { AxiosInstance } from "axios";
 import { PaymentStatus } from "../../core/enums.js";
 import { VoltaxGatewayError, VoltaxNetworkError } from "../../core/errors.js";
 import { VoltaxPaymentResponse, VoltaxProvider } from "../../core/interfaces.js";
-import { InitiatePaymentDTO } from "../../core/schemas.js";
-import { handleGatewayError } from "../../core/utils.js";
+import {
+  YourGatewayPaymentSchema,
+  YourGatewayPaymentDTO,
+} from "../../core/provider-schemas/your_gateway.schema.js";
+import { handleGatewayError } from "../../core/errors.js";
 import { YourGatewayConfig } from "./types.js";
 
-export class YourGatewayAdapter implements VoltaxProvider {
+export class YourGatewayAdapter implements VoltaxProvider<YourGatewayPaymentDTO> {
   private axiosClient: AxiosInstance;
 
   constructor(private config: YourGatewayConfig) {
@@ -149,14 +175,17 @@ export class YourGatewayAdapter implements VoltaxProvider {
     });
   }
 
-  async initializePayment(payload: InitiatePaymentDTO): Promise<VoltaxPaymentResponse> {
+  async initiatePayment(payload: YourGatewayPaymentDTO): Promise<VoltaxPaymentResponse> {
     try {
+      // Validate payload with Zod schema
+      const validated = YourGatewayPaymentSchema.parse(payload);
+
       // Transform payload to gateway format
       const gatewayPayload = {
-        amount: payload.amount * 100, // Convert to minor units if needed
-        email: payload.email,
-        currency: payload.currency,
-        reference: payload.reference,
+        amount: validated.amount * 100, // Convert to minor units if needed
+        email: validated.email,
+        currency: validated.currency,
+        reference: validated.reference,
         // Map other fields...
       };
 
@@ -165,7 +194,7 @@ export class YourGatewayAdapter implements VoltaxProvider {
       // Transform response to VoltaxPaymentResponse
       return {
         status: PaymentStatus.PENDING,
-        reference: payload.reference || response.data.reference,
+        reference: validated.reference || response.data.reference,
         authorizationUrl: response.data.authorization_url,
         externalReference: response.data.reference,
         raw: response.data,
@@ -254,21 +283,43 @@ Add exports to `packages/node/src/index.ts`:
 ```typescript
 // Add to exports
 export { YourGatewayAdapter } from "./providers/YOUR_GATEWAY/your_gateway.adapter.js";
-export { YourGatewayOptions } from "./providers/YOUR_GATEWAY/types.js";
+export type { YourGatewayOptions, YourGatewayPaymentDTO } from "./core/provider-schemas/your_gateway.schema.js";
 ```
 
-### Step 6: Integrate with Voltax Class
+### Step 6: Integrate with Voltax Factory
 
 Update `packages/node/src/core/voltax.ts` to include your gateway:
 
 ```typescript
-// Add to VoltaxConfig interface
-yourgateway?: YourGatewayConfig;
+// Add to VoltaxProviders type
+export type VoltaxProviders = 'paystack' | 'hubtel' | 'flutterwave' | 'moolre' | 'yourgateway';
 
-// Add to Voltax class
+// Add to VoltaxConfigMap interface
+export interface VoltaxConfigMap {
+  // ... existing providers
+  yourgateway: YourGatewayConfig;
+}
+
+// Add to VoltaxAdapterMap interface
+export interface VoltaxAdapterMap {
+  // ... existing providers
+  yourgateway: YourGatewayAdapter;
+}
+
+// Add to VoltaxMultiConfig interface
+export interface VoltaxMultiConfig {
+  // ... existing providers
+  yourgateway?: YourGatewayConfig;
+}
+
+// Add case in Voltax factory function
+case 'yourgateway':
+  return new YourGatewayAdapter(config as YourGatewayConfig);
+
+// Add to VoltaxAdapter class
 public yourgateway?: YourGatewayAdapter;
 
-// In constructor
+// In VoltaxAdapter constructor
 if (config.yourgateway) {
   this.yourgateway = new YourGatewayAdapter(config.yourgateway);
 }

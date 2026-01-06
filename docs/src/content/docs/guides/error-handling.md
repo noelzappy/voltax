@@ -26,7 +26,7 @@ The base error class for all Voltax-related errors.
 import { VoltaxError } from '@noelzappy/voltax';
 
 try {
-  await voltax.paystack.initializePayment(payload);
+  await paystack.initiatePayment(payload);
 } catch (error) {
   if (error instanceof VoltaxError) {
     console.error('Voltax error:', error.message);
@@ -39,10 +39,14 @@ try {
 Thrown when input validation fails. This includes invalid email addresses, unsupported currencies, missing required fields, or invalid amounts.
 
 ```typescript
-import { VoltaxValidationError } from '@noelzappy/voltax';
+import Voltax, { VoltaxValidationError, Currency } from '@noelzappy/voltax';
+
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
+});
 
 try {
-  await voltax.paystack.initializePayment({
+  await paystack.initiatePayment({
     amount: -100,  // Invalid: negative amount
     email: 'invalid-email',  // Invalid: not a valid email
     currency: Currency.NGN,
@@ -81,7 +85,7 @@ Thrown when the payment provider's API returns an error response (e.g., invalid 
 import { VoltaxGatewayError } from '@noelzappy/voltax';
 
 try {
-  await voltax.paystack.verifyTransaction('invalid-reference');
+  await paystack.verifyTransaction('invalid-reference');
 } catch (error) {
   if (error instanceof VoltaxGatewayError) {
     console.error('Gateway error:', error.message);
@@ -113,7 +117,7 @@ Thrown when the network request fails due to connectivity issues, timeouts, or D
 import { VoltaxNetworkError } from '@noelzappy/voltax';
 
 try {
-  await voltax.paystack.initializePayment(payload);
+  await paystack.initiatePayment(payload);
 } catch (error) {
   if (error instanceof VoltaxNetworkError) {
     console.error('Network error:', error.message);
@@ -142,8 +146,7 @@ try {
 Here's a complete example of handling all error types:
 
 ```typescript
-import {
-  Voltax,
+import Voltax, {
   Currency,
   PaymentStatus,
   VoltaxError,
@@ -151,14 +154,15 @@ import {
   VoltaxGatewayError,
   VoltaxNetworkError,
 } from '@noelzappy/voltax';
+import type { PaystackPaymentDTO } from '@noelzappy/voltax';
 
-async function processPayment(payload: InitiatePaymentDTO) {
-  const voltax = new Voltax({
-    paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+async function processPayment(payload: PaystackPaymentDTO) {
+  const paystack = Voltax('paystack', {
+    secretKey: process.env.PAYSTACK_SECRET_KEY!,
   });
 
   try {
-    const response = await voltax.paystack.initializePayment(payload);
+    const response = await paystack.initiatePayment(payload);
     return {
       success: true,
       checkoutUrl: response.authorizationUrl,
@@ -236,16 +240,22 @@ async function processPayment(payload: InitiatePaymentDTO) {
 ### Retry Pattern for Network Errors
 
 ```typescript
-async function initializeWithRetry(
-  voltax: Voltax,
-  payload: InitiatePaymentDTO,
+import { Voltax, VoltaxNetworkError } from '@noelzappy/voltax';
+import type { PaystackPaymentDTO } from '@noelzappy/voltax';
+
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
+});
+
+async function initiateWithRetry(
+  payload: PaystackPaymentDTO,
   maxRetries = 3
 ) {
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      return await voltax.paystack.initializePayment(payload);
+      return await paystack.initiatePayment(payload);
     } catch (error) {
       if (error instanceof VoltaxNetworkError) {
         lastError = error;
@@ -269,20 +279,29 @@ async function initializeWithRetry(
 ### Provider Failover Pattern
 
 ```typescript
-async function initializeWithFailover(
-  voltax: Voltax,
-  payload: InitiatePaymentDTO
-) {
+import { VoltaxAdapter, VoltaxGatewayError, VoltaxNetworkError, Currency } from '@noelzappy/voltax';
+
+const voltax = new VoltaxAdapter({
+  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
+});
+
+async function initiateWithFailover(payload: {
+  amount: number;
+  email: string;
+  currency: Currency;
+  reference?: string;
+}) {
   // Try primary provider
   try {
-    return await voltax.paystack.initializePayment(payload);
+    return await voltax.paystack.initiatePayment(payload);
   } catch (error) {
     if (error instanceof VoltaxGatewayError || error instanceof VoltaxNetworkError) {
       console.warn('Primary provider failed, trying backup...');
       
       // Failover to backup provider
       try {
-        return await voltax.flutterwave.initializePayment({
+        return await voltax.flutterwave.initiatePayment({
           ...payload,
           reference: payload.reference || `fallback-${Date.now()}`,
         });
@@ -298,27 +317,24 @@ async function initializeWithFailover(
 
 ## Configuration Errors
 
-When accessing a provider that hasn't been configured, Voltax throws a `VoltaxValidationError`:
+When using `VoltaxAdapter` with an unconfigured provider, Voltax will have an undefined adapter for that provider:
 
 ```typescript
-const voltax = new Voltax({
+import { VoltaxAdapter } from '@noelzappy/voltax';
+
+const voltax = new VoltaxAdapter({
   paystack: { secretKey: 'sk_xxx' },
   // Flutterwave not configured
 });
 
-try {
-  // This will throw because Flutterwave is not configured
-  await voltax.flutterwave.initializePayment(payload);
-} catch (error) {
-  if (error instanceof VoltaxValidationError) {
-    console.error(error.message);
-    // "Flutterwave configuration is missing. Please provide "flutterwave" in the Voltax constructor."
-  }
+// voltax.flutterwave is undefined
+if (!voltax.flutterwave) {
+  console.error('Flutterwave is not configured');
 }
 ```
 
 <Aside type="tip" title="Best Practice">
-  Always configure only the providers you need. Accessing an unconfigured provider will throw immediately, making it easy to catch configuration issues during development.
+  Use the `Voltax()` factory function for single providers to get full type safety. Use `VoltaxAdapter` only when you need multiple providers, and always check if the provider is configured before using it.
 </Aside>
 
 ## The handleGatewayError Function

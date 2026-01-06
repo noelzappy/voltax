@@ -50,26 +50,18 @@ yarn add @noelzappy/voltax
 
 ## Quick Start
 
-```typescript
-import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
+### Single Provider (Recommended)
 
-// Initialize with your providers
-const voltax = new Voltax({
-  paystack: {
-    secretKey: process.env.PAYSTACK_SECRET_KEY!,
-  },
-  flutterwave: {
-    secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-  },
-  hubtel: {
-    clientId: process.env.HUBTEL_CLIENT_ID!,
-    clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
-    merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
-  },
+```typescript
+import { Voltax, Currency, PaymentStatus } from '@noelzappy/voltax';
+
+// Initialize a single provider
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
-// Initialize a payment
-const payment = await voltax.paystack.initializePayment({
+// Initiate a payment
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -81,11 +73,32 @@ console.log(payment.authorizationUrl);
 // Redirect customer to complete payment
 
 // Verify the payment
-const result = await voltax.paystack.verifyTransaction(payment.reference);
+const result = await paystack.verifyTransaction(payment.reference);
 
 if (result.status === PaymentStatus.SUCCESS) {
   console.log('Payment successful!');
 }
+```
+
+### Multiple Providers
+
+```typescript
+import { VoltaxAdapter, Currency } from '@noelzappy/voltax';
+
+// Initialize multiple providers at once
+const voltax = new VoltaxAdapter({
+  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
+  hubtel: {
+    clientId: process.env.HUBTEL_CLIENT_ID!,
+    clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
+    merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
+  },
+});
+
+// Use any configured provider
+await voltax.paystack.initiatePayment({ ... });
+await voltax.hubtel.initiatePayment({ ... });
 ```
 
 ## Standardized API
@@ -93,16 +106,19 @@ if (result.status === PaymentStatus.SUCCESS) {
 All providers implement the same interface:
 
 ```typescript
-interface VoltaxProvider {
-  initializePayment(payload: InitiatePaymentDTO): Promise<VoltaxPaymentResponse>;
+interface VoltaxProvider<TPaymentDTO> {
+  initiatePayment(payload: TPaymentDTO): Promise<VoltaxPaymentResponse>;
   verifyTransaction(reference: string): Promise<VoltaxPaymentResponse>;
   getPaymentStatus(reference: string): Promise<PaymentStatus>;
 }
 ```
 
-### InitiatePaymentDTO
+### Payment DTO
+
+Each provider has its own typed payment DTO that extends the base schema. Common fields include:
 
 ```typescript
+// Base fields shared by all providers
 {
   amount: number;         // Amount in major units (e.g., 100 for 100 NGN)
   email: string;          // Customer email
@@ -112,12 +128,11 @@ interface VoltaxProvider {
   description?: string;   // Transaction description
   callbackUrl?: string;   // Redirect URL after payment
   metadata?: object;      // Custom data
-  options?: {             // Provider-specific options
-    paystack?: PaystackOptions;
-    flutterwave?: FlutterwaveOptions;
-    hubtel?: HubtelOptions;
-  };
 }
+
+// Provider-specific fields are added at the top level
+// e.g., Paystack adds: channels, subaccount, splitCode, etc.
+// e.g., Hubtel adds: returnUrl, cancellationUrl (required fields)
 ```
 
 ### VoltaxPaymentResponse
@@ -164,54 +179,63 @@ try {
 ### Paystack
 
 ```typescript
-import { PaystackChannel } from '@noelzappy/voltax';
+import { Voltax, PaystackChannel, Currency } from '@noelzappy/voltax';
 
-const payment = await voltax.paystack.initializePayment({
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
+});
+
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
-  options: {
-    paystack: {
-      channels: [PaystackChannel.CARD, PaystackChannel.BANK_TRANSFER],
-      subaccount: 'ACCT_xxxxx',
-      transactionCharge: 100,
-    },
-  },
+  // Paystack-specific options at top level
+  channels: [PaystackChannel.CARD, PaystackChannel.BANK_TRANSFER],
+  subaccount: 'ACCT_xxxxx',
+  transactionCharge: 100,
 });
 ```
 
 ### Flutterwave
 
 ```typescript
-const payment = await voltax.flutterwave.initializePayment({
+import { Voltax, Currency } from '@noelzappy/voltax';
+
+const flutterwave = Voltax('flutterwave', {
+  secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
+});
+
+const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
   reference: 'order-123',  // Required for Flutterwave
-  options: {
-    flutterwave: {
-      customerName: 'John Doe',
-      pageTitle: 'My Store',
-      logoUrl: 'https://yoursite.com/logo.png',
-    },
-  },
+  // Flutterwave-specific options at top level
+  customerName: 'John Doe',
+  pageTitle: 'My Store',
+  logoUrl: 'https://yoursite.com/logo.png',
 });
 ```
 
 ### Hubtel
 
 ```typescript
-const payment = await voltax.hubtel.initializePayment({
+import { Voltax, Currency } from '@noelzappy/voltax';
+
+const hubtel = Voltax('hubtel', {
+  clientId: process.env.HUBTEL_CLIENT_ID!,
+  clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
+  merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
+});
+
+const payment = await hubtel.initiatePayment({
   amount: 100,
   email: 'customer@example.com',
   currency: Currency.GHS,
   reference: 'order-123',  // Required
   callbackUrl: 'https://yoursite.com/webhook',  // Required
-  options: {
-    hubtel: {
-      returnUrl: 'https://yoursite.com/success',  // Required
-    },
-  },
+  // Hubtel-specific options at top level
+  returnUrl: 'https://yoursite.com/success',  // Required
 });
 ```
 

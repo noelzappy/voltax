@@ -7,7 +7,7 @@ title: "handleGatewayError"
 
 > **handleGatewayError**(`error`, `gateway`): `never`
 
-Defined in: [packages/node/src/core/errors.ts:61](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/errors.ts#L61)
+Defined in: [packages/node/src/core/errors.ts:61](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L61)
 
 ## Parameters
 

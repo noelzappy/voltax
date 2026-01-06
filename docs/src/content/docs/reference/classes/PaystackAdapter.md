@@ -5,13 +5,24 @@ prev: false
 title: "PaystackAdapter"
 ---
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:22](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L22)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:12](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L12)
 
-Interface that all Voltax Gateways must implement.
+Interface that all Voltax payment providers must implement.
+The generic type TPaymentDTO allows each provider to define its own payment payload type.
+
+## Example
+
+```ts
+class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
+  async initiatePayment(payload: PaystackPaymentDTO): Promise<VoltaxPaymentResponse> { ... }
+  async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> { ... }
+  async getPaymentStatus(reference: string): Promise<PaymentStatus> { ... }
+}
+```
 
 ## Implements
 
-- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)
+- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)\<[`PaystackPaymentDTO`](/reference/type-aliases/paystackpaymentdto/)\>
 
 ## Constructors
 
@@ -19,7 +30,7 @@ Interface that all Voltax Gateways must implement.
 
 > **new PaystackAdapter**(`__namedParameters`): `PaystackAdapter`
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:25](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L25)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L15)
 
 #### Parameters
 
@@ -37,7 +48,7 @@ Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:25](https:
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:156](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L156)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:150](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L150)
 
 Helper to get status directly.
 
@@ -57,11 +68,11 @@ Helper to get status directly.
 
 ***
 
-### initializePayment()
+### initiatePayment()
 
-> **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+> **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:45](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L45)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:49](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L49)
 
 Initialize a payment with Paystack.
 
@@ -69,13 +80,23 @@ Initialize a payment with Paystack.
 
 ##### payload
 
+Payment details including amount, email, currency, and optional Paystack-specific options
+
 ###### amount
 
 `number` = `...`
 
+###### bearer?
+
+`"subaccount"` \| `"account"` = `...`
+
 ###### callbackUrl?
 
 `string` = `...`
+
+###### channels?
+
+[`PaystackChannel`](/reference/enumerations/paystackchannel/)[] = `...`
 
 ###### currency
 
@@ -89,17 +110,33 @@ Initialize a payment with Paystack.
 
 `string` = `...`
 
+###### invoiceLimit?
+
+`number` = `...`
+
 ###### metadata?
 
 `Record`\<`string`, `any`\> = `...`
 
-###### options?
+###### plan?
 
-\{ `flutterwave?`: \{ `customerName?`: `string`; `linkExpiration?`: `Date`; `logoUrl?`: `string`; `maxRetryAttempts?`: `number`; `mobileNumber?`: `string`; `pageTitle?`: `string`; `paymentOptions?`: `string`; `paymentPlan?`: `number`; `sessionDuration?`: `number`; `subaccounts?`: `object`[]; \}; `hubtel?`: \{ `cancellationUrl?`: `string`; `mobileNumber?`: `string`; `returnUrl?`: `string`; \}; `moolre?`: \{ `accountNumberOverride?`: `string`; `linkReusable?`: `boolean`; `redirectUrl?`: `string`; \}; `paystack?`: \{ `bearer?`: `"subaccount"` \| `"account"`; `channels?`: [`PaystackChannel`](/reference/enumerations/paystackchannel/)[]; `invoiceLimit?`: `number`; `plan?`: `string`; `splitCode?`: `string`; `subaccount?`: `string`; `transactionCharge?`: `number`; \}; \} \| `null` = `...`
+`string` = `...`
 
 ###### reference?
 
 `string` = `...`
+
+###### splitCode?
+
+`string` = `...`
+
+###### subaccount?
+
+`string` = `...`
+
+###### transactionCharge?
+
+`number` = `...`
 
 #### Returns
 
@@ -107,9 +144,24 @@ Initialize a payment with Paystack.
 
 Promise<VoltaxPaymentResponse>
 
+#### Example
+
+```ts
+const paystack = Voltax('paystack', { secretKey: '...' });
+const response = await paystack.initiatePayment({
+  amount: 100,
+  email: 'customer@example.com',
+  currency: Currency.NGN,
+  reference: 'unique-ref',
+  // Paystack-specific options (flat, not nested)
+  channels: [PaystackChannel.CARD, PaystackChannel.BANK],
+  subaccount: 'ACCT_xxx',
+});
+```
+
 #### Implementation of
 
-[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initializePayment`](/reference/interfaces/voltaxprovider/#initializepayment)
+[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initiatePayment`](/reference/interfaces/voltaxprovider/#initiatepayment)
 
 ***
 
@@ -117,7 +169,7 @@ Promise<VoltaxPaymentResponse>
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:129](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/paystack/paystack.adapter.ts#L129)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:125](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L125)
 
 Verify a transaction with Paystack.
 

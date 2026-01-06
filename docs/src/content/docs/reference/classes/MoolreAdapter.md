@@ -5,13 +5,24 @@ prev: false
 title: "MoolreAdapter"
 ---
 
-Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:23
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:17](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L17)
 
-Interface that all Voltax Gateways must implement.
+Interface that all Voltax payment providers must implement.
+The generic type TPaymentDTO allows each provider to define its own payment payload type.
+
+## Example
+
+```ts
+class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
+  async initiatePayment(payload: PaystackPaymentDTO): Promise<VoltaxPaymentResponse> { ... }
+  async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> { ... }
+  async getPaymentStatus(reference: string): Promise<PaymentStatus> { ... }
+}
+```
 
 ## Implements
 
-- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)
+- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)\<[`MoolrePaymentDTO`](/reference/type-aliases/moolrepaymentdto/)\>
 
 ## Constructors
 
@@ -19,7 +30,7 @@ Interface that all Voltax Gateways must implement.
 
 > **new MoolreAdapter**(`__namedParameters`): `MoolreAdapter`
 
-Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:27
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:21](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L21)
 
 #### Parameters
 
@@ -37,10 +48,9 @@ Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:27
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:123
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:121](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L121)
 
 Gets the status of a payment.
-In many cases aliases to verifyTransaction, but explicit for clarity.
 
 #### Parameters
 
@@ -54,31 +64,37 @@ The transaction reference
 
 `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
+The payment status
+
 #### Implementation of
 
 [`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`getPaymentStatus`](/reference/interfaces/voltaxprovider/#getpaymentstatus)
 
 ***
 
-### initializePayment()
+### initiatePayment()
 
-> **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+> **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:39
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:53](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L53)
 
-Initiates a payment transaction.
+Initiate a payment with Moolre
 
 #### Parameters
 
 ##### payload
 
-The payment details
+Payment details including amount, email, currency, and Moolre-specific options
+
+###### accountNumberOverride?
+
+`string` = `...`
 
 ###### amount
 
 `number` = `...`
 
-###### callbackUrl?
+###### callbackUrl
 
 `string` = `...`
 
@@ -94,15 +110,19 @@ The payment details
 
 `string` = `...`
 
+###### linkReusable?
+
+`boolean` = `...`
+
 ###### metadata?
 
 `Record`\<`string`, `any`\> = `...`
 
-###### options?
+###### redirectUrl
 
-\{ `flutterwave?`: \{ `customerName?`: `string`; `linkExpiration?`: `Date`; `logoUrl?`: `string`; `maxRetryAttempts?`: `number`; `mobileNumber?`: `string`; `pageTitle?`: `string`; `paymentOptions?`: `string`; `paymentPlan?`: `number`; `sessionDuration?`: `number`; `subaccounts?`: `object`[]; \}; `hubtel?`: \{ `cancellationUrl?`: `string`; `mobileNumber?`: `string`; `returnUrl?`: `string`; \}; `moolre?`: \{ `accountNumberOverride?`: `string`; `linkReusable?`: `boolean`; `redirectUrl?`: `string`; \}; `paystack?`: \{ `bearer?`: `"subaccount"` \| `"account"`; `channels?`: [`PaystackChannel`](/reference/enumerations/paystackchannel/)[]; `invoiceLimit?`: `number`; `plan?`: `string`; `splitCode?`: `string`; `subaccount?`: `string`; `transactionCharge?`: `number`; \}; \} \| `null` = `...`
+`string` = `...`
 
-###### reference?
+###### reference
 
 `string` = `...`
 
@@ -110,9 +130,27 @@ The payment details
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
+Promise<VoltaxPaymentResponse>
+
+#### Example
+
+```ts
+const moolre = Voltax('moolre', { apiUser: '...', accountNumber: '...', apiPublicKey: '...' });
+const response = await moolre.initiatePayment({
+  amount: 100,
+  email: 'customer@example.com',
+  currency: Currency.GHS,
+  reference: 'unique-ref',
+  callbackUrl: 'https://example.com/callback',
+  // Moolre-specific options (flat, not nested)
+  redirectUrl: 'https://example.com/redirect',
+  linkReusable: false,
+});
+```
+
 #### Implementation of
 
-[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initializePayment`](/reference/interfaces/voltaxprovider/#initializepayment)
+[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initiatePayment`](/reference/interfaces/voltaxprovider/#initiatepayment)
 
 ***
 
@@ -120,7 +158,7 @@ The payment details
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: packages/node/src/providers/moolre/moolre.adapter.ts:98
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:96](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L96)
 
 Verifies a transaction by its reference.
 
@@ -135,6 +173,8 @@ The transaction reference
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+
+A standardized payment response with updated status
 
 #### Implementation of
 

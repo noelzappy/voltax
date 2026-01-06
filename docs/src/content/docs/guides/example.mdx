@@ -15,9 +15,9 @@ A typical e-commerce checkout flow with order tracking:
 import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 import { randomUUID } from 'crypto';
 
-// Initialize Voltax
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+// Initialize Voltax with a single provider
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 interface Order {
@@ -30,7 +30,7 @@ interface Order {
 async function createCheckout(order: Order) {
   const reference = `order-${order.id}-${randomUUID().slice(0, 8)}`;
 
-  const payment = await voltax.paystack.initializePayment({
+  const payment = await paystack.initiatePayment({
     amount: order.amount,
     email: order.customerEmail,
     currency: Currency.NGN,
@@ -54,7 +54,7 @@ async function createCheckout(order: Order) {
 }
 
 async function handlePaymentCallback(orderId: string, reference: string) {
-  const result = await voltax.paystack.verifyTransaction(reference);
+  const result = await paystack.verifyTransaction(reference);
 
   if (result.status === PaymentStatus.SUCCESS) {
     await db.orders.update(orderId, {
@@ -79,8 +79,8 @@ Using Paystack's subscription plan feature:
 ```typescript
 import Voltax, { Currency, PaystackChannel } from '@noelzappy/voltax';
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 async function createSubscription(
@@ -88,19 +88,16 @@ async function createSubscription(
   planCode: string,  // Created in Paystack dashboard
   maxCharges?: number
 ) {
-  const payment = await voltax.paystack.initializePayment({
+  const payment = await paystack.initiatePayment({
     amount: 0,  // Amount comes from the plan
     email,
     currency: Currency.NGN,
     reference: `sub-${Date.now()}`,
     callbackUrl: 'https://yourapp.com/subscription/callback',
-    options: {
-      paystack: {
-        plan: planCode,
-        invoiceLimit: maxCharges,  // Optional: limit subscription duration
-        channels: [PaystackChannel.CARD],  // Subscriptions require card
-      },
-    },
+    // Paystack-specific options (flat, not nested)
+    plan: planCode,
+    invoiceLimit: maxCharges,  // Optional: limit subscription duration
+    channels: [PaystackChannel.CARD],  // Subscriptions require card
   });
 
   return payment.authorizationUrl;
@@ -112,9 +109,9 @@ async function createSubscription(
 Supporting different currencies based on customer location:
 
 ```typescript
-import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
+import { VoltaxAdapter, Currency, PaymentStatus } from '@noelzappy/voltax';
 
-const voltax = new Voltax({
+const voltax = new VoltaxAdapter({
   paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
   flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
   hubtel: {
@@ -132,7 +129,7 @@ interface PaymentRequest {
   callbackUrl: string;
 }
 
-async function initializePayment(request: PaymentRequest) {
+async function initiatePayment(request: PaymentRequest) {
   const { amount, email, country, reference, callbackUrl } = request;
 
   // Map country to currency and provider
@@ -156,19 +153,15 @@ async function initializePayment(request: PaymentRequest) {
 
   switch (provider) {
     case 'paystack':
-      return voltax.paystack.initializePayment(payload);
+      return voltax.paystack.initiatePayment(payload);
 
     case 'flutterwave':
-      return voltax.flutterwave.initializePayment(payload);
+      return voltax.flutterwave.initiatePayment(payload);
 
     case 'hubtel':
-      return voltax.hubtel.initializePayment({
+      return voltax.hubtel.initiatePayment({
         ...payload,
-        options: {
-          hubtel: {
-            returnUrl: `${process.env.FRONTEND_URL}/payment/success`,
-          },
-        },
+        returnUrl: `${process.env.FRONTEND_URL}/payment/success`,
       });
   }
 }
@@ -191,8 +184,8 @@ import Voltax, {
 const app = express();
 app.use(express.json());
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 // Error handling middleware
@@ -234,7 +227,7 @@ app.post('/api/v1/payments', async (req, res) => {
 
     const reference = `pay-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    const payment = await voltax.paystack.initializePayment({
+    const payment = await paystack.initiatePayment({
       amount,
       email,
       currency: Currency.NGN,
@@ -261,7 +254,7 @@ app.get('/api/v1/payments/:reference', async (req, res) => {
   try {
     const { reference } = req.params;
 
-    const result = await voltax.paystack.verifyTransaction(reference);
+    const result = await paystack.verifyTransaction(reference);
 
     res.json({
       success: true,
@@ -281,7 +274,7 @@ app.get('/api/v1/payments/callback', async (req, res) => {
   const { reference } = req.query;
 
   try {
-    const result = await voltax.paystack.verifyTransaction(reference as string);
+    const result = await paystack.verifyTransaction(reference as string);
 
     const redirectUrl = result.status === PaymentStatus.SUCCESS
       ? `${process.env.FRONTEND_URL}/payment/success?ref=${reference}`
@@ -307,8 +300,8 @@ Using Voltax with Next.js App Router:
 import { NextRequest, NextResponse } from 'next/server';
 import Voltax, { Currency } from '@noelzappy/voltax';
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 export async function POST(request: NextRequest) {
@@ -318,7 +311,7 @@ export async function POST(request: NextRequest) {
 
     const reference = `order-${orderId}-${Date.now()}`;
 
-    const payment = await voltax.paystack.initializePayment({
+    const payment = await paystack.initiatePayment({
       amount,
       email,
       currency: Currency.NGN,
@@ -344,8 +337,8 @@ export async function POST(request: NextRequest) {
 import { NextRequest, NextResponse } from 'next/server';
 import Voltax, { PaymentStatus } from '@noelzappy/voltax';
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 export async function GET(
@@ -353,7 +346,7 @@ export async function GET(
   { params }: { params: { reference: string } }
 ) {
   try {
-    const result = await voltax.paystack.verifyTransaction(params.reference);
+    const result = await paystack.verifyTransaction(params.reference);
 
     return NextResponse.json({
       status: result.status,
@@ -379,8 +372,8 @@ import Voltax, { PaymentStatus } from '@noelzappy/voltax';
 
 const app = express();
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
 // Paystack webhook handler
@@ -404,7 +397,7 @@ app.post(
       const { reference } = event.data;
 
       // Always verify the transaction
-      const result = await voltax.paystack.verifyTransaction(reference);
+      const result = await paystack.verifyTransaction(reference);
 
       if (result.status === PaymentStatus.SUCCESS) {
         // Process the successful payment
@@ -432,10 +425,8 @@ For testing purposes:
 import Voltax, { Currency, PaymentStatus } from '@noelzappy/voltax';
 
 // Use test/sandbox keys
-const voltax = new Voltax({
-  paystack: { 
-    secretKey: process.env.PAYSTACK_TEST_SECRET_KEY!  // sk_test_xxx
-  },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_TEST_SECRET_KEY!,  // sk_test_xxx
 });
 
 // Test card numbers for Paystack
@@ -447,7 +438,7 @@ const testCards = {
 
 // Initialize a test payment
 async function testPayment() {
-  const payment = await voltax.paystack.initializePayment({
+  const payment = await paystack.initiatePayment({
     amount: 100,  // ₦100
     email: 'test@example.com',
     currency: Currency.NGN,

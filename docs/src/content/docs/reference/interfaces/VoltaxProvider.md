@@ -5,9 +5,28 @@ prev: false
 title: "VoltaxProvider"
 ---
 
-Defined in: [packages/node/src/core/interfaces.ts:18](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/interfaces.ts#L18)
+Defined in: [packages/node/src/core/interfaces.ts:29](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L29)
 
-Interface that all Voltax Gateways must implement.
+Interface that all Voltax payment providers must implement.
+The generic type TPaymentDTO allows each provider to define its own payment payload type.
+
+## Example
+
+```ts
+class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
+  async initiatePayment(payload: PaystackPaymentDTO): Promise<VoltaxPaymentResponse> { ... }
+  async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> { ... }
+  async getPaymentStatus(reference: string): Promise<PaymentStatus> { ... }
+}
+```
+
+## Type Parameters
+
+### TPaymentDTO
+
+`TPaymentDTO`
+
+The provider-specific payment payload type
 
 ## Methods
 
@@ -15,10 +34,9 @@ Interface that all Voltax Gateways must implement.
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:43](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/interfaces.ts#L43)
+Defined in: [packages/node/src/core/interfaces.ts:49](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L49)
 
 Gets the status of a payment.
-In many cases aliases to verifyTransaction, but explicit for clarity.
 
 #### Parameters
 
@@ -32,13 +50,15 @@ The transaction reference
 
 `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
+The payment status
+
 ***
 
-### initializePayment()
+### initiatePayment()
 
-> **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+> **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:28](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/interfaces.ts#L28)
+Defined in: [packages/node/src/core/interfaces.ts:35](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L35)
 
 Initiates a payment transaction.
 
@@ -46,43 +66,15 @@ Initiates a payment transaction.
 
 ##### payload
 
-The payment details
+`TPaymentDTO`
 
-###### amount
-
-`number` = `...`
-
-###### callbackUrl?
-
-`string` = `...`
-
-###### currency
-
-[`Currency`](/reference/enumerations/currency/) = `...`
-
-###### description?
-
-`string` = `...`
-
-###### email
-
-`string` = `...`
-
-###### metadata?
-
-`Record`\<`string`, `any`\> = `...`
-
-###### options?
-
-\{ `flutterwave?`: \{ `customerName?`: `string`; `linkExpiration?`: `Date`; `logoUrl?`: `string`; `maxRetryAttempts?`: `number`; `mobileNumber?`: `string`; `pageTitle?`: `string`; `paymentOptions?`: `string`; `paymentPlan?`: `number`; `sessionDuration?`: `number`; `subaccounts?`: `object`[]; \}; `hubtel?`: \{ `cancellationUrl?`: `string`; `mobileNumber?`: `string`; `returnUrl?`: `string`; \}; `moolre?`: \{ `accountNumberOverride?`: `string`; `linkReusable?`: `boolean`; `redirectUrl?`: `string`; \}; `paystack?`: \{ `bearer?`: `"subaccount"` \| `"account"`; `channels?`: [`PaystackChannel`](/reference/enumerations/paystackchannel/)[]; `invoiceLimit?`: `number`; `plan?`: `string`; `splitCode?`: `string`; `subaccount?`: `string`; `transactionCharge?`: `number`; \}; \} \| `null` = `...`
-
-###### reference?
-
-`string` = `...`
+The provider-specific payment details
 
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+
+A standardized payment response
 
 ***
 
@@ -90,7 +82,7 @@ The payment details
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:36](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/core/interfaces.ts#L36)
+Defined in: [packages/node/src/core/interfaces.ts:42](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L42)
 
 Verifies a transaction by its reference.
 
@@ -105,3 +97,5 @@ The transaction reference
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+
+A standardized payment response with updated status
