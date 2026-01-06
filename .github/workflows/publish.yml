@@ -33,13 +33,11 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
+          cache-dependency-path: packages/node/package-lock.json
           registry-url: "https://registry.npmjs.org"
           scope: "@noelzappy"
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install package dependencies
         working-directory: packages/node
         run: npm ci
 
@@ -88,13 +86,11 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
+          cache-dependency-path: packages/node/package-lock.json
           registry-url: "https://npm.pkg.github.com"
           scope: "@noelzappy"
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install package dependencies
         working-directory: packages/node
         run: npm ci
 
