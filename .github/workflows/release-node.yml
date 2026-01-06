@@ -1,9 +1,9 @@
-name: Release
+name: Release - Node.js
 
 on:
   push:
     tags:
-      - "v*"
+      - "node-v*"
 
 jobs:
   release:
@@ -44,7 +44,7 @@ jobs:
       # Extract version from tag
       - name: Get version from tag
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=${GITHUB_REF#refs/tags/node-v}" >> $GITHUB_OUTPUT
 
       # Update package.json version
       - name: Update package version
