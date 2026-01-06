@@ -46,10 +46,18 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/node-v}" >> $GITHUB_OUTPUT
 
-      # Update package.json version
+      # Update package.json version (only if different)
       - name: Update package version
         working-directory: packages/node
-        run: npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${{ steps.get_version.outputs.VERSION }}"
+          if [ "$CURRENT_VERSION" != "$TAG_VERSION" ]; then
+            npm version $TAG_VERSION --no-git-tag-version
+            echo "Updated version from $CURRENT_VERSION to $TAG_VERSION"
+          else
+            echo "Version already matches: $CURRENT_VERSION"
+          fi
 
       # Generate changelog
       - name: Generate changelog
