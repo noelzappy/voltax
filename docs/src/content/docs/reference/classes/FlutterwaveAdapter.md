@@ -5,13 +5,24 @@ prev: false
 title: "FlutterwaveAdapter"
 ---
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:21](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L21)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:11](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L11)
 
-Interface that all Voltax Gateways must implement.
+Interface that all Voltax payment providers must implement.
+The generic type TPaymentDTO allows each provider to define its own payment payload type.
+
+## Example
+
+```ts
+class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
+  async initiatePayment(payload: PaystackPaymentDTO): Promise<VoltaxPaymentResponse> { ... }
+  async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> { ... }
+  async getPaymentStatus(reference: string): Promise<PaymentStatus> { ... }
+}
+```
 
 ## Implements
 
-- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)
+- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)\<[`FlutterwavePaymentDTO`](/reference/type-aliases/flutterwavepaymentdto/)\>
 
 ## Constructors
 
@@ -19,7 +30,7 @@ Interface that all Voltax Gateways must implement.
 
 > **new FlutterwaveAdapter**(`__namedParameters`): `FlutterwaveAdapter`
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:24](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L24)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:14](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L14)
 
 #### Parameters
 
@@ -37,7 +48,7 @@ Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:24](
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:150](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L150)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:146](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L146)
 
 Helper to get status directly.
 
@@ -57,17 +68,19 @@ Helper to get status directly.
 
 ***
 
-### initializePayment()
+### initiatePayment()
 
-> **initializePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+> **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:41](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L41)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:49](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L49)
 
 Initiate a payment with Flutterwave
 
 #### Parameters
 
 ##### payload
+
+Payment details including amount, email, currency, and Flutterwave-specific options
 
 ###### amount
 
@@ -81,6 +94,10 @@ Initiate a payment with Flutterwave
 
 [`Currency`](/reference/enumerations/currency/) = `...`
 
+###### customerName?
+
+`string` = `...`
+
 ###### description?
 
 `string` = `...`
@@ -89,25 +106,76 @@ Initiate a payment with Flutterwave
 
 `string` = `...`
 
+###### linkExpiration?
+
+`Date` = `...`
+
+###### logoUrl?
+
+`string` = `...`
+
+###### maxRetryAttempts?
+
+`number` = `...`
+
 ###### metadata?
 
 `Record`\<`string`, `any`\> = `...`
 
-###### options?
-
-\{ `flutterwave?`: \{ `customerName?`: `string`; `linkExpiration?`: `Date`; `logoUrl?`: `string`; `maxRetryAttempts?`: `number`; `mobileNumber?`: `string`; `pageTitle?`: `string`; `paymentOptions?`: `string`; `paymentPlan?`: `number`; `sessionDuration?`: `number`; `subaccounts?`: `object`[]; \}; `hubtel?`: \{ `cancellationUrl?`: `string`; `mobileNumber?`: `string`; `returnUrl?`: `string`; \}; `moolre?`: \{ `accountNumberOverride?`: `string`; `linkReusable?`: `boolean`; `redirectUrl?`: `string`; \}; `paystack?`: \{ `bearer?`: `"subaccount"` \| `"account"`; `channels?`: [`PaystackChannel`](/reference/enumerations/paystackchannel/)[]; `invoiceLimit?`: `number`; `plan?`: `string`; `splitCode?`: `string`; `subaccount?`: `string`; `transactionCharge?`: `number`; \}; \} \| `null` = `...`
-
-###### reference?
+###### mobileNumber?
 
 `string` = `...`
+
+###### pageTitle?
+
+`string` = `...`
+
+###### paymentOptions?
+
+`string` = `...`
+
+###### paymentPlan?
+
+`number` = `...`
+
+###### reference
+
+`string` = `...`
+
+###### sessionDuration?
+
+`number` = `...`
+
+###### subaccounts?
+
+`object`[] = `...`
 
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
+Promise<VoltaxPaymentResponse>
+
+#### Example
+
+```ts
+const flutterwave = Voltax('flutterwave', { secretKey: '...' });
+const response = await flutterwave.initiatePayment({
+  amount: 100,
+  email: 'customer@example.com',
+  currency: Currency.NGN,
+  reference: 'unique-ref',
+  callbackUrl: 'https://example.com/callback',
+  // Flutterwave-specific options (flat, not nested)
+  customerName: 'John Doe',
+  pageTitle: 'My Store',
+  logoUrl: 'https://example.com/logo.png',
+});
+```
+
 #### Implementation of
 
-[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initializePayment`](/reference/interfaces/voltaxprovider/#initializepayment)
+[`VoltaxProvider`](/reference/interfaces/voltaxprovider/).[`initiatePayment`](/reference/interfaces/voltaxprovider/#initiatepayment)
 
 ***
 
@@ -115,7 +183,7 @@ Initiate a payment with Flutterwave
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:126](https://github.com/noelzappy/voltax/blob/626c92119cb8ab7a82c2674b0cefd68f9c98c2f7/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L126)
+Defined in: [packages/node/src/providers/flutterwave/flutterwave.adapter.ts:122](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/flutterwave/flutterwave.adapter.ts#L122)
 
 Verifies a transaction by its reference.
 
@@ -130,6 +198,8 @@ The transaction reference
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
+
+A standardized payment response with updated status
 
 #### Implementation of
 

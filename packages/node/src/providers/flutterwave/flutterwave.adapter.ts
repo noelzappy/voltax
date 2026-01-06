@@ -1,49 +1,55 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from 'axios';
+import { handleGatewayError, VoltaxValidationError } from '../../core/errors.js';
+import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
+import { FlutterwaveConfig, FlutterwaveResponse, FlutterwaveTransaction } from './types.js';
 import {
-  handleGatewayError,
-  VoltaxValidationError,
-} from "../../core/errors.js";
-import {
-  VoltaxPaymentResponse,
-  VoltaxProvider,
-} from "../../core/interfaces.js";
-import {
-  FlutterwaveConfig,
-  FlutterwaveResponse,
-  FlutterwaveTransaction,
-} from "./types.js";
-import {
-  InitiatePaymentDTO,
-  InitiatePaymentSchema,
-} from "../../core/schemas.js";
-import { PaymentStatus } from "../../core/enums.js";
+  FlutterwavePaymentSchema,
+  FlutterwavePaymentDTO,
+} from '../../core/provider-schemas/flutterwave.schema.js';
+import { PaymentStatus } from '../../core/enums.js';
 
-export class FlutterwaveAdapter implements VoltaxProvider {
+export class FlutterwaveAdapter implements VoltaxProvider<FlutterwavePaymentDTO> {
   private readonly axiosClient: AxiosInstance;
 
   constructor({ secretKey }: FlutterwaveConfig) {
     if (!secretKey) {
-      throw new VoltaxValidationError("Flutterwave secret key is required");
+      throw new VoltaxValidationError('Flutterwave secret key is required');
     }
     this.axiosClient = axios.create({
-      baseURL: "https://api.flutterwave.com/v3",
+      baseURL: 'https://api.flutterwave.com/v3',
       timeout: 10000,
       headers: {
         Authorization: `Bearer ${secretKey}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
 
   /**
-   *  Initiate a payment with Flutterwave
+   * Initiate a payment with Flutterwave
+   * @param payload - Payment details including amount, email, currency, and Flutterwave-specific options
+   * @returns Promise<VoltaxPaymentResponse>
+   *
+   * @example
+   * ```ts
+   * const flutterwave = Voltax('flutterwave', { secretKey: '...' });
+   * const response = await flutterwave.initiatePayment({
+   *   amount: 100,
+   *   email: 'customer@example.com',
+   *   currency: Currency.NGN,
+   *   reference: 'unique-ref',
+   *   callbackUrl: 'https://example.com/callback',
+   *   // Flutterwave-specific options (flat, not nested)
+   *   customerName: 'John Doe',
+   *   pageTitle: 'My Store',
+   *   logoUrl: 'https://example.com/logo.png',
+   * });
+   * ```
    */
-  async initializePayment(
-    payload: InitiatePaymentDTO,
-  ): Promise<VoltaxPaymentResponse> {
-    const validation = InitiatePaymentSchema.safeParse(payload);
+  async initiatePayment(payload: FlutterwavePaymentDTO): Promise<VoltaxPaymentResponse> {
+    const validation = FlutterwavePaymentSchema.safeParse(payload);
     if (!validation.success) {
-      throw new VoltaxValidationError(validation.error.message);
+      throw new VoltaxValidationError('Validation Failed', validation.error.errors);
     }
 
     const {
@@ -54,16 +60,6 @@ export class FlutterwaveAdapter implements VoltaxProvider {
       metadata,
       description,
       reference,
-      options,
-    } = validation.data;
-
-    if (!reference) {
-      throw new VoltaxValidationError(
-        "Payment reference is required for Flutterwave payments",
-      );
-    }
-
-    const {
       customerName,
       logoUrl,
       pageTitle,
@@ -74,7 +70,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
       linkExpiration,
       subaccounts,
       mobileNumber,
-    } = options?.flutterwave || {};
+    } = validation.data;
 
     const flutterwavePayload = {
       amount,
@@ -110,7 +106,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
         FlutterwaveResponse<{
           link: string;
         }>
-      >("/payments", flutterwavePayload);
+      >('/payments', flutterwavePayload);
 
       return {
         status: PaymentStatus.PENDING,
@@ -119,18 +115,18 @@ export class FlutterwaveAdapter implements VoltaxProvider {
         authorizationUrl: data.data.link,
       };
     } catch (error) {
-      handleGatewayError(error, "Flutterwave");
+      handleGatewayError(error, 'Flutterwave');
     }
   }
 
   async verifyTransaction(reference: string): Promise<VoltaxPaymentResponse> {
     if (!reference) {
-      throw new VoltaxValidationError("Reference is required");
+      throw new VoltaxValidationError('Reference is required');
     }
     try {
-      const response = await this.axiosClient.get<
-        FlutterwaveResponse<FlutterwaveTransaction>
-      >(`/transactions/verify_by_reference?tx_ref=${reference}`);
+      const response = await this.axiosClient.get<FlutterwaveResponse<FlutterwaveTransaction>>(
+        `/transactions/verify_by_reference?tx_ref=${reference}`,
+      );
       const data = response.data?.data;
 
       return {
@@ -140,7 +136,7 @@ export class FlutterwaveAdapter implements VoltaxProvider {
         raw: response.data,
       };
     } catch (error) {
-      handleGatewayError(error, "Flutterwave");
+      handleGatewayError(error, 'Flutterwave');
     }
   }
 
@@ -154,9 +150,9 @@ export class FlutterwaveAdapter implements VoltaxProvider {
 
   private mapStatus(status: string): PaymentStatus {
     switch (status) {
-      case "successful":
+      case 'successful':
         return PaymentStatus.SUCCESS;
-      case "failed":
+      case 'failed':
         return PaymentStatus.FAILED;
       default:
         return PaymentStatus.PENDING;

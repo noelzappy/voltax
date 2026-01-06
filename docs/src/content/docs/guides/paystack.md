@@ -19,26 +19,24 @@ Before you begin, you'll need:
 
 ## Configuration
 
-Initialize Voltax with your Paystack credentials:
+Initialize a Paystack provider with your credentials:
 
 ```typescript
 import Voltax from '@noelzappy/voltax';
 
-const voltax = new Voltax({
-  paystack: {
-    secretKey: process.env.PAYSTACK_SECRET_KEY!,
-  },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 ```
 
-## Initialize a Payment
+## Initiate a Payment
 
 ### Basic Payment
 
 ```typescript
 import { Currency } from '@noelzappy/voltax';
 
-const payment = await voltax.paystack.initializePayment({
+const payment = await paystack.initiatePayment({
   amount: 5000,  // 5,000 NGN (Voltax handles kobo conversion)
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -60,7 +58,7 @@ console.log(payment.authorizationUrl);
 Attach custom data to track orders and customers:
 
 ```typescript
-const payment = await voltax.paystack.initializePayment({
+const payment = await paystack.initiatePayment({
   amount: 15000,
   email: 'customer@example.com',
   currency: Currency.NGN,
@@ -76,7 +74,7 @@ const payment = await voltax.paystack.initializePayment({
 
 ## Paystack-Specific Options
 
-Paystack supports several advanced options through the `options.paystack` field:
+Paystack supports several advanced options as top-level fields in the payment DTO:
 
 ### Payment Channels
 
@@ -85,19 +83,15 @@ Limit which payment methods customers can use:
 ```typescript
 import { PaystackChannel } from '@noelzappy/voltax';
 
-const payment = await voltax.paystack.initializePayment({
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
-  options: {
-    paystack: {
-      channels: [
-        PaystackChannel.CARD,
-        PaystackChannel.BANK_TRANSFER,
-        PaystackChannel.USSD,
-      ],
-    },
-  },
+  channels: [
+    PaystackChannel.CARD,
+    PaystackChannel.BANK_TRANSFER,
+    PaystackChannel.USSD,
+  ],
 });
 ```
 
@@ -120,25 +114,18 @@ const payment = await voltax.paystack.initializePayment({
 Split payments between accounts using subaccounts or split codes:
 
 ```typescript
-const payment = await voltax.paystack.initializePayment({
+const payment = await paystack.initiatePayment({
   amount: 10000,
   email: 'customer@example.com',
   currency: Currency.NGN,
-  options: {
-    paystack: {
-      // Use a subaccount
-      subaccount: 'ACCT_xxxxxxxxxx',
-      
-      // Or use a split code for multi-party splits
-      splitCode: 'SPL_xxxxxxxxxx',
-      
-      // Who bears the transaction charge
-      bearer: 'subaccount',  // or 'account'
-      
-      // Additional charge to add (in kobo)
-      transactionCharge: 10000,  // ₦100 extra
-    },
-  },
+  // Use a subaccount
+  subaccount: 'ACCT_xxxxxxxxxx',
+  // Or use a split code for multi-party splits
+  splitCode: 'SPL_xxxxxxxxxx',
+  // Who bears the transaction charge
+  bearer: 'subaccount',  // or 'account'
+  // Additional charge to add (in kobo)
+  transactionCharge: 10000,  // ₦100 extra
 });
 ```
 
@@ -147,44 +134,39 @@ const payment = await voltax.paystack.initializePayment({
 For recurring payments with Paystack Plans:
 
 ```typescript
-const payment = await voltax.paystack.initializePayment({
+const payment = await paystack.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
-  options: {
-    paystack: {
-      plan: 'PLN_xxxxxxxxxx',
-      // Limit number of subscription invoices
-      invoiceLimit: 12,  // 12 months
-    },
-  },
+  plan: 'PLN_xxxxxxxxxx',
+  // Limit number of subscription invoices
+  invoiceLimit: 12,  // 12 months
 });
 ```
 
 ### Complete Options Reference
 
+All Paystack-specific options are available as top-level fields in the payment DTO:
+
 ```typescript
-interface PaystackOptions {
-  // Limit payment channels
-  channels?: PaystackChannel[];
+interface PaystackPaymentDTO {
+  // Base fields
+  amount: number;
+  email: string;
+  currency: Currency;
+  reference?: string;
+  callbackUrl?: string;
+  description?: string;
+  metadata?: Record<string, any>;
   
-  // Subaccount for split payments
-  subaccount?: string;
-  
-  // Split code for multi-party splits
-  splitCode?: string;
-  
-  // Who bears Paystack fees: 'account' (you) or 'subaccount'
-  bearer?: 'account' | 'subaccount';
-  
-  // Flat fee to charge on transaction (in kobo)
-  transactionCharge?: number;
-  
-  // Subscription plan code
-  plan?: string;
-  
-  // Max number of subscription charges
-  invoiceLimit?: number;
+  // Paystack-specific options
+  channels?: PaystackChannel[];      // Limit payment channels
+  subaccount?: string;               // Subaccount for split payments
+  splitCode?: string;                // Split code for multi-party splits
+  bearer?: 'account' | 'subaccount'; // Who bears Paystack fees
+  transactionCharge?: number;        // Flat fee to charge (in kobo)
+  plan?: string;                     // Subscription plan code
+  invoiceLimit?: number;             // Max subscription charges
 }
 ```
 
@@ -195,7 +177,7 @@ After the customer completes payment, verify the transaction:
 ```typescript
 import { PaymentStatus } from '@noelzappy/voltax';
 
-const result = await voltax.paystack.verifyTransaction('txn-123456');
+const result = await paystack.verifyTransaction('txn-123456');
 
 console.log(result);
 // {
@@ -229,7 +211,7 @@ Voltax maps Paystack statuses to standardized values:
 For a quick status check:
 
 ```typescript
-const status = await voltax.paystack.getPaymentStatus('txn-123456');
+const status = await paystack.getPaymentStatus('txn-123456');
 
 if (status === PaymentStatus.SUCCESS) {
   console.log('Payment successful!');
@@ -247,16 +229,16 @@ import Voltax, { Currency, PaymentStatus, PaystackChannel } from '@noelzappy/vol
 const app = express();
 app.use(express.json());
 
-const voltax = new Voltax({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+const paystack = Voltax('paystack', {
+  secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
-// Initialize payment
+// Initiate payment
 app.post('/api/payments/initialize', async (req, res) => {
   try {
     const { amount, email, orderId } = req.body;
 
-    const payment = await voltax.paystack.initializePayment({
+    const payment = await paystack.initiatePayment({
       amount,
       email,
       currency: Currency.NGN,
@@ -264,14 +246,10 @@ app.post('/api/payments/initialize', async (req, res) => {
       callbackUrl: `${process.env.BASE_URL}/payment/callback`,
       description: `Payment for Order #${orderId}`,
       metadata: { orderId },
-      options: {
-        paystack: {
-          channels: [
-            PaystackChannel.CARD,
-            PaystackChannel.BANK_TRANSFER,
-          ],
-        },
-      },
+      channels: [
+        PaystackChannel.CARD,
+        PaystackChannel.BANK_TRANSFER,
+      ],
     });
 
     res.json({
@@ -289,7 +267,7 @@ app.get('/payment/callback', async (req, res) => {
   const { reference } = req.query;
 
   try {
-    const result = await voltax.paystack.verifyTransaction(reference as string);
+    const result = await paystack.verifyTransaction(reference as string);
 
     if (result.status === PaymentStatus.SUCCESS) {
       // Mark order as paid in your database

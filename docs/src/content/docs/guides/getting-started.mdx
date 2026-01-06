@@ -5,13 +5,13 @@ description: Learn how to install and configure the Voltax SDK for Node.js.
 
 import { Tabs, TabItem, Steps, Aside } from "@astrojs/starlight/components";
 
-Voltax is a unified payment SDK that simplifies integrating multiple African payment gateways (Paystack, Flutterwave, Hubtel) into a single, consistent API. Build faster, switch providers easily, and maintain less code.
+Voltax is a unified payment SDK that simplifies integrating multiple African payment gateways (Paystack, Flutterwave, Hubtel, etc) into a single, consistent API. Build faster, switch providers easily, and maintain less code.
 
 ## Features
 
 - 🛡 **Strictly Typed**: Built with TypeScript + Zod for runtime validation
 - 🔗 **Standardized API**: One interface (`VoltaxProvider`) for all gateways
-- 🔄 **Adapter Pattern**: Swap providers without rewriting business logic
+- 🔄 **Factory Pattern**: Use `Voltax()` for single providers, `VoltaxAdapter` for multiple
 - ⚡ **Lightweight**: Tree-shakeable, ESM & CJS support
 - 🔒 **Secure**: No hardcoded keys, enforced validation checks
 
@@ -40,31 +40,43 @@ Install the Voltax SDK using your preferred package manager.
 
 1. **Import the SDK**
 
-   You can import the `Voltax` class either as a default export or named export:
+   You can import the `Voltax` factory function:
 
    ```typescript
-   // Default import
    import Voltax from "@noelzappy/voltax";
-
-   // Or named import
-   import { Voltax } from "@noelzappy/voltax";
    ```
 
-2. **Initialize the SDK**
-
-   Configure the SDK with the providers you want to use. You only need to provide configuration for the providers you'll be using:
+   Or import specific adapters directly:
 
    ```typescript
-   const voltax = new Voltax({
-     // Paystack configuration
-     paystack: {
-       secretKey: process.env.PAYSTACK_SECRET_KEY!,
-     },
-     // Flutterwave configuration (optional)
-     flutterwave: {
-       secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-     },
-     // Hubtel configuration (optional)
+   import { PaystackAdapter, HubtelAdapter } from "@noelzappy/voltax";
+   ```
+
+2. **Initialize a Provider**
+
+   Use the `Voltax` factory function to create a provider instance with full type inference:
+
+   ```typescript
+   // Single provider setup (recommended)
+   const paystack = Voltax("paystack", {
+     secretKey: process.env.PAYSTACK_SECRET_KEY!,
+   });
+
+   const hubtel = Voltax("hubtel", {
+     clientId: process.env.HUBTEL_CLIENT_ID!,
+     clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
+     merchantAccountNumber: process.env.HUBTEL_MERCHANT_ACCOUNT!,
+   });
+   ```
+
+   Or use `VoltaxAdapter` for multiple providers:
+
+   ```typescript
+   import { VoltaxAdapter } from "@noelzappy/voltax";
+
+   const voltax = new VoltaxAdapter({
+     paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
+     flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
      hubtel: {
        clientId: process.env.HUBTEL_CLIENT_ID!,
        clientSecret: process.env.HUBTEL_CLIENT_SECRET!,
@@ -73,14 +85,14 @@ Install the Voltax SDK using your preferred package manager.
    });
    ```
 
-3. **Initialize a Payment**
+3. **Initiate a Payment**
 
-   Use the provider of your choice to initialize a payment:
+   Use the provider to initiate a payment:
 
    ```typescript
    import { Currency } from "@noelzappy/voltax";
 
-   const response = await voltax.paystack.initializePayment({
+   const response = await paystack.initiatePayment({
      amount: 100.0, // Amount in major currency units (e.g., 100 NGN)
      email: "customer@example.com",
      currency: Currency.NGN,
@@ -100,7 +112,7 @@ Install the Voltax SDK using your preferred package manager.
    ```typescript
    import { PaymentStatus } from "@noelzappy/voltax";
 
-   const verification = await voltax.paystack.verifyTransaction(
+   const verification = await paystack.verifyTransaction(
      "unique-transaction-ref-123"
    );
 
@@ -127,9 +139,7 @@ Install the Voltax SDK using your preferred package manager.
 | [Paystack](/guides/paystack/)       | Nigeria, Ghana, South Africa, Kenya           | NGN, GHS, ZAR, KES, USD |
 | [Flutterwave](/guides/flutterwave/) | Nigeria, Ghana, Kenya, South Africa, and more | NGN, GHS, KES, ZAR, USD |
 | [Hubtel](/guides/hubtel/)           | Ghana                                         | GHS                     |
-| [Moolre](/guides/moolre/)           | Ghana, Nigeria                                         | GHS, NGN                     |
-
-
+| [Moolre](/guides/moolre/)           | Ghana, Nigeria                                | GHS, NGN                |
 
 ## Configuration Reference
 

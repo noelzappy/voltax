@@ -1,0 +1,102 @@
+name: Release - Node.js
+
+on:
+  push:
+    tags:
+      - "node-v*"
+
+jobs:
+  release:
+    name: Create Release & Publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: packages/node/package-lock.json
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        working-directory: packages/node
+        run: npm ci
+
+      - name: Run tests
+        working-directory: packages/node
+        run: npm test
+
+      - name: Build package
+        working-directory: packages/node
+        run: npm run build
+
+      # Extract version from tag
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/node-v}" >> $GITHUB_OUTPUT
+
+      # Update package.json version
+      - name: Update package version
+        working-directory: packages/node
+        run: npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
+
+      # Generate changelog
+      - name: Generate changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: |
+            {
+              "categories": [
+                { "title": "## 🚀 Features", "labels": ["feature", "enhancement"] },
+                { "title": "## 🐛 Bug Fixes", "labels": ["bug", "fix"] },
+                { "title": "## 📚 Documentation", "labels": ["documentation", "docs"] },
+                { "title": "## 🔧 Maintenance", "labels": ["chore", "maintenance"] }
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+          files: |
+            packages/node/dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Publish to npm
+      - name: Publish to npm
+        working-directory: packages/node
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Publish to GitHub Packages
+      - name: Setup Node.js for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@noelzappy"
+
+      - name: Publish to GitHub Packages
+        working-directory: packages/node
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
