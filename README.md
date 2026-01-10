@@ -27,12 +27,12 @@ Building payment systems in Africa means dealing with multiple payment gateways,
 
 ## Supported Payment Gateways
 
-| Gateway | Countries | Status |
-|---------|-----------|--------|
-| [Paystack](https://paystack.com) | Nigeria, Ghana, South Africa, Kenya | ✅ Ready |
-| [Flutterwave](https://flutterwave.com) | Nigeria, Ghana, Kenya, South Africa + | ✅ Ready |
-| [Hubtel](https://hubtel.com) | Ghana | ✅ Ready |
-| More coming... | — | [Contribute!](CONTRIBUTING.md) |
+| Gateway                                | Countries                             | Status                         |
+| -------------------------------------- | ------------------------------------- | ------------------------------ |
+| [Paystack](https://paystack.com)       | Nigeria, Ghana, South Africa, Kenya   | ✅ Ready                       |
+| [Flutterwave](https://flutterwave.com) | Nigeria, Ghana, Kenya, South Africa + | ✅ Ready                       |
+| [Hubtel](https://hubtel.com)           | Ghana                                 | ✅ Ready                       |
+| More coming...                         | —                                     | [Contribute!](CONTRIBUTING.md) |
 
 ## Installation
 
@@ -209,7 +209,7 @@ const payment = await flutterwave.initiatePayment({
   amount: 5000,
   email: 'customer@example.com',
   currency: Currency.NGN,
-  reference: 'order-123',  // Required for Flutterwave
+  reference: 'order-123', // Required for Flutterwave
   // Flutterwave-specific options at top level
   customerName: 'John Doe',
   pageTitle: 'My Store',
@@ -232,10 +232,10 @@ const payment = await hubtel.initiatePayment({
   amount: 100,
   email: 'customer@example.com',
   currency: Currency.GHS,
-  reference: 'order-123',  // Required
-  callbackUrl: 'https://yoursite.com/webhook',  // Required
+  reference: 'order-123', // Required
+  callbackUrl: 'https://yoursite.com/webhook', // Required
   // Hubtel-specific options at top level
-  returnUrl: 'https://yoursite.com/success',  // Required
+  returnUrl: 'https://yoursite.com/success', // Required
 });
 ```
 
@@ -253,6 +253,7 @@ For complete documentation, visit [voltax.noelzappy.dev](https://voltax.noelzapp
 We welcome contributions! Voltax aims to support all major African payment gateways, and we need your help.
 
 **Gateways we'd love to add:**
+
 - M-Pesa (Kenya)
 - OPay (Nigeria)
 - Chipper Cash (Pan-African)

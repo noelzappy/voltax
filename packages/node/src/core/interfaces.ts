@@ -1,3 +1,4 @@
+import { PaystackBanks } from '../providers/paystack/types.js';
 import { PaymentStatus } from './enums.js';
 
 /**
@@ -8,6 +9,11 @@ export interface VoltaxPaymentResponse {
   reference: string;
   authorizationUrl?: string; // Some providers return a URL to redirect the user to
   externalReference?: string; // Provider's unique ID for the transaction
+  raw?: unknown; // The original provider response, for debugging or advanced use cases
+}
+export interface VoltaxBankResponse {
+  status: PaymentStatus;
+  data?: PaystackBanks[];
   raw?: unknown; // The original provider response, for debugging or advanced use cases
 }
 
