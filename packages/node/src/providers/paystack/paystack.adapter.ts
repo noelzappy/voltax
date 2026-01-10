@@ -1,9 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
-import { VoltaxPaymentResponse, VoltaxProvider } from '../../core/interfaces.js';
+import {
+  VoltaxBankResponse,
+  VoltaxPaymentResponse,
+  VoltaxProvider,
+} from '../../core/interfaces.js';
 import { PaymentStatus } from '../../core/enums.js';
 import { VoltaxValidationError, handleGatewayError } from '../../core/errors.js';
 import { isValidAmount } from '../../core/utils.js';
-import { PaystackConfig, PaystackResponse, PaystackTransaction } from './types.js';
+import { PaystackBanks, PaystackConfig, PaystackResponse, PaystackTransaction } from './types.js';
 import {
   PaystackPaymentSchema,
   PaystackPaymentDTO,
@@ -138,6 +142,28 @@ export class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
         reference: data.reference,
         externalReference: data.id?.toString(),
         raw: response.data,
+      };
+    } catch (error) {
+      handleGatewayError(error, 'Paystack');
+    }
+  }
+
+  /**
+   * Verify a transaction with Paystack.
+   * @param country The country to fetch banks for.
+   * @returns Promise<VoltaxBankResponse>.
+   */
+
+  async banks(country: string): Promise<VoltaxBankResponse> {
+    try {
+      const response = await this.axiosClient.get<PaystackResponse<PaystackBanks[]>>(
+        `bank/country=${country}`,
+      );
+      const data = response.data?.data;
+      return {
+        status: PaymentStatus.SUCCESS,
+        raw: response.data,
+        data: data,
       };
     } catch (error) {
       handleGatewayError(error, 'Paystack');
