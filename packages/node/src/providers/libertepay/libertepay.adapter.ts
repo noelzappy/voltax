@@ -30,7 +30,7 @@ export class LibertePayAdapter implements VoltaxProvider<LibertePayPaymentDTO> {
     });
   }
 
-  async initiatePayment(payload: LibertePayPaymentDTO): Promise<VoltaxPaymentResponse> {
+  public async initiatePayment(payload: LibertePayPaymentDTO): Promise<VoltaxPaymentResponse> {
     const validation = LibertePayPaymentSchema.safeParse(payload);
     if (!validation.success) {
       throw new VoltaxValidationError('Validation Failed', validation.error.errors);

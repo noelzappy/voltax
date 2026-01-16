@@ -7,11 +7,13 @@ import { FlutterwaveConfig } from '../providers/flutterwave/types.js';
 import { VoltaxValidationError } from './errors.js';
 import { MoolreAdapterOptions } from '../providers/moolre/types.js';
 import { MoolreAdapter } from '../providers/moolre/moolre.adapter.js';
+import { LibertePayAdapter } from '../providers/libertepay/libertepay.adapter.js';
+import { LibertePayConfig } from '../providers/libertepay/types.js';
 
 /**
  * Supported payment providers
  */
-export type VoltaxProviders = 'paystack' | 'hubtel' | 'flutterwave' | 'moolre';
+export type VoltaxProviders = 'paystack' | 'hubtel' | 'flutterwave' | 'moolre' | 'libertepay';
 
 /**
  * Maps provider names to their config types
@@ -21,6 +23,7 @@ export interface VoltaxConfigMap {
   hubtel: HubtelConfig;
   flutterwave: FlutterwaveConfig;
   moolre: MoolreAdapterOptions;
+  libertepay: LibertePayConfig;
 }
 
 /**
@@ -31,6 +34,7 @@ export interface VoltaxAdapterMap {
   hubtel: HubtelAdapter;
   flutterwave: FlutterwaveAdapter;
   moolre: MoolreAdapter;
+  libertepay: LibertePayAdapter;
 }
 
 /**
@@ -41,6 +45,7 @@ export interface VoltaxMultiConfig {
   hubtel?: HubtelConfig;
   flutterwave?: FlutterwaveConfig;
   moolre?: MoolreAdapterOptions;
+  libertepay?: LibertePayConfig;
 }
 
 /**
@@ -68,6 +73,8 @@ export function Voltax(provider: VoltaxProviders, config: unknown) {
       return new FlutterwaveAdapter(config as FlutterwaveConfig);
     case 'moolre':
       return new MoolreAdapter(config as MoolreAdapterOptions);
+    case 'libertepay':
+      return new LibertePayAdapter(config as LibertePayConfig);
     default:
       throw new VoltaxValidationError(`Unsupported provider: ${provider}`);
   }
@@ -92,6 +99,7 @@ export class VoltaxAdapter {
   private _hubtel?: HubtelAdapter;
   private _flutterwave?: FlutterwaveAdapter;
   private _moolre?: MoolreAdapter;
+  private _libertepay?: LibertePayAdapter;
 
   constructor(private readonly config: VoltaxMultiConfig) {}
 
@@ -165,5 +173,23 @@ export class VoltaxAdapter {
 
     this._moolre = new MoolreAdapter(this.config.moolre);
     return this._moolre;
+  }
+
+  /**
+   * Get LibertePay provider instance
+   */
+  get libertepay(): LibertePayAdapter {
+    if (this._libertepay) {
+      return this._libertepay;
+    }
+
+    if (!this.config.libertepay) {
+      throw new VoltaxValidationError(
+        'LibertePay configuration is missing. Please provide "libertepay" in the VoltaxAdapter constructor.',
+      );
+    }
+
+    this._libertepay = new LibertePayAdapter(this.config.libertepay);
+    return this._libertepay;
   }
 }
