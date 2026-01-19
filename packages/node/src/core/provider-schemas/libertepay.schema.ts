@@ -6,9 +6,7 @@ export const LibertePayOptionsSchema = z.object({
   paymentSlug: z.string().optional(),
 });
 
-export const LibertePayPaymentSchema = BasePaymentSchema.extend({
-  reference: z.string().min(1, 'Reference is required'),
-}).extend(LibertePayOptionsSchema.shape);
+export const LibertePayPaymentSchema = BasePaymentSchema.extend(LibertePayOptionsSchema.shape);
 
 export type LibertePayPaymentDTO = z.infer<typeof LibertePayPaymentSchema>;
 export type LibertePayOptions = z.infer<typeof LibertePayOptionsSchema>;

@@ -24,6 +24,7 @@ function SuccessContent() {
       const urlReference =
         searchParams.get("reference") || searchParams.get("transaction_id");
       const storedReference = localStorage.getItem("lastPaymentRef");
+      const provider = localStorage.getItem("lastPaymentProvider");
       const reference = urlReference || storedReference;
 
       if (!reference) {
@@ -38,7 +39,7 @@ function SuccessContent() {
       }
 
       try {
-        const response = await fetch("/api/verify-payment", {
+        const response = await fetch(`/api/${provider}/verify-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ reference }),

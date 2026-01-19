@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Verify the transaction
     const result = await libertepay.verifyTransaction(reference);
+    console.log("Payment verification result:", result);
 
     return NextResponse.json({
       success: result.status === PaymentStatus.SUCCESS,

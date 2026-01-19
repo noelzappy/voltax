@@ -36,11 +36,10 @@ export class LibertePayAdapter implements VoltaxProvider<LibertePayPaymentDTO> {
       throw new VoltaxValidationError('Validation Failed', validation.error.errors);
     }
 
-    const { amount, email, mobileNumber, paymentSlug, reference } = payload;
+    const { amount, email, mobileNumber, paymentSlug } = payload;
     const apiPayload = {
       amount,
       emailid: email,
-      reference,
       phone_number: mobileNumber,
       payment_slug: paymentSlug,
     };
@@ -52,7 +51,7 @@ export class LibertePayAdapter implements VoltaxProvider<LibertePayPaymentDTO> {
 
       return {
         status: PaymentStatus.PENDING, // Initialization is always pending until user pays
-        reference,
+        reference: data.data.reference,
         externalReference: data.data.reference,
         authorizationUrl: data.data.payment_url,
         raw: data,
@@ -69,10 +68,7 @@ export class LibertePayAdapter implements VoltaxProvider<LibertePayPaymentDTO> {
 
     try {
       const { data } = await this.axiosClient.post<LibertePayResponse<LibertePayTransaction>>(
-        `/payments/status-check`,
-        {
-          transaction_id: reference,
-        },
+        `/transactions/transaction-check/${reference}`,
       );
 
       return {

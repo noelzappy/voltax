@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
       .toString(36)
       .substring(7)}`;
 
-
     // Initiate payment
     const payment = await libertepay.initiatePayment({
       amount: Number(amount),
@@ -36,8 +35,6 @@ export async function POST(request: NextRequest) {
       callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/libertepay/webhook`,
     });
 
-    console.log("Payment initiated:", payment);
-
     return NextResponse.json({
       success: true,
       reference: payment.reference,
@@ -45,8 +42,6 @@ export async function POST(request: NextRequest) {
       externalReference: payment.externalReference,
     });
   } catch (error) {
-    console.error("Payment initiation error:", error);
-
     const errorMessage =
       error instanceof Error ? error.message : "Payment initiation failed";
     return NextResponse.json({ error: errorMessage }, { status: 500 });
