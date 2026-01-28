@@ -1,0 +1,354 @@
+---
+title: LibertePay Integration
+description: Complete guide to integrating LibertePay payments with Voltax.
+---
+
+import { Aside, Tabs, TabItem, Steps } from "@astrojs/starlight/components";
+
+[LibertePay](https://libertepay.com) is a payment technology company providing seamless mobile money and payment solutions in Ghana. This guide covers how to integrate LibertePay payments using Voltax.
+
+## Prerequisites
+
+Before you begin, you'll need:
+
+- A LibertePay merchant account (sign up at [libertepay.com](https://libertepay.com))
+- Your LibertePay secret key (from your merchant dashboard)
+- A payment slug (configured in your LibertePay dashboard)
+
+<Aside type="caution">
+  Never expose your secret key in client-side code. Always keep it secure on
+  your server.
+</Aside>
+
+## Configuration
+
+Initialize a LibertePay provider with your credentials:
+
+```typescript
+import Voltax from "@noelzappy/voltax";
+
+const libertepay = Voltax("libertepay", {
+  secretKey: process.env.LIBERTEPAY_SECRET_KEY!,
+  testEnv: true, // Set to false for production
+});
+```
+
+### Configuration Options
+
+| Option      | Type    | Required | Description                                           |
+| ----------- | ------- | -------- | ----------------------------------------------------- |
+| `secretKey` | string  | Yes      | Your LibertePay API secret key                        |
+| `testEnv`   | boolean | Yes      | Set to `true` for UAT/sandbox, `false` for production |
+
+<Aside type="tip">
+  LibertePay provides separate UAT (User Acceptance Testing) and production
+  environments. Always test with `testEnv: true` before going live.
+</Aside>
+
+## Initiate a Payment
+
+### Basic Payment
+
+```typescript
+import { Currency } from "@noelzappy/voltax";
+
+const payment = await libertepay.initiatePayment({
+  amount: 50,
+  email: "customer@example.com",
+  currency: Currency.GHS,
+});
+
+// Redirect customer to complete payment
+console.log(payment.authorizationUrl);
+// "https://360pay-merchant-api.libertepay.com/checkout/..."
+```
+
+### With Mobile Number and Payment Slug
+
+```typescript
+const payment = await libertepay.initiatePayment({
+  amount: 100,
+  email: "customer@example.com",
+  currency: Currency.GHS,
+  mobileNumber: "0241234567",
+  paymentSlug: "my-store-checkout",
+  description: "Order #12345",
+  callbackUrl: "https://yoursite.com/payment/callback",
+});
+```
+
+## LibertePay-Specific Options
+
+LibertePay supports specific fields for payment customization:
+
+```typescript
+interface LibertePayPaymentDTO {
+  // Base required fields
+  amount: number;
+  email: string;
+  currency: Currency;
+
+  // Optional base fields
+  description?: string;
+  callbackUrl?: string;
+  reference?: string;
+  metadata?: Record<string, any>;
+
+  // LibertePay-specific options
+  mobileNumber?: string; // Customer's mobile number (10-15 digits)
+  paymentSlug?: string; // Payment page identifier from dashboard
+}
+```
+
+### Field Descriptions
+
+| Field          | Description                                                                       |
+| -------------- | --------------------------------------------------------------------------------- |
+| `mobileNumber` | Customer's phone number for mobile money payments (10-15 characters)              |
+| `paymentSlug`  | A unique identifier for the payment page, configured in your LibertePay dashboard |
+
+## Verify a Transaction
+
+After the customer completes payment, verify the transaction:
+
+```typescript
+import { PaymentStatus } from "@noelzappy/voltax";
+
+const result = await libertepay.verifyTransaction("your-reference");
+
+console.log(result);
+// {
+//   status: 'SUCCESS',
+//   reference: 'your-reference',
+//   externalReference: 'LP-TXN-123456',
+//   raw: { ... }
+// }
+
+if (result.status === PaymentStatus.SUCCESS) {
+  console.log("Payment completed successfully!");
+}
+```
+
+### Status Mapping
+
+Voltax maps LibertePay statuses to standardized values:
+
+| LibertePay Status | Voltax Status |
+| ----------------- | ------------- |
+| `success`         | `SUCCESS`     |
+| `failed`          | `FAILED`      |
+| `reversed`        | `FAILED`      |
+| `abandoned`       | `FAILED`      |
+| Other             | `PENDING`     |
+
+## Get Payment Status
+
+For a quick status check:
+
+```typescript
+const status = await libertepay.getPaymentStatus("your-reference");
+
+if (status === PaymentStatus.SUCCESS) {
+  console.log("Payment successful!");
+}
+```
+
+## Complete Example
+
+Here's a full Next.js App Router integration example:
+
+### Create Payment Route
+
+```typescript
+// app/api/libertepay/create-payment/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { Voltax, Currency } from "@noelzappy/voltax";
+
+export async function POST(request: NextRequest) {
+  try {
+    const { amount, email, mobileNumber, description } = await request.json();
+
+    if (!amount || !email) {
+      return NextResponse.json(
+        { error: "Amount and email are required" },
+        { status: 400 },
+      );
+    }
+
+    const libertepay = Voltax("libertepay", {
+      secretKey: process.env.LIBERTEPAY_SECRET_KEY!,
+      testEnv: process.env.LIBERTEPAY_TEST_ENV === "true",
+    });
+
+    const reference = `order-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
+    const payment = await libertepay.initiatePayment({
+      amount: Number(amount),
+      email,
+      currency: Currency.GHS,
+      reference,
+      mobileNumber: mobileNumber || undefined,
+      description: description || "Payment",
+      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/libertepay/webhook`,
+    });
+
+    return NextResponse.json({
+      success: true,
+      reference: payment.reference,
+      authorizationUrl: payment.authorizationUrl,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Payment initiation failed";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}
+```
+
+### Verify Payment Route
+
+```typescript
+// app/api/libertepay/verify-payment/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { Voltax, PaymentStatus } from "@noelzappy/voltax";
+
+export async function POST(request: NextRequest) {
+  try {
+    const { reference } = await request.json();
+
+    if (!reference) {
+      return NextResponse.json(
+        { error: "Transaction reference is required" },
+        { status: 400 },
+      );
+    }
+
+    const libertepay = Voltax("libertepay", {
+      secretKey: process.env.LIBERTEPAY_SECRET_KEY!,
+      testEnv: process.env.LIBERTEPAY_TEST_ENV === "true",
+    });
+
+    const result = await libertepay.verifyTransaction(reference);
+
+    return NextResponse.json({
+      success: result.status === PaymentStatus.SUCCESS,
+      status: result.status,
+      reference: result.reference,
+      externalReference: result.externalReference,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Payment verification failed";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}
+```
+
+### Express.js Example
+
+```typescript
+import express from "express";
+import Voltax, { Currency, PaymentStatus } from "@noelzappy/voltax";
+
+const app = express();
+app.use(express.json());
+
+const libertepay = Voltax("libertepay", {
+  secretKey: process.env.LIBERTEPAY_SECRET_KEY!,
+  testEnv: process.env.NODE_ENV !== "production",
+});
+
+// Initiate payment
+app.post("/api/payments/libertepay", async (req, res) => {
+  try {
+    const { amount, email, mobileNumber, orderId } = req.body;
+
+    const reference = `order-${orderId}-${Date.now()}`;
+
+    const payment = await libertepay.initiatePayment({
+      amount,
+      email,
+      currency: Currency.GHS,
+      reference,
+      mobileNumber,
+      callbackUrl: `${process.env.BASE_URL}/payment/callback`,
+    });
+
+    res.json({
+      success: true,
+      checkoutUrl: payment.authorizationUrl,
+      reference: payment.reference,
+    });
+  } catch (error) {
+    console.error("Payment initialization failed:", error);
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Payment callback
+app.get("/payment/callback", async (req, res) => {
+  const { reference } = req.query;
+
+  try {
+    const result = await libertepay.verifyTransaction(reference as string);
+
+    if (result.status === PaymentStatus.SUCCESS) {
+      res.redirect("/order/success");
+    } else if (result.status === PaymentStatus.PENDING) {
+      res.redirect("/order/pending");
+    } else {
+      res.redirect("/order/failed");
+    }
+  } catch (error) {
+    console.error("Verification failed:", error);
+    res.redirect("/order/error");
+  }
+});
+
+app.listen(3000);
+```
+
+## Environment Variables
+
+Set up these environment variables for LibertePay:
+
+```bash
+# .env
+LIBERTEPAY_SECRET_KEY=your_secret_key_here
+LIBERTEPAY_TEST_ENV=true  # Set to "false" in production
+```
+
+## Supported Currency
+
+LibertePay primarily supports:
+
+| Currency      | Code  | Country |
+| ------------- | ----- | ------- |
+| Ghanaian Cedi | `GHS` | Ghana   |
+
+## Important Notes
+
+<Aside type="caution" title="Test Environment">
+  Always set `testEnv: true` during development and testing. LibertePay's UAT
+  environment uses a different API endpoint from production.
+</Aside>
+
+<Aside type="tip" title="Payment Slug">
+  The `paymentSlug` is a unique identifier for your payment page configured in
+  the LibertePay dashboard. It helps customize the checkout experience for your
+  customers.
+</Aside>
+
+<Aside type="note" title="Mobile Money Focus">
+  LibertePay specializes in mobile money payments in Ghana. Ensure your
+  customers have access to mobile money services for the best experience.
+</Aside>
+
+## Next Steps
+
+- Learn about [Error Handling](/guides/error-handling/) for LibertePay errors
+- Explore the [API Reference](/reference/classes/libertepay/) for LibertePayAdapter
+- Check out other providers like [Flutterwave](/guides/flutterwave/) or [Hubtel](/guides/hubtel/)

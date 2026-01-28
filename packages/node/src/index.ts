@@ -8,12 +8,14 @@ export * from './core/provider-schemas/paystack.schema.js';
 export * from './core/provider-schemas/hubtel.schema.js';
 export * from './core/provider-schemas/flutterwave.schema.js';
 export * from './core/provider-schemas/moolre.schema.js';
+export * from './core/provider-schemas/libertepay.schema.js';
 
 // Adapters
 export * from './providers/paystack/paystack.adapter.js';
 export * from './providers/flutterwave/flutterwave.adapter.js';
 export * from './providers/hubtel/hubtel.adapter.js';
 export * from './providers/moolre/moolre.adapter.js';
+export * from './providers/libertepay/libertepay.adapter.js';
 
 export {
   Voltax,

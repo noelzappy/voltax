@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxAdapter"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:90](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L90)
+Defined in: [packages/node/src/core/voltax.ts:97](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L97)
 
 Multi-provider adapter for managing multiple payment gateways
 
@@ -27,7 +27,7 @@ await voltax.paystack.initiatePayment({ amount: 100, ... });
 
 > **new VoltaxAdapter**(`config`): `VoltaxAdapter`
 
-Defined in: [packages/node/src/core/voltax.ts:96](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L96)
+Defined in: [packages/node/src/core/voltax.ts:104](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L104)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [packages/node/src/core/voltax.ts:96](https://github.com/noelzappy/v
 
 > **get** **flutterwave**(): [`FlutterwaveAdapter`](/reference/classes/flutterwaveadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:137](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L137)
+Defined in: [packages/node/src/core/voltax.ts:145](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L145)
 
 Get Flutterwave provider instance
 
@@ -63,7 +63,7 @@ Get Flutterwave provider instance
 
 > **get** **hubtel**(): [`HubtelAdapter`](/reference/classes/hubteladapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:119](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L119)
+Defined in: [packages/node/src/core/voltax.ts:127](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L127)
 
 Get Hubtel provider instance
 
@@ -73,13 +73,29 @@ Get Hubtel provider instance
 
 ***
 
+### libertepay
+
+#### Get Signature
+
+> **get** **libertepay**(): [`LibertePayAdapter`](/reference/classes/libertepayadapter/)
+
+Defined in: [packages/node/src/core/voltax.ts:181](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L181)
+
+Get LibertePay provider instance
+
+##### Returns
+
+[`LibertePayAdapter`](/reference/classes/libertepayadapter/)
+
+***
+
 ### moolre
 
 #### Get Signature
 
 > **get** **moolre**(): [`MoolreAdapter`](/reference/classes/moolreadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:155](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L155)
+Defined in: [packages/node/src/core/voltax.ts:163](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L163)
 
 Get Moolre provider instance
 
@@ -95,7 +111,7 @@ Get Moolre provider instance
 
 > **get** **paystack**(): [`PaystackAdapter`](/reference/classes/paystackadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:101](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L101)
+Defined in: [packages/node/src/core/voltax.ts:109](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L109)
 
 Get Paystack provider instance
 

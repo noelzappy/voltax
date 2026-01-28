@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxAdapterMap"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:29](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L29)
+Defined in: [packages/node/src/core/voltax.ts:32](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L32)
 
 Maps provider names to their adapter types
 
@@ -15,7 +15,7 @@ Maps provider names to their adapter types
 
 > **flutterwave**: [`FlutterwaveAdapter`](/reference/classes/flutterwaveadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:32](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L32)
+Defined in: [packages/node/src/core/voltax.ts:35](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L35)
 
 ***
 
@@ -23,7 +23,15 @@ Defined in: [packages/node/src/core/voltax.ts:32](https://github.com/noelzappy/v
 
 > **hubtel**: [`HubtelAdapter`](/reference/classes/hubteladapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:31](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L31)
+Defined in: [packages/node/src/core/voltax.ts:34](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L34)
+
+***
+
+### libertepay
+
+> **libertepay**: [`LibertePayAdapter`](/reference/classes/libertepayadapter/)
+
+Defined in: [packages/node/src/core/voltax.ts:37](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L37)
 
 ***
 
@@ -31,7 +39,7 @@ Defined in: [packages/node/src/core/voltax.ts:31](https://github.com/noelzappy/v
 
 > **moolre**: [`MoolreAdapter`](/reference/classes/moolreadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:33](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L33)
+Defined in: [packages/node/src/core/voltax.ts:36](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L36)
 
 ***
 
@@ -39,4 +47,4 @@ Defined in: [packages/node/src/core/voltax.ts:33](https://github.com/noelzappy/v
 
 > **paystack**: [`PaystackAdapter`](/reference/classes/paystackadapter/)
 
-Defined in: [packages/node/src/core/voltax.ts:30](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L30)
+Defined in: [packages/node/src/core/voltax.ts:33](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L33)

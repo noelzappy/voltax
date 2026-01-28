@@ -5,7 +5,7 @@ prev: false
 title: "PaystackAdapter"
 ---
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:12](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L12)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:12](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L12)
 
 Interface that all Voltax payment providers must implement.
 The generic type TPaymentDTO allows each provider to define its own payment payload type.
@@ -30,7 +30,7 @@ class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
 
 > **new PaystackAdapter**(`__namedParameters`): `PaystackAdapter`
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L15)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L15)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https:
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:150](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L150)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:150](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L150)
 
 Helper to get status directly.
 
@@ -72,7 +72,7 @@ Helper to get status directly.
 
 > **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:49](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L49)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:49](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L49)
 
 Initialize a payment with Paystack.
 
@@ -169,7 +169,7 @@ const response = await paystack.initiatePayment({
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:125](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/paystack/paystack.adapter.ts#L125)
+Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:125](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L125)
 
 Verify a transaction with Paystack.
 

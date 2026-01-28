@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxProvider"
 ---
 
-Defined in: [packages/node/src/core/interfaces.ts:29](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L29)
+Defined in: [packages/node/src/core/interfaces.ts:29](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L29)
 
 Interface that all Voltax payment providers must implement.
 The generic type TPaymentDTO allows each provider to define its own payment payload type.
@@ -34,7 +34,7 @@ The provider-specific payment payload type
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:49](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L49)
+Defined in: [packages/node/src/core/interfaces.ts:49](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L49)
 
 Gets the status of a payment.
 
@@ -58,7 +58,7 @@ The payment status
 
 > **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:35](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L35)
+Defined in: [packages/node/src/core/interfaces.ts:35](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L35)
 
 Initiates a payment transaction.
 
@@ -82,7 +82,7 @@ A standardized payment response
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/core/interfaces.ts:42](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L42)
+Defined in: [packages/node/src/core/interfaces.ts:42](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L42)
 
 Verifies a transaction by its reference.
 

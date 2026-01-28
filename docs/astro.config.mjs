@@ -36,6 +36,7 @@ export default defineConfig({
                 { label: "Flutterwave", slug: "guides/flutterwave" },
                 { label: "Hubtel", slug: "guides/hubtel" },
                 { label: "Moolre", slug: "guides/moolre" },
+                { label: "LibertePay", slug: "guides/libertepay" },
               ],
             },
             { label: "Examples", slug: "guides/example" },
