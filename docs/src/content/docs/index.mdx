@@ -3,7 +3,7 @@ title: Voltax Payment SDK
 description: The unified payment SDK for Africa. One API for Paystack, Flutterwave, Hubtel, and more.
 template: splash
 hero:
-  tagline: Unify fragmented African payment gateways into a single, standardized, and strictly typed API. Build faster, switch providers easily, and maintain less code.
+  tagline: Unify fragmented African payment gateways into a single, standardized, and strictly typed API.
   image:
     file: ../../assets/houston.webp
   actions:
@@ -11,129 +11,70 @@ hero:
       link: /guides/getting-started/
       icon: right-arrow
       variant: primary
-    - text: API Reference
-      link: /reference/
+    - text: View on GitHub
+      link: https://github.com/noelzappy/voltax
       icon: external
 ---
 
-import {
-  Card,
-  CardGrid,
-  Aside,
-  Tabs,
-  TabItem,
-} from "@astrojs/starlight/components";
+import { Card, CardGrid, Aside } from "@astrojs/starlight/components";
 
-## Why Voltax?
+## Installation
 
-Building payment integrations across Africa means dealing with multiple providers, each with their own APIs, data formats, and quirks. **Voltax** eliminates this complexity by providing:
+```bash
+npm install @noelzappy/voltax
+```
 
-- 🛡 **Strictly Typed**: Built with TypeScript + Zod for compile-time and runtime validation
-- 🔗 **Standardized API**: One interface (`VoltaxProvider`) for all gateways
-- 🔄 **Adapter Pattern**: Swap providers without rewriting business logic
-- ⚡ **Lightweight**: Tree-shakeable, ESM & CJS support
-- 🔒 **Secure**: No hardcoded keys, enforced validation checks
-
-## Quick Example
-
-### Single Provider
+## Quick Start
 
 ```typescript
 import { Voltax, Currency, PaymentStatus } from "@noelzappy/voltax";
 
-// Initialize with your provider credentials
 const paystack = Voltax("paystack", {
   secretKey: process.env.PAYSTACK_SECRET_KEY!,
 });
 
-// Create a payment
 const payment = await paystack.initiatePayment({
   amount: 5000,
   email: "customer@example.com",
   currency: Currency.NGN,
-  reference: "order-123",
 });
 
-// Redirect customer to payment page
-console.log(payment.authorizationUrl);
-
-// Later, verify the payment
-const result = await paystack.verifyTransaction("order-123");
-if (result.status === PaymentStatus.SUCCESS) {
-  // Fulfill the order
-}
-```
-
-### Multiple Providers
-
-```typescript
-import { VoltaxAdapter, Currency } from "@noelzappy/voltax";
-
-// Initialize multiple providers
-const voltax = new VoltaxAdapter({
-  paystack: { secretKey: process.env.PAYSTACK_SECRET_KEY! },
-  flutterwave: { secretKey: process.env.FLUTTERWAVE_SECRET_KEY! },
-});
-
-// Use any provider with the same API
-const payment = await voltax.paystack.initiatePayment({
-  amount: 5000,
-  email: "customer@example.com",
-  currency: Currency.NGN,
-  reference: "order-123",
-});
+// Redirect customer to payment.authorizationUrl
 ```
 
 ## Supported Providers
 
-| Provider                                   | Countries                                     | Status       |
-| ------------------------------------------ | --------------------------------------------- | ------------ |
-| **[Paystack](https://paystack.com)**       | Nigeria, Ghana, South Africa, Kenya           | ✅ Supported |
-| **[Flutterwave](https://flutterwave.com)** | Nigeria, Ghana, Kenya, South Africa + 30 more | ✅ Supported |
-| **[Hubtel](https://hubtel.com)**           | Ghana                                         | ✅ Supported |
-| **[Moolre](https://moolre.com)**           | Ghana, Nigeria                                | ✅ Supported |
-
-## Next Steps
-
-<CardGrid stagger>
-  <Card title="Install the SDK" icon="add-document">
-    Get up and running in minutes with our [Getting Started
-    Guide](/guides/getting-started/).
+<CardGrid>
+  <Card title="Paystack" icon="star">
+    Nigeria, Ghana, South Africa, Kenya [View Guide →](/guides/paystack/)
   </Card>
-  <Card title="Initialize Payments" icon="rocket">
-    Learn how to [create and manage payments](/guides/payments/) with any
-    provider.
+  <Card title="Flutterwave" icon="star">
+    Nigeria, Ghana, Kenya + 30 more countries [View Guide
+    →](/guides/flutterwave/)
   </Card>
-  <Card title="Handle Errors" icon="warning">
-    Implement robust [error handling](/guides/error-handling/) for production
-    apps.
+  <Card title="Hubtel" icon="star">
+    Ghana (Mobile Money) [View Guide →](/guides/hubtel/)
   </Card>
-  <Card title="API Reference" icon="open-book">
-    Explore the complete [API documentation](/reference/) with all classes,
-    interfaces, and types.
+  <Card title="Moolre" icon="star">
+    Ghana, Nigeria [View Guide →](/guides/moolre/)
+  </Card>
+  <Card title="LibertePay" icon="star">
+    Ghana (Mobile Money) [View Guide →](/guides/libertepay/)
   </Card>
 </CardGrid>
 
-## Provider Guides
+## Why Voltax?
+
+- 🛡 **Type-Safe** — Built with TypeScript + Zod validation
+- 🔗 **Unified API** — One interface for all providers
+- 🔄 **Easy Switching** — Swap providers without code changes
+- ⚡ **Lightweight** — Tree-shakeable, ESM & CJS support
 
 <CardGrid>
-  <Card title="Paystack" icon="seti:config">
-    Integrate [Paystack payments](/guides/paystack/) with channels, splits, and
-    subscriptions.
+  <Card title="Getting Started" icon="rocket">
+    [Install and configure](/guides/getting-started/) Voltax in minutes.
   </Card>
-  <Card title="Flutterwave" icon="seti:config">
-    Set up [Flutterwave payments](/guides/flutterwave/) with customization and
-    subaccounts.
-  </Card>
-  <Card title="Hubtel" icon="seti:config">
-    Configure [Hubtel payments](/guides/hubtel/) for Ghana with mobile money
-    support.
-  </Card>
-  <Card title="Moolre" icon="seti:config">
-    Configure [Moolre payments](/guides/moolre/) for Ghana and Nigeria with
-    mobile money support.
-  </Card>
-  <Card title="Examples" icon="seti:todo">
-    Real-world [integration examples](/guides/example/) for common scenarios.
+  <Card title="API Reference" icon="open-book">
+    Explore the complete [API documentation](/reference/).
   </Card>
 </CardGrid>
