@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     if (!reference) {
       return NextResponse.json(
         { error: "Transaction reference is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
 
     // Verify the transaction
     const result = await libertepay.verifyTransaction(reference);
-    console.log("Payment verification result:", result);
 
     return NextResponse.json({
       success: result.status === PaymentStatus.SUCCESS,
