@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxGatewayError"
 ---
 
-Defined in: [packages/node/src/core/errors.ts:29](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L29)
+Defined in: [packages/node/src/core/errors.ts:29](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/errors.ts#L29)
 
 Thrown when the gateway returns an error response (e.g. 400 Bad Request from Paystack).
 
@@ -19,7 +19,7 @@ Thrown when the gateway returns an error response (e.g. 400 Bad Request from Pay
 
 > **new VoltaxGatewayError**(`message`, `provider`, `statusCode?`, `data?`): `VoltaxGatewayError`
 
-Defined in: [packages/node/src/core/errors.ts:34](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L34)
+Defined in: [packages/node/src/core/errors.ts:34](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/errors.ts#L34)
 
 #### Parameters
 
@@ -65,7 +65,7 @@ Defined in: docs/node\_modules/typescript/lib/lib.es2022.error.d.ts:26
 
 > `readonly` `optional` **data**: `any`
 
-Defined in: [packages/node/src/core/errors.ts:32](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L32)
+Defined in: [packages/node/src/core/errors.ts:32](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/errors.ts#L32)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: docs/node\_modules/typescript/lib/lib.es5.d.ts:1076
 
 > `readonly` **provider**: `string`
 
-Defined in: [packages/node/src/core/errors.ts:30](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L30)
+Defined in: [packages/node/src/core/errors.ts:30](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/errors.ts#L30)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: docs/node\_modules/typescript/lib/lib.es5.d.ts:1078
 
 > `readonly` `optional` **statusCode**: `number`
 
-Defined in: [packages/node/src/core/errors.ts:31](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/errors.ts#L31)
+Defined in: [packages/node/src/core/errors.ts:31](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/errors.ts#L31)
 
 ***
 

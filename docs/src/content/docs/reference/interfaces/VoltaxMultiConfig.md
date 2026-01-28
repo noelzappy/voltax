@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxMultiConfig"
 ---
 
-Defined in: [packages/node/src/core/voltax.ts:39](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L39)
+Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L43)
 
 Multi-provider config for VoltaxAdapter
 
@@ -15,7 +15,7 @@ Multi-provider config for VoltaxAdapter
 
 > `optional` **flutterwave**: `FlutterwaveConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:42](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L42)
+Defined in: [packages/node/src/core/voltax.ts:46](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L46)
 
 ***
 
@@ -23,7 +23,15 @@ Defined in: [packages/node/src/core/voltax.ts:42](https://github.com/noelzappy/v
 
 > `optional` **hubtel**: `HubtelConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:41](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L41)
+Defined in: [packages/node/src/core/voltax.ts:45](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L45)
+
+***
+
+### libertepay?
+
+> `optional` **libertepay**: `LibertePayConfig`
+
+Defined in: [packages/node/src/core/voltax.ts:48](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L48)
 
 ***
 
@@ -31,7 +39,7 @@ Defined in: [packages/node/src/core/voltax.ts:41](https://github.com/noelzappy/v
 
 > `optional` **moolre**: `MoolreAdapterOptions`
 
-Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L43)
+Defined in: [packages/node/src/core/voltax.ts:47](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L47)
 
 ***
 
@@ -39,4 +47,4 @@ Defined in: [packages/node/src/core/voltax.ts:43](https://github.com/noelzappy/v
 
 > `optional` **paystack**: `PaystackConfig`
 
-Defined in: [packages/node/src/core/voltax.ts:40](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/voltax.ts#L40)
+Defined in: [packages/node/src/core/voltax.ts:44](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/voltax.ts#L44)

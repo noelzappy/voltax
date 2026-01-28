@@ -5,7 +5,7 @@ prev: false
 title: "HubtelAdapter"
 ---
 
-Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:17](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/hubtel/hubtel.adapter.ts#L17)
+Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:17](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/hubtel/hubtel.adapter.ts#L17)
 
 Interface that all Voltax payment providers must implement.
 The generic type TPaymentDTO allows each provider to define its own payment payload type.
@@ -30,7 +30,7 @@ class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
 
 > **new HubtelAdapter**(`config`): `HubtelAdapter`
 
-Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:21](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/hubtel/hubtel.adapter.ts#L21)
+Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:21](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/hubtel/hubtel.adapter.ts#L21)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:21](https://gi
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:147](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/hubtel/hubtel.adapter.ts#L147)
+Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:147](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/hubtel/hubtel.adapter.ts#L147)
 
 Helper to get status directly.
 
@@ -72,7 +72,7 @@ Helper to get status directly.
 
 > **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:51](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/hubtel/hubtel.adapter.ts#L51)
+Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:51](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/hubtel/hubtel.adapter.ts#L51)
 
 Initialize payment with Hubtel's checkout API
 
@@ -154,7 +154,7 @@ const response = await hubtel.initiatePayment({
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:118](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/hubtel/hubtel.adapter.ts#L118)
+Defined in: [packages/node/src/providers/hubtel/hubtel.adapter.ts:118](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/hubtel/hubtel.adapter.ts#L118)
 
 Get transaction details.
 

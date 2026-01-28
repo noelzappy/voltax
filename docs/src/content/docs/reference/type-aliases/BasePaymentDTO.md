@@ -7,4 +7,4 @@ title: "BasePaymentDTO"
 
 > **BasePaymentDTO** = `z.infer`\<*typeof* [`BasePaymentSchema`](/reference/variables/basepaymentschema/)\>
 
-Defined in: [packages/node/src/core/schemas.ts:22](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/schemas.ts#L22)
+Defined in: [packages/node/src/core/schemas.ts:22](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/schemas.ts#L22)

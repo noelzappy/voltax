@@ -5,7 +5,7 @@ prev: false
 title: "VoltaxPaymentResponse"
 ---
 
-Defined in: [packages/node/src/core/interfaces.ts:6](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L6)
+Defined in: [packages/node/src/core/interfaces.ts:6](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L6)
 
 Standardized response from a payment initialization.
 
@@ -15,7 +15,7 @@ Standardized response from a payment initialization.
 
 > `optional` **authorizationUrl**: `string`
 
-Defined in: [packages/node/src/core/interfaces.ts:9](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L9)
+Defined in: [packages/node/src/core/interfaces.ts:9](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L9)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [packages/node/src/core/interfaces.ts:9](https://github.com/noelzapp
 
 > `optional` **externalReference**: `string`
 
-Defined in: [packages/node/src/core/interfaces.ts:10](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L10)
+Defined in: [packages/node/src/core/interfaces.ts:10](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L10)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [packages/node/src/core/interfaces.ts:10](https://github.com/noelzap
 
 > `optional` **raw**: `unknown`
 
-Defined in: [packages/node/src/core/interfaces.ts:11](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L11)
+Defined in: [packages/node/src/core/interfaces.ts:11](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L11)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [packages/node/src/core/interfaces.ts:11](https://github.com/noelzap
 
 > **reference**: `string`
 
-Defined in: [packages/node/src/core/interfaces.ts:8](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L8)
+Defined in: [packages/node/src/core/interfaces.ts:8](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L8)
 
 ***
 
@@ -47,4 +47,4 @@ Defined in: [packages/node/src/core/interfaces.ts:8](https://github.com/noelzapp
 
 > **status**: [`PaymentStatus`](/reference/enumerations/paymentstatus/)
 
-Defined in: [packages/node/src/core/interfaces.ts:7](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/core/interfaces.ts#L7)
+Defined in: [packages/node/src/core/interfaces.ts:7](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/core/interfaces.ts#L7)

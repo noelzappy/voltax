@@ -5,7 +5,7 @@ prev: false
 title: "MoolreAdapter"
 ---
 
-Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:17](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L17)
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:17](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/moolre/moolre.adapter.ts#L17)
 
 Interface that all Voltax payment providers must implement.
 The generic type TPaymentDTO allows each provider to define its own payment payload type.
@@ -30,7 +30,7 @@ class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
 
 > **new MoolreAdapter**(`__namedParameters`): `MoolreAdapter`
 
-Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:21](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L21)
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:21](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/moolre/moolre.adapter.ts#L21)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:21](https://gi
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:121](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L121)
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:121](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/moolre/moolre.adapter.ts#L121)
 
 Gets the status of a payment.
 
@@ -76,7 +76,7 @@ The payment status
 
 > **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:53](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L53)
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:53](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/moolre/moolre.adapter.ts#L53)
 
 Initiate a payment with Moolre
 
@@ -158,7 +158,7 @@ const response = await moolre.initiatePayment({
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:96](https://github.com/noelzappy/voltax/blob/b54006be6ebffb706e44a549e28612b44d0d9b6f/packages/node/src/providers/moolre/moolre.adapter.ts#L96)
+Defined in: [packages/node/src/providers/moolre/moolre.adapter.ts:96](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/moolre/moolre.adapter.ts#L96)
 
 Verifies a transaction by its reference.
 

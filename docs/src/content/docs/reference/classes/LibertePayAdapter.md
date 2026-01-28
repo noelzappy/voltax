@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "PaystackAdapter"
+title: "LibertePayAdapter"
 ---
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:12](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L12)
+Defined in: [packages/node/src/providers/libertepay/libertepay.adapter.ts:16](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/libertepay/libertepay.adapter.ts#L16)
 
 Interface that all Voltax payment providers must implement.
 The generic type TPaymentDTO allows each provider to define its own payment payload type.
@@ -22,25 +22,25 @@ class PaystackAdapter implements VoltaxProvider<PaystackPaymentDTO> {
 
 ## Implements
 
-- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)\<[`PaystackPaymentDTO`](/reference/type-aliases/paystackpaymentdto/)\>
+- [`VoltaxProvider`](/reference/interfaces/voltaxprovider/)\<[`LibertePayPaymentDTO`](/reference/type-aliases/libertepaypaymentdto/)\>
 
 ## Constructors
 
 ### Constructor
 
-> **new PaystackAdapter**(`__namedParameters`): `PaystackAdapter`
+> **new LibertePayAdapter**(`__namedParameters`): `LibertePayAdapter`
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L15)
+Defined in: [packages/node/src/providers/libertepay/libertepay.adapter.ts:19](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/libertepay/libertepay.adapter.ts#L19)
 
 #### Parameters
 
 ##### \_\_namedParameters
 
-`PaystackConfig`
+`LibertePayConfig`
 
 #### Returns
 
-`PaystackAdapter`
+`LibertePayAdapter`
 
 ## Methods
 
@@ -48,9 +48,9 @@ Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:15](https:
 
 > **getPaymentStatus**(`reference`): `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:150](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L150)
+Defined in: [packages/node/src/providers/libertepay/libertepay.adapter.ts:85](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/libertepay/libertepay.adapter.ts#L85)
 
-Helper to get status directly.
+Gets the status of a payment.
 
 #### Parameters
 
@@ -58,9 +58,13 @@ Helper to get status directly.
 
 `string`
 
+The transaction reference
+
 #### Returns
 
 `Promise`\<[`PaymentStatus`](/reference/enumerations/paymentstatus/)\>
+
+The payment status
 
 #### Implementation of
 
@@ -72,31 +76,23 @@ Helper to get status directly.
 
 > **initiatePayment**(`payload`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:49](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L49)
+Defined in: [packages/node/src/providers/libertepay/libertepay.adapter.ts:33](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/libertepay/libertepay.adapter.ts#L33)
 
-Initialize a payment with Paystack.
+Initiates a payment transaction.
 
 #### Parameters
 
 ##### payload
 
-Payment details including amount, email, currency, and optional Paystack-specific options
+The provider-specific payment details
 
 ###### amount
 
 `number` = `...`
 
-###### bearer?
-
-`"subaccount"` \| `"account"` = `...`
-
 ###### callbackUrl?
 
 `string` = `...`
-
-###### channels?
-
-[`PaystackChannel`](/reference/enumerations/paystackchannel/)[] = `...`
 
 ###### currency
 
@@ -110,15 +106,15 @@ Payment details including amount, email, currency, and optional Paystack-specifi
 
 `string` = `...`
 
-###### invoiceLimit?
-
-`number` = `...`
-
 ###### metadata?
 
 `Record`\<`string`, `any`\> = `...`
 
-###### plan?
+###### mobileNumber?
+
+`string` = `...`
+
+###### paymentSlug?
 
 `string` = `...`
 
@@ -126,38 +122,11 @@ Payment details including amount, email, currency, and optional Paystack-specifi
 
 `string` = `...`
 
-###### splitCode?
-
-`string` = `...`
-
-###### subaccount?
-
-`string` = `...`
-
-###### transactionCharge?
-
-`number` = `...`
-
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Promise<VoltaxPaymentResponse>
-
-#### Example
-
-```ts
-const paystack = Voltax('paystack', { secretKey: '...' });
-const response = await paystack.initiatePayment({
-  amount: 100,
-  email: 'customer@example.com',
-  currency: Currency.NGN,
-  reference: 'unique-ref',
-  // Paystack-specific options (flat, not nested)
-  channels: [PaystackChannel.CARD, PaystackChannel.BANK],
-  subaccount: 'ACCT_xxx',
-});
-```
+A standardized payment response
 
 #### Implementation of
 
@@ -169,9 +138,9 @@ const response = await paystack.initiatePayment({
 
 > **verifyTransaction**(`reference`): `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-Defined in: [packages/node/src/providers/paystack/paystack.adapter.ts:125](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/paystack/paystack.adapter.ts#L125)
+Defined in: [packages/node/src/providers/libertepay/libertepay.adapter.ts:64](https://github.com/noelzappy/voltax/blob/0f90834dbd594f24a367fadff44e7df5ad4bd805/packages/node/src/providers/libertepay/libertepay.adapter.ts#L64)
 
-Verify a transaction with Paystack.
+Verifies a transaction by its reference.
 
 #### Parameters
 
@@ -179,13 +148,13 @@ Verify a transaction with Paystack.
 
 `string`
 
-The transaction reference to verify.
+The transaction reference
 
 #### Returns
 
 `Promise`\<[`VoltaxPaymentResponse`](/reference/interfaces/voltaxpaymentresponse/)\>
 
-The payment response.
+A standardized payment response with updated status
 
 #### Implementation of
 
