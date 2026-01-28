@@ -67,7 +67,7 @@ export class LibertePayAdapter implements VoltaxProvider<LibertePayPaymentDTO> {
     }
 
     try {
-      const { data } = await this.axiosClient.post<LibertePayResponse<LibertePayTransaction>>(
+      const { data } = await this.axiosClient.get<LibertePayResponse<LibertePayTransaction>>(
         `/transactions/transaction-check/${reference}`,
       );
 
