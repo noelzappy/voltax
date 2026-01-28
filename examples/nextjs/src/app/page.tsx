@@ -18,7 +18,7 @@ const providers = [
     countries: ["Nigeria", "Ghana", "South Africa", "Kenya"],
     icon: "💳",
     color: "#00c3f7",
-    status: "coming",
+    status: "ready",
   },
   {
     id: "flutterwave",
@@ -27,7 +27,7 @@ const providers = [
     countries: ["Nigeria", "Ghana", "Kenya", "South Africa"],
     icon: "🦋",
     color: "#f5a623",
-    status: "coming",
+    status: "ready",
   },
   {
     id: "hubtel",
@@ -36,7 +36,7 @@ const providers = [
     countries: ["Ghana"],
     icon: "📱",
     color: "#00b894",
-    status: "coming",
+    status: "ready",
   },
   {
     id: "moolre",
@@ -45,9 +45,9 @@ const providers = [
     countries: ["Ghana"],
     icon: "💰",
     color: "#9b59b6",
-    status: "coming",
+    status: "ready",
   },
-];
+].sort((a, b) => a.name.localeCompare(b.name));
 
 export default function Home() {
   return (
