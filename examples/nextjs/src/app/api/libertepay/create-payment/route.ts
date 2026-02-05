@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (!amount || !email) {
       return NextResponse.json(
         { error: "Amount and email are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
