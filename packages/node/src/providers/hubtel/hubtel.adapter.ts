@@ -122,7 +122,7 @@ export class HubtelAdapter implements VoltaxProvider<HubtelPaymentDTO> {
 
     try {
       const { data } = await axios.get<HubtelAPIResponse<HubtelTransaction>>(
-        `https://api-txnstatus.hubtel.com/transactions/${this.merchantAccount}/status`,
+        `https://api-txnstatus.hubtel.com/transactions/${this.merchantAccount}/status?clientReference=${reference}`,
         {
           headers: { Authorization: this.authHeader },
         },
