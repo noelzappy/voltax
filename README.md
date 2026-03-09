@@ -289,15 +289,21 @@ voltax/
 To publish a new version of the Node.js SDK to npm:
 
 ```bash
-# Create and push a release tag (triggers CI to publish to npm)
-git tag node-v1.0.0
-git push origin node-v1.0.0
+cd packages/node
+
+# Patch release (0.0.x) - bug fixes
+npm run release:patch
+
+# Minor release (0.x.0) - new features
+npm run release:minor
+
+# Major release (x.0.0) - breaking changes
+npm run release:major
 ```
 
-The tag format is `node-v<version>` (e.g., `node-v1.2.3`, `node-v2.0.0-beta.1`). This triggers the release workflow which:
+This triggers the release workflow which:
 - Runs tests
 - Builds the package
-- Updates `package.json` version to match the tag
 - Creates a GitHub Release with auto-generated changelog
 - Publishes to npm and GitHub Packages
 
