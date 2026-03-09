@@ -93,7 +93,7 @@ export class HubtelAdapter implements VoltaxProvider<HubtelPaymentDTO> {
         },
       );
 
-      if (data.status !== 'success') {
+      if (data.status?.toLowerCase() !== 'success') {
         throw new Error('Hubtel Initialization Failed');
       }
 
